@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npx convex dev & next dev",
+    "build": "npx convex deploy --cmd 'next build'",
     "start": "next start",
     "lint": "eslint"
   },

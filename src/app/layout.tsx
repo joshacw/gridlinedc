@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "GridlineDC",
-  description: "GridlineDC Application",
+  title: "GRIDLINE | Future of Data Center Infrastructure",
+  description: "Aggregating premier digital infrastructure assets for the public markets. Direct investment bridge to high-density data center infrastructure.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${outfit.variable} antialiased bg-slate-50 text-slate-900`}
+        style={{ fontFamily: "'Inter', sans-serif" }}
       >
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>

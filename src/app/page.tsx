@@ -1,65 +1,97 @@
-import Image from "next/image";
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import ValuationRerating from '@/components/ValuationRerating';
+import PartnershipOptions from '@/components/PartnershipOptions';
+import InvestmentTiers from '@/components/InvestmentTiers';
+import Footer from '@/components/Footer';
+import { FEATURES } from '@/constants';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
+      <Navbar />
+
+      <main>
+        <Hero />
+
+        <section id="platform" className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+              {FEATURES.map((feature, i) => (
+                <div key={i} className="text-center md:text-left">
+                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2 font-outfit">{feature.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <ValuationRerating />
+
+        <section id="path" className="py-24 bg-slate-950 text-white relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-2xl mb-16">
+              <h2 className="text-3xl font-outfit font-bold mb-4">Liquidity Path</h2>
+              <p className="text-slate-400 leading-relaxed">
+                Our roadmap to public listing ensures institutional liquidity for early asset owners by standardizing operations and aggregating scale.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {[
+                { step: 'Phase 1', title: 'Onboarding', desc: 'Secure high-density sites and establish baseline governance.' },
+                { step: 'Phase 2', title: 'Build-out', desc: 'Scale AI-ready infrastructure with superior capital efficiency.' },
+                { step: 'Phase 3', title: 'Portfolio', desc: 'Unified asset aggregation to de-risk earnings via diversification.' },
+                { step: 'Phase 4', title: 'Public Exit', desc: 'Institutional IPO / Exchange Listing at target 12x multiples.' }
+              ].map((item, idx) => (
+                <div key={idx} className="relative group p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all">
+                  <div className="text-blue-500 text-xs font-bold uppercase tracking-widest mb-4">{item.step}</div>
+                  <h4 className="text-lg font-bold mb-2 font-outfit">{item.title}</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <PartnershipOptions />
+
+        <InvestmentTiers />
+
+        <section className="py-32 bg-slate-50 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <pattern id="dotPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="currentColor" className="text-slate-900" />
+              </pattern>
+              <rect width="100%" height="100%" fill="url(#dotPattern)" />
+            </svg>
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 className="text-4xl font-outfit font-bold mb-6 text-slate-950">Partner with GridlineDC</h2>
+            <p className="text-slate-600 mb-12 max-w-lg mx-auto leading-relaxed">
+              Open to accredited investors and data center asset owners looking for a strategic exit via institutional rerating and portfolio aggregation.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button className="px-10 py-5 bg-slate-950 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs">
+                Connect with Advisory
+              </button>
+              <button className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs">
+                Contact Strategy Team
+              </button>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

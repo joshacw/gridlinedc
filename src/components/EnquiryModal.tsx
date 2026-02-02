@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useMutation } from "convex/react";
+import { useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 interface EnquiryModalProps {
@@ -47,7 +47,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const submitEnquiry = useMutation(api.enquiries.submit);
+  const submitEnquiry = useAction(api.enquiries.submitWithWebhook);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',

@@ -123,10 +123,16 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
     setDcSurvey(prev => ({ ...prev, [field]: value }));
   };
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const isContactValid = () => {
     return (
       contactInfo.name.trim() !== '' &&
       contactInfo.email.trim() !== '' &&
+      isValidEmail(contactInfo.email) &&
       contactInfo.companyName.trim() !== '' &&
       contactInfo.enquiryType !== null &&
       contactInfo.heardAbout !== ''

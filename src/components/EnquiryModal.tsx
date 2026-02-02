@@ -295,6 +295,22 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
     </div>
   );
 
+  const isSurveyValid = () => {
+    return (
+      dcSurvey.ownershipStructure.trim() !== '' &&
+      dcSurvey.currentPowerUtilisation.trim() !== '' &&
+      dcSurvey.powerScalability.trim() !== '' &&
+      dcSurvey.customerBase.trim() !== '' &&
+      dcSurvey.customerConcentration.trim() !== '' &&
+      dcSurvey.contractTenure.trim() !== '' &&
+      dcSurvey.anchorTenants.trim() !== '' &&
+      dcSurvey.networkConnectivity.trim() !== '' &&
+      dcSurvey.annualRevenue.trim() !== '' &&
+      dcSurvey.ebitdaRange.trim() !== '' &&
+      dcSurvey.capitalOutlook.trim() !== ''
+    );
+  };
+
   const renderStep2AssetOwner = () => {
     const questions = [
       { key: 'ownershipStructure', label: 'Ownership Structure', question: 'Is the data centre fully owned, or are there any external shareholders or partners involved?', placeholder: 'e.g., Fully owned / 70% owned with 30% external partner' },
@@ -317,14 +333,14 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
             Data Center Profile
           </div>
           <h2 className="text-xl font-outfit font-bold text-slate-900 mb-2">Tell us about your facility</h2>
-          <p className="text-slate-500 text-sm">This information helps us understand your asset and identify the best partnership structure.</p>
+          <p className="text-slate-500 text-sm">This information helps us understand your asset and identify the best partnership structure. All fields are required.</p>
         </div>
 
         <div className="space-y-5 max-h-[50vh] overflow-y-auto pr-2 -mr-2">
           {questions.map(({ key, label, question, placeholder }) => (
             <div key={key} className="bg-slate-50 rounded-2xl p-4">
               <label className="block text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">
-                {label}
+                {label} *
               </label>
               <p className="text-sm text-slate-700 mb-3">{question}</p>
               <textarea
@@ -332,7 +348,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
                 onChange={(e) => handleSurveyChange(key as keyof DCOwnerSurvey, e.target.value)}
                 placeholder={placeholder}
                 rows={2}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none"
+                className={`w-full px-4 py-3 bg-white border rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none ${
+                  dcSurvey[key as keyof DCOwnerSurvey].trim() === '' ? 'border-slate-200' : 'border-green-300'
+                }`}
               />
             </div>
           ))}
@@ -347,8 +365,8 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
+            disabled={isSubmitting || !isSurveyValid()}
+            className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Enquiry'}
           </button>

@@ -1,7 +1,11 @@
 import React from 'react';
 import { INVESTMENT_TIERS } from '@/constants';
 
-const InvestmentTiers: React.FC = () => {
+interface InvestmentTiersProps {
+  onCtaClick?: () => void;
+}
+
+const InvestmentTiers: React.FC<InvestmentTiersProps> = ({ onCtaClick }) => {
   return (
     <section id="strategy" className="py-24 bg-slate-50 border-t border-slate-200">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +50,10 @@ const InvestmentTiers: React.FC = () => {
                 </div>
               </div>
 
-              <button className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold transition-all hover:bg-blue-600 shadow-lg shadow-slate-200 hover:shadow-blue-200">
+              <button
+                onClick={onCtaClick}
+                className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold transition-all hover:bg-blue-600 shadow-lg shadow-slate-200 hover:shadow-blue-200"
+              >
                 Request Strategy Overview
               </button>
 

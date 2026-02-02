@@ -1,7 +1,11 @@
 import React from 'react';
 import { PARTNERSHIP_OPTIONS } from '@/constants';
 
-const PartnershipOptions: React.FC = () => {
+interface PartnershipOptionsProps {
+  onCtaClick?: () => void;
+}
+
+const PartnershipOptions: React.FC<PartnershipOptionsProps> = ({ onCtaClick }) => {
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'link':
@@ -68,11 +72,14 @@ const PartnershipOptions: React.FC = () => {
               </ul>
 
               <div className="mt-auto">
-                <button className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95 ${
-                  idx === 0
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
-                    : 'bg-slate-950 text-white hover:bg-slate-800'
-                }`}>
+                <button
+                  onClick={onCtaClick}
+                  className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95 ${
+                    idx === 0
+                      ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
+                      : 'bg-slate-950 text-white hover:bg-slate-800'
+                  }`}
+                >
                   Discuss Strategy
                 </button>
               </div>

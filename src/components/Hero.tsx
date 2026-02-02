@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onCtaClick?: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
   return (
     <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50">
       {/* Dynamic Background Elements */}
@@ -46,10 +50,16 @@ const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button className="w-full sm:w-auto px-10 py-4 bg-slate-950 hover:bg-blue-600 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-xl active:scale-95">
+            <button
+              onClick={onCtaClick}
+              className="w-full sm:w-auto px-10 py-4 bg-slate-950 hover:bg-blue-600 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-xl active:scale-95"
+            >
               Secure Allocation
             </button>
-            <button className="w-full sm:w-auto px-10 py-4 glass text-slate-900 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-white transition-all">
+            <button
+              onClick={onCtaClick}
+              className="w-full sm:w-auto px-10 py-4 glass text-slate-900 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-white transition-all"
+            >
               Strategy Brief
             </button>
           </div>

@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { NAV_ITEMS } from '@/constants';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onInquireClick?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onInquireClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -40,7 +44,10 @@ const Navbar: React.FC = () => {
             <button className="hidden sm:block text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-blue-600">
               Login
             </button>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:shadow-xl active:scale-95">
+            <button
+              onClick={onInquireClick}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:shadow-xl active:scale-95"
+            >
               Inquire
             </button>
           </div>

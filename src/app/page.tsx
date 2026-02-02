@@ -1,18 +1,27 @@
+"use client";
+
+import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ValuationRerating from '@/components/ValuationRerating';
 import PartnershipOptions from '@/components/PartnershipOptions';
 import InvestmentTiers from '@/components/InvestmentTiers';
 import Footer from '@/components/Footer';
+import EnquiryModal from '@/components/EnquiryModal';
 import { FEATURES } from '@/constants';
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
-      <Navbar />
+      <Navbar onInquireClick={openModal} />
 
       <main>
-        <Hero />
+        <Hero onCtaClick={openModal} />
 
         <section id="platform" className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,9 +70,9 @@ export default function Home() {
           </div>
         </section>
 
-        <PartnershipOptions />
+        <PartnershipOptions onCtaClick={openModal} />
 
-        <InvestmentTiers />
+        <InvestmentTiers onCtaClick={openModal} />
 
         <section className="py-32 bg-slate-50 relative overflow-hidden">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
@@ -80,10 +89,16 @@ export default function Home() {
               Open to accredited investors and data center asset owners looking for a strategic exit via institutional rerating and portfolio aggregation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="px-10 py-5 bg-slate-950 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs">
+              <button
+                onClick={openModal}
+                className="px-10 py-5 bg-slate-950 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs"
+              >
                 Connect with Advisory
               </button>
-              <button className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs">
+              <button
+                onClick={openModal}
+                className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs"
+              >
                 Contact Strategy Team
               </button>
             </div>
@@ -92,6 +107,8 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <EnquiryModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }

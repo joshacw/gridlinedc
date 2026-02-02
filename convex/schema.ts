@@ -29,6 +29,7 @@ export default defineSchema({
     // Metadata
     submittedAt: v.string(),
     status: v.optional(v.string()), // e.g., "new", "contacted", "qualified", "closed"
+    ghlContactId: v.optional(v.string()), // GoHighLevel contact ID
   })
     .index("by_email", ["email"])
     .index("by_type", ["enquiryType"])

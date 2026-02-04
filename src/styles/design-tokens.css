@@ -1,0 +1,105 @@
+/**
+ * GridlineDC Design System Tokens
+ * Extracted from Figma: https://www.figma.com/design/YPwvwFw6uJXa6xsYhUW47O/GridlineDC
+ *
+ * This file contains the foundational design tokens for the GridlineDC website.
+ * All values are derived from the Figma design system to ensure consistency.
+ */
+
+:root {
+  /* ===== Color Palette (Figma Primary Colors) ===== */
+
+  /* Primary Brand Colors */
+  --gridline-primary: #2469ff;           /* Electric blue - primary CTAs, accents, highlights */
+  --gridline-navy: #010825;              /* Dark navy - dark backgrounds, headers */
+  --gridline-dark-blue: #030948;         /* Dark blue - card backgrounds, secondary dark surfaces */
+  --gridline-white: #fdfdfd;             /* Off-white - light backgrounds, text on dark */
+
+  /* Neutral Grays */
+  --gridline-gray: #94a3b8;              /* Slate gray - muted text, supporting information */
+  --gridline-light-gray: #bebebe;        /* Light gray - subtle text, tertiary information */
+
+  /* Extended Palette (from current design) */
+  --gridline-slate-50: #f8fafc;          /* Very light gray - page backgrounds */
+  --gridline-slate-950: #0f172a;         /* Very dark navy - dark section backgrounds */
+
+  /* ===== Semantic Color Tokens ===== */
+
+  /* Call-to-Action Colors */
+  --color-cta-primary: var(--gridline-primary);
+  --color-cta-primary-hover: #1d5ae6;    /* Slightly darker blue for hover states */
+
+  /* Background Colors */
+  --color-background-dark: var(--gridline-navy);
+  --color-background-dark-alt: var(--gridline-dark-blue);
+  --color-background-light: var(--gridline-white);
+  --color-background-page: var(--gridline-slate-50);
+
+  /* Text Colors */
+  --color-text-primary: var(--gridline-navy);
+  --color-text-on-dark: var(--gridline-white);
+  --color-text-muted: var(--gridline-gray);
+  --color-text-subtle: var(--gridline-light-gray);
+
+  /* Border Colors */
+  --color-border-light: #e2e8f0;
+  --color-border-primary: var(--gridline-primary);
+
+  /* ===== Typography System ===== */
+
+  /* Font Families */
+  --font-outfit: 'Outfit', sans-serif;                    /* Brand headings, labels */
+  --font-big-shoulders: 'Big Shoulders Display', sans-serif;  /* Monumental headings */
+  --font-instrument-sans: 'Instrument Sans', sans-serif;  /* UI labels, metrics, captions */
+  --font-inter: 'Inter', sans-serif;                      /* Body text, paragraphs */
+
+  /* Font Sizes (Figma Specifications) */
+  --text-mega: 55.59px;        /* Hero headlines, massive scale (Big Shoulders) */
+  --text-xxl: 39.927px;        /* Section titles, major headings (Outfit Bold) */
+  --text-xl: 21.419px;         /* Large headings (Outfit Bold) */
+  --text-base: 13.83px;        /* Body text, standard labels (Instrument Sans/Outfit Regular) */
+  --text-sm: 12.83px;          /* Small text, secondary information */
+  --text-xs: 11.89px;          /* Captions, metric labels (Instrument Sans) */
+  --text-tiny: 8.83px;         /* Fine print, disclaimers */
+  --text-micro: 6.831px;       /* Confidential marks, very small labels */
+
+  /* Line Heights (from Figma) */
+  --leading-mega: 61.246px;    /* For --text-mega */
+  --leading-xxl: 56.942px;     /* For --text-xxl */
+  --leading-base: 23.9px;      /* For --text-base */
+  --leading-sm: 19.416px;      /* For --text-sm/xs */
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* ===== Spacing & Sizing ===== */
+
+  /* Border Radius (Figma Specifications) */
+  --radius-card: 19px;         /* Card border radius */
+  --radius-sm: 8px;            /* Small elements */
+  --radius-md: 12px;           /* Medium elements */
+  --radius-lg: 16px;           /* Large elements */
+  --radius-full: 9999px;       /* Pills, badges */
+
+  /* Shadow Specifications */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-primary: 4px 4px 7px 3px rgba(96, 165, 250, 0.4);  /* Blue glow shadow */
+
+  /* ===== Gradients ===== */
+
+  /* Background Gradients (Figma Specifications) */
+  --gradient-bg-dark: linear-gradient(105.39deg, rgb(2, 6, 23) 1.5%, rgb(2, 9, 42) 73.59%);
+  --gradient-bg-dark-alt: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 1) 100%);
+
+  /* Text Gradients */
+  --gradient-text-primary: linear-gradient(135deg, #0f172a 0%, #2469ff 100%);
+
+  /* ===== Legacy Compatibility (Deprecated - for gradual migration) ===== */
+
+  --color-blue-600: #2563eb;   /* Old primary blue - being replaced by --gridline-primary */
+  --background: #f8fafc;       /* Old background token - use --color-background-page */
+  --foreground: #0f172a;       /* Old foreground token - use --color-text-primary */
+}

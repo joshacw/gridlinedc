@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&display=swap');
 @import "tailwindcss";
+@import "../styles/design-tokens.css";
 
 :root {
   --background: #f8fafc;
@@ -24,9 +26,10 @@ h1, h2, h3, h4, .font-outfit {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+  background: var(--gradient-text-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @keyframes scan {

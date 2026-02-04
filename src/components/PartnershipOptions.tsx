@@ -35,8 +35,8 @@ const PartnershipOptions: React.FC<PartnershipOptionsProps> = ({ onCtaClick }) =
     <section id="partnership" className="py-24 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-outfit font-bold text-slate-900 mb-4">Partnership & Acquisition Options</h2>
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm italic">
+          <h2 className="font-outfit text-xxl font-bold text-dark-navy mb-4">Partnership & Acquisition Options</h2>
+          <p className="font-inter text-gridline-gray max-w-2xl mx-auto text-sm italic">
             The following options represent conceptual frameworks for discussion purposes only. They are not final terms and are subject to further negotiation and definitive documentation.
           </p>
         </div>
@@ -45,27 +45,27 @@ const PartnershipOptions: React.FC<PartnershipOptionsProps> = ({ onCtaClick }) =
           {PARTNERSHIP_OPTIONS.map((option, idx) => (
             <div
               key={idx}
-              className={`relative bg-white p-10 rounded-[2.5rem] shadow-sm border transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${
+              className={`relative bg-white p-10 rounded-card shadow-card border transition-all duration-500 hover:shadow-card-hover hover:-translate-y-1 ${
                 idx === 0
-                  ? 'border-blue-500 shadow-blue-100 ring-4 ring-blue-500/5'
+                  ? 'border-primary-blue shadow-primary/20 ring-4 ring-primary-blue/5'
                   : 'border-slate-100'
               }`}
             >
               <div className="flex justify-between items-start mb-8">
-                <div className={`p-4 rounded-2xl ${idx === 0 ? 'bg-blue-600 text-white' : 'bg-slate-50 text-slate-900'}`}>
+                <div className={`p-4 rounded-2xl ${idx === 0 ? 'bg-primary-blue text-white' : 'bg-slate-50 text-slate-900'}`}>
                   {getIcon(option.icon)}
                 </div>
-                <div className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${idx === 0 ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-600'}`}>
+                <div className={`inline-block px-3 py-1 rounded-full font-instrument-sans text-[10px] font-bold uppercase tracking-widest ${idx === 0 ? 'bg-primary-blue/10 text-primary-blue' : 'bg-slate-100 text-gridline-gray'}`}>
                   {option.type}
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-slate-900 mb-8 min-h-[56px] leading-snug font-outfit">{option.title}</h3>
+              <h3 className="font-outfit text-xl font-bold text-dark-navy mb-8 min-h-[56px] leading-snug">{option.title}</h3>
 
               <ul className="space-y-5 mb-10">
                 {option.points.map((point, pIdx) => (
-                  <li key={pIdx} className="flex gap-4 text-xs text-slate-600 leading-relaxed group/item">
-                    <span className="text-blue-500 font-bold transition-transform group-hover/item:scale-125 inline-block">•</span>
+                  <li key={pIdx} className="flex gap-4 font-inter text-xs text-gridline-gray leading-relaxed group/item">
+                    <span className="text-primary-blue font-bold transition-transform group-hover/item:scale-125 inline-block">•</span>
                     {point}
                   </li>
                 ))}
@@ -74,10 +74,10 @@ const PartnershipOptions: React.FC<PartnershipOptionsProps> = ({ onCtaClick }) =
               <div className="mt-auto">
                 <button
                   onClick={onCtaClick}
-                  className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95 ${
+                  className={`w-full py-4 rounded-2xl font-outfit font-bold text-xs uppercase tracking-widest transition-all shadow-primary active:scale-95 ${
                     idx === 0
-                      ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
-                      : 'bg-slate-950 text-white hover:bg-slate-800'
+                      ? 'bg-primary-blue text-white hover:bg-cta-primary-hover hover:shadow-card-hover'
+                      : 'bg-dark-navy text-white hover:bg-dark-blue'
                   }`}
                 >
                   Discuss Strategy

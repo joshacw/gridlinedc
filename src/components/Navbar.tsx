@@ -23,8 +23,8 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`glass rounded-2xl flex items-center justify-between px-6 py-3 transition-all duration-300 ${isScrolled ? 'shadow-lg bg-white/80' : 'bg-white/40 shadow-sm'}`}>
           <div className="flex items-center">
-            <span className="font-outfit text-2xl font-bold tracking-tighter text-slate-950">
-              GRID<span className="text-blue-600">LINE</span>
+            <span className="font-outfit text-2xl font-bold tracking-tighter text-dark-navy">
+              GRID<span className="text-primary-blue">LINE</span>
             </span>
           </div>
 
@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick }) => {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-blue-600 transition-colors"
+                className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray hover:text-primary-blue transition-colors"
               >
                 {item.label}
               </a>
@@ -41,12 +41,12 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick }) => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="hidden sm:block text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-blue-600">
+            <button className="hidden sm:block font-instrument-sans text-xs font-bold uppercase tracking-widest text-dark-navy hover:text-primary-blue">
               Login
             </button>
             <button
               onClick={onInquireClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-md hover:shadow-xl active:scale-95"
+              className="bg-primary-blue hover:bg-cta-primary-hover text-white px-5 py-2.5 rounded-xl font-outfit text-xs font-bold uppercase tracking-widest transition-all shadow-primary hover:shadow-card-hover active:scale-95"
             >
               Inquire
             </button>

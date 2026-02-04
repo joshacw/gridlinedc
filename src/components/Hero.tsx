@@ -26,39 +26,39 @@ const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
         </div>
 
         {/* Floating Geometric Shapes */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/10 blur-[100px] rounded-full animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-400/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-blue/10 blur-[100px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-primary-blue/8 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Moving "Scanning" Line */}
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent animate-[scan_8s_linear_infinite]"></div>
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary-blue/20 to-transparent animate-[scan_8s_linear_infinite]"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/50 border border-slate-200 mb-8 backdrop-blur-sm shadow-sm">
-            <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-ping"></span>
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Institutional Track 2026</span>
+            <span className="flex h-2 w-2 rounded-full bg-primary-blue animate-ping"></span>
+            <span className="font-instrument-sans text-[10px] font-bold text-gridline-gray uppercase tracking-[0.2em]">Institutional Track 2026</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-outfit font-bold tracking-tighter text-slate-950 mb-8 leading-[1.05]">
+          <h1 className="font-big-shoulders text-5xl md:text-mega font-bold tracking-tighter text-dark-navy mb-8 leading-[1.05]">
             Secure the Future of <br />
-            <span className="text-blue-600">Digital Assets</span>
+            <span className="text-primary-blue">Digital Assets</span>
           </h1>
 
-          <p className="text-lg text-slate-600 mb-12 max-w-xl mx-auto leading-relaxed">
+          <p className="font-inter text-lg text-gridline-gray mb-12 max-w-xl mx-auto leading-relaxed">
             GRIDLINE provides a direct investment bridge to high-density data center infrastructure on the path to public listing.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <button
               onClick={onCtaClick}
-              className="w-full sm:w-auto px-10 py-4 bg-slate-950 hover:bg-blue-600 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-xl active:scale-95"
+              className="w-full sm:w-auto px-10 py-4 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-2xl font-outfit font-bold uppercase tracking-widest text-xs transition-all shadow-primary active:scale-95"
             >
               Secure Allocation
             </button>
             <button
               onClick={onCtaClick}
-              className="w-full sm:w-auto px-10 py-4 glass text-slate-900 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-white transition-all"
+              className="w-full sm:w-auto px-10 py-4 glass text-dark-navy rounded-2xl font-outfit font-bold uppercase tracking-widest text-xs hover:bg-white transition-all"
             >
               Strategy Brief
             </button>

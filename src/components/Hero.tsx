@@ -41,9 +41,9 @@ const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
 
           <h1 className="font-big-shoulders text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-[1.1]">
             <span className="text-white">Secure the </span>
-            <span className="text-primary-blue">Future of</span>
+            <span style={{ color: '#2469ff' }}>Future of</span>
             <br />
-            <span className="text-primary-blue">Digital Assets</span>
+            <span style={{ color: '#2469ff' }}>Digital Assets</span>
           </h1>
 
           <p className="font-inter text-lg md:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">

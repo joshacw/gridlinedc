@@ -203,8 +203,13 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
             value={contactInfo.email}
             onChange={(e) => handleContactChange('email', e.target.value)}
             placeholder="john@company.com"
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+            className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${
+              contactInfo.email && !isValidEmail(contactInfo.email) ? 'border-red-400' : 'border-slate-200'
+            }`}
           />
+          {contactInfo.email && !isValidEmail(contactInfo.email) && (
+            <p className="text-red-500 text-xs mt-1">Please enter a valid email address</p>
+          )}
         </div>
       </div>
 

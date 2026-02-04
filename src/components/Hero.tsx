@@ -6,7 +6,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
   return (
-    <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-dark-navy">
+    <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden" style={{ backgroundColor: '#010825' }}>
       {/* Navy Grid Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Grid Pattern */}

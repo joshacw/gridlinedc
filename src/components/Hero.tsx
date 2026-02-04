@@ -6,46 +6,45 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
   return (
-    <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50">
-      {/* Dynamic Background Elements */}
+    <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-dark-navy">
+      {/* Navy Grid Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Animated Grid Lines */}
-        <div className="absolute inset-0 opacity-[0.15]">
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-20">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-                <path d="M 80 0 L 0 0 0 80" fill="none" stroke="currentColor" strokeWidth="1" className="text-slate-400" />
+              <pattern id="navy-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#2469ff" strokeWidth="0.5" />
               </pattern>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.2 }} />
-                <stop offset="100%" style={{ stopColor: '#1d4ed8', stopOpacity: 0 }} />
-              </linearGradient>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
+            <rect width="100%" height="100%" fill="url(#navy-grid)" />
           </svg>
         </div>
 
-        {/* Floating Geometric Shapes */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-blue/10 blur-[100px] rounded-full animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-primary-blue/8 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+        {/* Gradient Overlay from top */}
+        <div className="absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-dark-blue/40 via-dark-navy/20 to-transparent"></div>
 
-        {/* Moving "Scanning" Line */}
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary-blue/20 to-transparent animate-[scan_8s_linear_infinite]"></div>
+        {/* Blue Glow Effects */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary-blue/5 blur-[120px] rounded-full"></div>
+        <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-primary-blue/8 blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+        {/* Subtle scan line */}
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-blue/30 to-transparent animate-[scan_8s_linear_infinite]"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/50 border border-slate-200 mb-8 backdrop-blur-sm shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-blue/10 border border-primary-blue/30 mb-8 backdrop-blur-sm">
             <span className="flex h-2 w-2 rounded-full bg-primary-blue animate-ping"></span>
-            <span className="font-instrument-sans text-[10px] font-bold text-gridline-gray uppercase tracking-[0.2em]">Institutional Track 2026</span>
+            <span className="font-instrument-sans text-[10px] font-bold text-primary-blue uppercase tracking-[0.2em]">Institutional Track 2026</span>
           </div>
 
-          <h1 className="font-big-shoulders text-5xl md:text-mega font-bold tracking-tighter text-dark-navy mb-8 leading-[1.05]">
+          <h1 className="font-big-shoulders text-5xl md:text-mega font-bold tracking-tighter text-white mb-8 leading-[1.05]">
             Secure the Future of <br />
             <span className="text-primary-blue">Digital Assets</span>
           </h1>
 
-          <p className="font-inter text-lg text-gridline-gray mb-12 max-w-xl mx-auto leading-relaxed">
+          <p className="font-inter text-lg text-slate-300 mb-12 max-w-xl mx-auto leading-relaxed">
             GRIDLINE provides a direct investment bridge to high-density data center infrastructure on the path to public listing.
           </p>
 
@@ -58,7 +57,7 @@ const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
             </button>
             <button
               onClick={onCtaClick}
-              className="w-full sm:w-auto px-10 py-4 glass text-dark-navy rounded-2xl font-outfit font-bold uppercase tracking-widest text-xs hover:bg-white transition-all"
+              className="w-full sm:w-auto px-10 py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-outfit font-bold uppercase tracking-widest text-xs hover:bg-white/20 transition-all backdrop-blur-sm"
             >
               Strategy Brief
             </button>

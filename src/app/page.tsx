@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import PartnershipValue from '@/components/PartnershipValue';
+import DCArbitrage from '@/components/DCArbitrage';
 import ValuationRerating from '@/components/ValuationRerating';
 import PartnershipOptions from '@/components/PartnershipOptions';
 import InvestmentTiers from '@/components/InvestmentTiers';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
-import { FEATURES } from '@/constants';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,27 +24,59 @@ export default function Home() {
       <main>
         <Hero onCtaClick={openModal} />
 
+        {/* Three Features Section - Matching Figma */}
         <section id="platform" className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-              {FEATURES.map((feature, i) => (
-                <div key={i} className="text-center md:text-left">
-                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6 mx-auto md:mx-0">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2 font-outfit">{feature.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
+              {/* Asset Aggregation */}
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary-blue/10 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                  <svg className="w-8 h-8 text-primary-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
                 </div>
-              ))}
+                <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Asset Aggregation</h3>
+                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                  We bundle high-quality data center assets into a unified portfolio for public markets.
+                </p>
+              </div>
+
+              {/* Listing Readiness */}
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary-blue/10 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                  <svg className="w-8 h-8 text-primary-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Listing Readiness</h3>
+                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                  Institutional-grade governance designed to meet public exchange requirements.
+                </p>
+              </div>
+
+              {/* AI Workloads */}
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary-blue/10 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                  <svg className="w-8 h-8 text-primary-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">AI Workloads</h3>
+                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                  Infrastructure optimized for high-density compute and liquid cooling.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
+        <PartnershipValue />
+
+        <DCArbitrage onCtaClick={openModal} />
+
         <ValuationRerating />
 
-        <section id="path" className="py-24 bg-slate-950 text-white relative overflow-hidden">
+        <section id="path" className="py-24 bg-slate-950 text-white relative overflow-hidden" style={{ display: 'none' }}>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600"></div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-2xl mb-16">

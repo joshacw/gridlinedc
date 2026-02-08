@@ -1,10 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&display=swap');
 @import "tailwindcss";
-@import "../styles/design-tokens.css";
 
+/*
+ * GridlineDC Design System — Tailwind v4 Theme
+ * All tokens from Figma: https://www.figma.com/design/YPwvwFw6uJXa6xsYhUW47O/GridlineDC
+ */
+@theme {
+  /* ===== Colors ===== */
+  --color-primary-blue: #2469ff;
+  --color-dark-navy: #010825;
+  --color-dark-blue: #030948;
+  --color-gridline-white: #fdfdfd;
+  --color-gridline-gray: #94a3b8;
+  --color-gridline-light-gray: #bebebe;
+
+  /* Semantic */
+  --color-cta-primary: #2469ff;
+  --color-cta-primary-hover: #1d5ae6;
+  --color-bg-dark: #010825;
+  --color-bg-dark-alt: #030948;
+  --color-bg-light: #fdfdfd;
+  --color-text-on-dark: #fdfdfd;
+
+  /* ===== Font Family ===== */
+  --font-outfit: 'Outfit', sans-serif;
+  --font-big-shoulders: 'Big Shoulders Display', sans-serif;
+  --font-instrument-sans: 'Instrument Sans', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+
+  /* ===== Font Size + Line Height (Figma exact) ===== */
+  /* TW4 uses --text-* namespace for font-size utilities */
+  --text-mega: 55.59px;
+  --text-mega--line-height: 61.246px;
+  --text-xxl: 39.927px;
+  --text-xxl--line-height: 56.942px;
+  --text-xl-figma: 21.419px;
+  --text-xl-figma--line-height: 1.4;
+  --text-base-figma: 13.83px;
+  --text-base-figma--line-height: 23.9px;
+  --text-sm-figma: 12.83px;
+  --text-sm-figma--line-height: 19.416px;
+  --text-xs-figma: 11.89px;
+  --text-xs-figma--line-height: 19.416px;
+
+  /* ===== Border Radius ===== */
+  --radius-card: 19px;
+
+  /* ===== Box Shadow ===== */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-primary: 4px 4px 7px 3px rgba(96, 165, 250, 0.4);
+}
+
+/* ===== Base Styles ===== */
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
+  --gradient-bg-dark: linear-gradient(105.39deg, rgb(2, 6, 23) 1.5%, rgb(2, 9, 42) 73.59%);
+  --gradient-text-primary: linear-gradient(135deg, #0f172a 0%, #2469ff 100%);
 }
 
 body {
@@ -18,14 +71,22 @@ h1, h2, h3, h4 {
   font-family: 'Outfit', sans-serif;
 }
 
-/* Figma accent line utility */
+/* ===== Figma Design Utilities ===== */
+
+/* Accent line — 4px blue bar (Figma pattern) */
 .accent-line {
   width: 48px;
   height: 4px;
-  background: var(--gridline-primary);
+  background: #2469ff;
   border-radius: 2px;
 }
 
+/* Dark section gradient background (Figma) */
+.bg-gradient-dark {
+  background: linear-gradient(105.39deg, rgb(2, 6, 23) 1.5%, rgb(2, 9, 42) 73.59%);
+}
+
+/* Glass morphism navbar */
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
@@ -33,6 +94,7 @@ h1, h2, h3, h4 {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Text gradient */
 .text-gradient {
   background: var(--gradient-text-primary);
   -webkit-background-clip: text;

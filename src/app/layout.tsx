@@ -33,7 +33,6 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${outfit.variable} ${instrumentSans.variable} antialiased bg-slate-50 text-slate-900`}
-        style={{ fontFamily: "'Inter', sans-serif" }}
       >
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>

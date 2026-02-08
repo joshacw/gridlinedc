@@ -25,7 +25,7 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-outfit text-xxl font-bold mb-6">
+          <h2 className="font-outfit text-xxl font-bold mb-6 text-white">
             The Data Center Valuation <span className="text-primary-blue">Arbitrage</span>
           </h2>
           <p className="font-outfit text-lg text-slate-300 max-w-4xl mx-auto leading-relaxed">
@@ -50,13 +50,13 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
                   Revenue Multiple
                 </div>
               </div>
-              <div className="space-y-3 text-left">
-                <div className="flex items-start gap-3">
-                  <span className="text-slate-500 mt-1">&#9675;</span>
+              <div className="space-y-3 text-left pl-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-500 text-xs shrink-0">&#9675;</span>
                   <p className="font-outfit text-sm-figma text-slate-300">Private market</p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-slate-500 mt-1">&#9675;</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-500 text-xs shrink-0">&#9675;</span>
                   <p className="font-outfit text-sm-figma text-slate-300">Illiquidity discount</p>
                 </div>
               </div>
@@ -84,13 +84,13 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
                     EBITDA Multiple
                   </div>
                 </div>
-                <div className="space-y-3 text-left">
-                  <div className="flex items-start gap-3">
-                    <span className="text-white mt-1">&#9679;</span>
+                <div className="space-y-3 text-left pl-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-white text-xs shrink-0">&#9679;</span>
                     <p className="font-outfit text-sm-figma text-white/90">Public market</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-white mt-1">&#9679;</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-white text-xs shrink-0">&#9679;</span>
                     <p className="font-outfit text-sm-figma text-white/90">Platform comparables</p>
                   </div>
                 </div>

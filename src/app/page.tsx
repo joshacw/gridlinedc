@@ -1,13 +1,9 @@
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import PartnershipValue from '@/components/PartnershipValue';
-import DCArbitrage from '@/components/DCArbitrage';
-import ValuationRerating from '@/components/ValuationRerating';
-import PartnershipOptions from '@/components/PartnershipOptions';
-import InvestmentTiers from '@/components/InvestmentTiers';
+import HomeHero from '@/components/HomeHero';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
 
@@ -22,9 +18,9 @@ export default function Home() {
       <Navbar onInquireClick={openModal} />
 
       <main>
-        <Hero onCtaClick={openModal} />
+        <HomeHero />
 
-        {/* Three Features Section - Matching Figma */}
+        {/* Three Features Section */}
         <section id="platform" className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
@@ -36,7 +32,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Asset Aggregation</h3>
-                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
                   We bundle high-quality data center assets into a unified portfolio for public markets.
                 </p>
               </div>
@@ -49,7 +45,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Listing Readiness</h3>
-                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
                   Institutional-grade governance designed to meet public exchange requirements.
                 </p>
               </div>
@@ -62,7 +58,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">AI Workloads</h3>
-                <p className="font-inter text-sm text-slate-600 leading-relaxed">
+                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
                   Infrastructure optimized for high-density compute and liquid cooling.
                 </p>
               </div>
@@ -70,43 +66,7 @@ export default function Home() {
           </div>
         </section>
 
-        <PartnershipValue />
-
-        <DCArbitrage onCtaClick={openModal} />
-
-        <ValuationRerating />
-
-        <section id="path" className="py-24 bg-slate-950 text-white relative overflow-hidden" style={{ display: 'none' }}>
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-2xl mb-16">
-              <h2 className="text-3xl font-outfit font-bold mb-4">Liquidity Path</h2>
-              <p className="text-slate-400 leading-relaxed">
-                Our roadmap to public listing ensures institutional liquidity for early asset owners by standardizing operations and aggregating scale.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {[
-                { step: 'Phase 1', title: 'Onboarding', desc: 'Secure high-density sites and establish baseline governance.' },
-                { step: 'Phase 2', title: 'Build-out', desc: 'Scale AI-ready infrastructure with superior capital efficiency.' },
-                { step: 'Phase 3', title: 'Portfolio', desc: 'Unified asset aggregation to de-risk earnings via diversification.' },
-                { step: 'Phase 4', title: 'Public Exit', desc: 'Institutional IPO / Exchange Listing at target 12x multiples.' }
-              ].map((item, idx) => (
-                <div key={idx} className="relative group p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all">
-                  <div className="text-blue-500 text-xs font-bold uppercase tracking-widest mb-4">{item.step}</div>
-                  <h4 className="text-lg font-bold mb-2 font-outfit">{item.title}</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <PartnershipOptions onCtaClick={openModal} />
-
-        <InvestmentTiers onCtaClick={openModal} />
-
+        {/* Audience Routing CTA */}
         <section className="py-32 bg-slate-50 relative overflow-hidden">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -117,23 +77,23 @@ export default function Home() {
             </svg>
           </div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-4xl font-outfit font-bold mb-6 text-slate-950">Partner with GridlineDC</h2>
+            <h2 className="text-xxl font-outfit font-bold mb-6 text-slate-950">How Can We Help?</h2>
             <p className="text-slate-600 mb-12 max-w-lg mx-auto leading-relaxed">
-              Open to accredited investors and data center asset owners looking for a strategic exit via institutional rerating and portfolio aggregation.
+              Select your path to learn more about how GRIDLINE can work for you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={openModal}
-                className="px-10 py-5 bg-slate-950 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs"
+              <Link
+                href="/owners"
+                className="px-10 py-5 bg-slate-950 text-white rounded-card font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs text-center"
               >
-                Connect with Advisory
-              </button>
-              <button
-                onClick={openModal}
-                className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs"
+                For Data Center Owners
+              </Link>
+              <Link
+                href="/investors"
+                className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-card font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs text-center"
               >
-                Contact Strategy Team
-              </button>
+                For Investors
+              </Link>
             </div>
           </div>
         </section>

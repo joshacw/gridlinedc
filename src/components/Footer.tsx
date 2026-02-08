@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
                   GRID<span className="text-primary-blue">LINE</span>
                 </span>
               </div>
-              <p className="font-inter text-gridline-gray text-sm leading-relaxed mb-6">
+              <p className="font-outfit text-gridline-gray text-sm leading-relaxed mb-6">
                 Aggregating premier digital infrastructure assets for the public markets.
               </p>
           </div>
@@ -19,23 +19,23 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray mb-6">Investment</h4>
             <ul className="space-y-4 text-gridline-gray text-sm">
-              <li><a href="#" className="font-inter hover:text-white transition-colors">Core Growth</a></li>
-              <li><a href="#" className="font-inter hover:text-white transition-colors">Seed Capital</a></li>
-              <li><a href="#" className="font-inter hover:text-white transition-colors">Performance</a></li>
+              <li><a href="#" className="font-outfit hover:text-white transition-colors">Core Growth</a></li>
+              <li><a href="#" className="font-outfit hover:text-white transition-colors">Seed Capital</a></li>
+              <li><a href="#" className="font-outfit hover:text-white transition-colors">Performance</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray mb-6">Company</h4>
             <ul className="space-y-4 text-gridline-gray text-sm">
-              <li><a href="#" className="font-inter hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="font-inter hover:text-white transition-colors">Contact</a></li>
+              <li><a href="#" className="font-outfit hover:text-white transition-colors">About</a></li>
+              <li><a href="#" className="font-outfit hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-dark-blue flex flex-col md:flex-row justify-between items-center gap-4 text-gridline-gray font-instrument-sans text-[10px] uppercase tracking-widest font-bold">
-          <p>&copy; 2024 GRIDLINE. All rights reserved.</p>
+          <p>&copy; 2025 GRIDLINE. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-primary-blue transition-colors">Privacy</a>
             <a href="#" className="hover:text-primary-blue transition-colors">Terms</a>

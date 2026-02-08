@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRIDLINE Design System Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&family=Outfit:wght@400;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       GRIDLINE DESIGN SYSTEM
+       Extracted from Figma: YPwvwFw6uJXa6xsYhUW47O
+       Last updated: 2026-02-08
+       ================================================================ */
+
+    :root {
+      /* ─── COLOR PALETTE ─── */
+      --gl-primary:        #2469ff;   /* Electric blue - CTAs, accents, highlights */
+      --gl-primary-hover:  #1d5ae6;   /* Hover state for primary */
+      --gl-navy:           #010825;   /* Dark navy - primary dark background */
+      --gl-dark-blue:      #030948;   /* Dark blue - cards on dark backgrounds */
+      --gl-white:          #fdfdfd;   /* Off-white - text on dark, light bg */
+      --gl-gray:           #94a3b8;   /* Slate gray - muted text, labels */
+      --gl-light-gray:     #bebebe;   /* Light gray - tertiary text */
+      --gl-hero-bg:        #00030f;   /* Hero background - near-black navy */
+
+      /* Gradient Backgrounds */
+      --gl-gradient-dark:  linear-gradient(105.39deg, rgb(2, 6, 23) 1.5%, rgb(2, 9, 42) 73.59%);
+
+      /* Shadow */
+      --gl-shadow-blue:    4px 4px 7px 3px rgba(96, 165, 250, 0.4);
+
+      /* ─── TYPOGRAPHY ─── */
+      --font-big-shoulders: 'Big Shoulders Display', sans-serif;
+      --font-outfit:        'Outfit', sans-serif;
+      --font-instrument:    'Instrument Sans', sans-serif;
+      --font-inter:         'Inter', sans-serif;
+
+      /* Font Sizes (exact Figma values) */
+      --size-mega:  55.59px;    /* Hero metrics (Big Shoulders Bold) */
+      --size-xxl:   39.927px;   /* Section headings (Outfit Bold) */
+      --size-xl:    21.419px;   /* Logo / sub-headings (Outfit Bold) */
+      --size-base:  13.83px;    /* Body text (Outfit Regular / Instrument Sans) */
+      --size-sm:    12.83px;    /* Secondary text (Outfit Regular) */
+      --size-xs:    11.89px;    /* Metric labels (Instrument Sans Regular) */
+      --size-tiny:  8.83px;     /* Disclaimers (Outfit Regular) */
+      --size-micro: 6.831px;    /* Confidential marks (Instrument Sans Medium) */
+
+      /* Line Heights (exact Figma values) */
+      --lh-mega:  61.246px;
+      --lh-xxl:   56.942px;
+      --lh-body:  23.9px;
+      --lh-label: 19.416px;
+      --lh-small: 33.9px;
+
+      /* Letter Spacing (exact Figma values) */
+      --ls-mega:  0.1086px;
+      --ls-xxl:   0.078px;
+      --ls-body:  0.027px;
+      --ls-label: 0.3135px;
+
+      /* ─── SPACING & SIZING ─── */
+      --radius-card: 19px;
+      --border-accent: 4px;    /* Blue accent line thickness */
+      --border-card:   3px;    /* Highlighted card border */
+    }
+
+    /* ─── RESET ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-inter); color: #1e293b; background: #f8fafc; line-height: 1.6; }
+
+    /* ─── GUIDE LAYOUT ─── */
+    .guide { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+    .guide-header { text-align: center; margin-bottom: 80px; padding: 60px 0; background: var(--gl-gradient-dark); border-radius: 24px; color: white; }
+    .guide-header h1 { font-family: var(--font-outfit); font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+    .guide-header h1 span { color: var(--gl-primary); }
+    .guide-header p { font-family: var(--font-instrument); color: var(--gl-gray); font-size: 14px; text-transform: uppercase; letter-spacing: 3px; }
+
+    .section { margin-bottom: 80px; }
+    .section-title {
+      font-family: var(--font-outfit);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gl-navy);
+      margin-bottom: 8px;
+      padding-bottom: 16px;
+      border-bottom: var(--border-accent) solid var(--gl-primary);
+      display: inline-block;
+    }
+    .section-desc {
+      font-family: var(--font-inter);
+      font-size: 14px;
+      color: var(--gl-gray);
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+    .subsection { margin-bottom: 40px; }
+    .subsection-title {
+      font-family: var(--font-outfit);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gl-navy);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ─── SWATCHES ─── */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .swatch {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      background: white;
+    }
+    .swatch-color { height: 100px; position: relative; }
+    .swatch-color::after {
+      content: attr(data-hex);
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-family: var(--font-instrument);
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      background: rgba(0,0,0,0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .swatch-info { padding: 12px 16px; }
+    .swatch-name { font-family: var(--font-outfit); font-weight: 700; font-size: 13px; color: var(--gl-navy); }
+    .swatch-var { font-family: var(--font-instrument); font-size: 11px; color: var(--gl-gray); margin-top: 2px; }
+    .swatch-usage { font-family: var(--font-inter); font-size: 11px; color: var(--gl-light-gray); margin-top: 4px; }
+
+    /* ─── TYPOGRAPHY SPECIMENS ─── */
+    .type-specimen { margin-bottom: 32px; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0; background: white; }
+    .type-specimen.on-dark { background: var(--gl-gradient-dark); border-color: var(--gl-dark-blue); }
+    .type-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .type-specimen.on-dark .type-meta { border-top-color: rgba(255,255,255,0.1); }
+    .type-tag {
+      font-family: var(--font-instrument);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: #f1f5f9;
+      color: var(--gl-gray);
+    }
+    .type-specimen.on-dark .type-tag { background: rgba(255,255,255,0.08); color: var(--gl-gray); }
+
+    /* ─── COMPONENT SPECIMENS ─── */
+    .component-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .component-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .component-demo { padding: 32px; display: flex; align-items: center; justify-content: center; min-height: 120px; }
+    .component-demo.dark-bg { background: var(--gl-gradient-dark); }
+    .component-label { padding: 12px 16px; border-top: 1px solid #e2e8f0; font-family: var(--font-instrument); font-size: 11px; color: var(--gl-gray); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ─── SPACING / TOKENS TABLE ─── */
+    .token-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+    .token-table th { font-family: var(--font-instrument); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gl-gray); padding: 14px 20px; text-align: left; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .token-table td { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .token-table td:first-child { font-family: var(--font-instrument); font-size: 12px; font-weight: 500; color: var(--gl-navy); }
+    .token-table td:nth-child(2) { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--gl-primary); }
+    .token-table td:nth-child(3) { font-family: var(--font-inter); font-size: 12px; color: var(--gl-gray); }
+
+    /* ─── LAYOUT REFERENCE ─── */
+    .layout-demo { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+    .layout-demo-inner { padding: 32px; }
+    .layout-label { padding: 12px 20px; border-top: 1px solid #e2e8f0; background: #f8fafc; font-family: var(--font-instrument); font-size: 11px; color: var(--gl-gray); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ─── DO / DON'T ─── */
+    .guidelines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .guideline-card { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+    .guideline-card.do { border-color: #22c55e; }
+    .guideline-card.dont { border-color: #ef4444; }
+    .guideline-header { padding: 10px 16px; font-family: var(--font-outfit); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+    .guideline-card.do .guideline-header { background: #f0fdf4; color: #16a34a; }
+    .guideline-card.dont .guideline-header { background: #fef2f2; color: #dc2626; }
+    .guideline-body { padding: 16px; font-family: var(--font-inter); font-size: 13px; color: #475569; line-height: 1.7; }
+    .guideline-body ul { padding-left: 16px; }
+    .guideline-body li { margin-bottom: 4px; }
+
+    /* ─── FIGMA VS CODE AUDIT ─── */
+    .audit-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+    .audit-table th { font-family: var(--font-instrument); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gl-gray); padding: 14px 16px; text-align: left; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .audit-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+    .status-match { color: #16a34a; font-weight: 600; }
+    .status-mismatch { color: #dc2626; font-weight: 600; }
+    .status-partial { color: #d97706; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="guide">
+
+  <!-- ════════════════════════════════════════════════════════════════
+       HEADER
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="guide-header">
+    <h1>GRID<span>LINE</span></h1>
+    <p>Design System Reference</p>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       1. COLOR PALETTE
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">1. Color Palette</h2>
+    <p class="section-desc">Extracted directly from Figma node styles. Every color used across the presentation deck and website.</p>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Primary Brand Colors</h3>
+      <div class="swatch-grid">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #2469ff;" data-hex="#2469ff"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Electric Blue</div>
+            <div class="swatch-var">--gl-primary</div>
+            <div class="swatch-usage">CTAs, accents, highlights, "LINE" in logo</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #1d5ae6;" data-hex="#1d5ae6"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Primary Hover</div>
+            <div class="swatch-var">--gl-primary-hover</div>
+            <div class="swatch-usage">Hover state for primary blue elements</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #010825;" data-hex="#010825"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Dark Navy</div>
+            <div class="swatch-var">--gl-navy</div>
+            <div class="swatch-usage">Primary dark backgrounds, headings on light</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #030948;" data-hex="#030948"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Dark Blue</div>
+            <div class="swatch-var">--gl-dark-blue</div>
+            <div class="swatch-usage">Cards on dark backgrounds (e.g., metric cards)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Background Colors</h3>
+      <div class="swatch-grid">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #00030f;" data-hex="#00030f"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Hero Background</div>
+            <div class="swatch-var">--gl-hero-bg</div>
+            <div class="swatch-usage">Hero section near-black background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: linear-gradient(105.39deg, rgb(2,6,23) 1.5%, rgb(2,9,42) 73.59%);" data-hex="gradient"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Dark Gradient</div>
+            <div class="swatch-var">--gl-gradient-dark</div>
+            <div class="swatch-usage">Page backgrounds in presentation, dark sections</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #ffffff;" data-hex="#ffffff"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">White</div>
+            <div class="swatch-var">white</div>
+            <div class="swatch-usage">Content area backgrounds on split-layout pages</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #fdfdfd; border: 1px solid #e2e8f0;" data-hex="#fdfdfd"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Off-White</div>
+            <div class="swatch-var">--gl-white</div>
+            <div class="swatch-usage">Text on dark backgrounds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Text Colors</h3>
+      <div class="swatch-grid">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #010825;" data-hex="#010825"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Heading on Light</div>
+            <div class="swatch-var">--gl-navy</div>
+            <div class="swatch-usage">Section headings, body text on white bg</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #94a3b8;" data-hex="#94a3b8"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Muted Text</div>
+            <div class="swatch-var">--gl-gray</div>
+            <div class="swatch-usage">Labels, supporting text, metric captions</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #bebebe;" data-hex="#bebebe"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Tertiary Text</div>
+            <div class="swatch-var">--gl-light-gray</div>
+            <div class="swatch-usage">Page numbers, section labels (e.g., "01 / THE OPPORTUNITY")</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       2. TYPOGRAPHY
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">2. Typography</h2>
+    <p class="section-desc">Four font families, each with a specific role. Sizes and weights extracted from Figma node properties.</p>
+
+    <!-- Big Shoulders Display -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-big-shoulders); font-size: 55.59px; font-weight: 700; line-height: 61.246px; letter-spacing: 0.1086px; color: white;">
+        1-3x
+      </div>
+      <div style="font-family: var(--font-big-shoulders); font-size: 55.59px; font-weight: 700; line-height: 61.246px; letter-spacing: 0.1086px; color: white; margin-top: 8px;">
+        8-10x<span style="font-size: 37.658px;">*</span>
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Big Shoulders Display</span>
+        <span class="type-tag">Bold 700</span>
+        <span class="type-tag">55.59px / 61.246px</span>
+        <span class="type-tag">Letter-spacing: 0.1086px</span>
+        <span class="type-tag">Use: Hero metrics, large numbers</span>
+      </div>
+    </div>
+
+    <!-- Big Shoulders Display - Medium -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-big-shoulders); font-size: 37.658px; font-weight: 700; line-height: 41.489px; letter-spacing: 0.0736px; color: var(--gl-primary);">
+        22%
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Big Shoulders Display</span>
+        <span class="type-tag">Bold 700</span>
+        <span class="type-tag">37.658px / 41.489px</span>
+        <span class="type-tag">Use: Secondary metrics</span>
+      </div>
+    </div>
+
+    <!-- Outfit Bold - Section Headings -->
+    <div class="type-specimen">
+      <div style="font-family: var(--font-outfit); font-size: 39.927px; font-weight: 700; line-height: 56.942px; letter-spacing: 0.078px; color: var(--gl-navy);">
+        Potential <span style="color: var(--gl-primary);">Valuation Uplift</span>
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Bold 700</span>
+        <span class="type-tag">39.927px / 56.942px</span>
+        <span class="type-tag">Letter-spacing: 0.078px</span>
+        <span class="type-tag">Use: Section headings</span>
+      </div>
+    </div>
+
+    <!-- Outfit Bold - Logo -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-outfit); font-size: 21.419px; font-weight: 700; line-height: 26.996px; letter-spacing: 0.0418px; color: white;">
+        GRID<span style="color: var(--gl-primary);">LINE</span>
+      </div>
+      <div style="font-family: var(--font-outfit); font-size: 31.731px; font-weight: 700; line-height: 39.995px; letter-spacing: 0.062px; color: white; margin-top: 16px;">
+        GRID<span style="color: var(--gl-primary);">LINE</span>
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Bold 700</span>
+        <span class="type-tag">Footer: 21.419px | Cover: 31.731px</span>
+        <span class="type-tag">Use: Logo wordmark</span>
+      </div>
+    </div>
+
+    <!-- Outfit Bold - Card Labels -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; line-height: 33.9px; letter-spacing: 0.027px; color: var(--gl-white);">
+        STANDALONE ASSET
+      </div>
+      <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; line-height: 33.9px; letter-spacing: 0.027px; color: var(--gl-primary); margin-top: 4px;">
+        UPSIDE POTENTIAL
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Bold 700</span>
+        <span class="type-tag">13.83px / 33.9px</span>
+        <span class="type-tag">Use: Card headings, row labels (VALUATION, RISK, etc.)</span>
+      </div>
+    </div>
+
+    <!-- Outfit Regular - Body Text -->
+    <div class="type-specimen">
+      <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 400; line-height: 23.9px; letter-spacing: 0.027px; color: var(--gl-navy);">
+        GridLine has completed a high-level review of the financial and operational information provided by Irix relating to Irix DC1. Based on this initial snapshot, we believe there is a viable pathway to structure a partnership.
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Regular 400</span>
+        <span class="type-tag">13.83px / 23.9px</span>
+        <span class="type-tag">Use: Body text, descriptions</span>
+      </div>
+    </div>
+
+    <!-- Outfit Regular - Comparison Values -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-outfit); font-size: 12.83px; font-weight: 400; line-height: 33.9px; letter-spacing: 0.0251px; color: var(--gl-white);">
+        Asset-level metrics<br>
+        Single asset concentration<br>
+        Raised asset by asset
+      </div>
+      <div style="font-family: var(--font-outfit); font-size: 12.83px; font-weight: 700; line-height: 33.9px; letter-spacing: 0.0251px; color: var(--gl-primary); margin-top: 8px;">
+        Platform-level framework<br>
+        Portfolio diversification<br>
+        Platform-level access
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Regular 400 (left) / Bold 700 (right, blue)</span>
+        <span class="type-tag">12.83px / 33.9px</span>
+        <span class="type-tag">Use: Comparison table values</span>
+      </div>
+    </div>
+
+    <!-- Instrument Sans - Labels -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-instrument); font-size: 11.89px; font-weight: 400; line-height: 19.416px; letter-spacing: 0.3135px; color: var(--gl-gray);">
+        Revenue Multiple
+      </div>
+      <div style="font-family: var(--font-instrument); font-size: 11.89px; font-weight: 400; line-height: 19.416px; letter-spacing: 0.3135px; color: var(--gl-gray); margin-top: 8px;">
+        EBITDA &nbsp; Multiple
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Instrument Sans</span>
+        <span class="type-tag">Regular 400</span>
+        <span class="type-tag">11.89px / 19.416px</span>
+        <span class="type-tag">Letter-spacing: 0.3135px</span>
+        <span class="type-tag">Use: Metric captions, fiscal year labels</span>
+      </div>
+    </div>
+
+    <!-- Instrument Sans - Confidential -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-instrument); font-size: 6.831px; font-weight: 500; line-height: 8.538px; color: white;">
+        CONFIDENTIAL
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Instrument Sans</span>
+        <span class="type-tag">Medium 500</span>
+        <span class="type-tag">6.831px / 8.538px</span>
+        <span class="type-tag">Use: Confidential badge text</span>
+      </div>
+    </div>
+
+    <!-- Outfit Regular - Disclaimers -->
+    <div class="type-specimen on-dark">
+      <div style="font-family: var(--font-outfit); font-size: 8.83px; font-weight: 400; line-height: 16.9px; letter-spacing: 0.0172px; color: white; opacity: 0.7;">
+        *8-10x EBITDA multiples reflect historical ranges observed in public market data center platforms. This is illustrative of market dynamics, not a projection of specific outcomes.
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Regular 400</span>
+        <span class="type-tag">8.83px / 16.9px</span>
+        <span class="type-tag">Use: Disclaimers, fine print</span>
+      </div>
+    </div>
+
+    <!-- Section Labels -->
+    <div class="type-specimen">
+      <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 400; line-height: 23.9px; letter-spacing: 0.027px; color: var(--gl-light-gray);">
+        01 / THE OPPORTUNITY
+      </div>
+      <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 400; line-height: 23.9px; letter-spacing: 0.027px; color: var(--gl-light-gray); margin-top: 4px;">
+        03 / VALUATION FRAMEWORK
+      </div>
+      <div class="type-meta">
+        <span class="type-tag">Outfit</span>
+        <span class="type-tag">Regular 400</span>
+        <span class="type-tag">13.83px / 23.9px</span>
+        <span class="type-tag">Color: #bebebe</span>
+        <span class="type-tag">Use: Page/section number labels</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       3. COMPONENTS
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">3. Components</h2>
+    <p class="section-desc">Reusable component patterns extracted from the Figma deck.</p>
+
+    <div class="component-grid">
+      <!-- Logo -->
+      <div class="component-card">
+        <div class="component-demo dark-bg">
+          <span style="font-family: var(--font-outfit); font-size: 31.731px; font-weight: 700; color: white; letter-spacing: -0.5px;">GRID<span style="color: var(--gl-primary);">LINE</span></span>
+        </div>
+        <div class="component-label">Logo - Cover Size (31.731px)</div>
+      </div>
+
+      <div class="component-card">
+        <div class="component-demo dark-bg">
+          <span style="font-family: var(--font-outfit); font-size: 21.419px; font-weight: 700; color: white; letter-spacing: -0.3px;">GRID<span style="color: var(--gl-primary);">LINE</span></span>
+        </div>
+        <div class="component-label">Logo - Footer Size (21.419px)</div>
+      </div>
+
+      <!-- Blue Accent Line -->
+      <div class="component-card">
+        <div class="component-demo" style="flex-direction: column; align-items: stretch;">
+          <div style="height: 4px; background: var(--gl-primary); border-radius: 0; width: 100%;"></div>
+        </div>
+        <div class="component-label">Accent Line - 4px, #2469ff, full width</div>
+      </div>
+
+      <!-- Metric Card - Dark -->
+      <div class="component-card">
+        <div class="component-demo dark-bg" style="flex-direction: column; gap: 4px;">
+          <div style="background: var(--gl-dark-blue); border-radius: 19px; padding: 20px 32px; text-align: center; width: 184px;">
+            <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; color: var(--gl-white); line-height: 33.9px;">STANDALONE ASSET</div>
+            <div style="font-family: var(--font-big-shoulders); font-size: 55.59px; font-weight: 700; color: white; line-height: 61.246px;">1-3x</div>
+            <div style="font-family: var(--font-instrument); font-size: 11.89px; color: var(--gl-gray); line-height: 19.416px;">Revenue Multiple</div>
+          </div>
+        </div>
+        <div class="component-label">Metric Card - Standard (bg: #030948, r: 19px)</div>
+      </div>
+
+      <!-- Metric Card - Highlighted -->
+      <div class="component-card">
+        <div class="component-demo dark-bg" style="flex-direction: column; gap: 4px;">
+          <div style="background: var(--gl-dark-blue); border: 3px solid var(--gl-primary); border-radius: 19px; padding: 20px 32px; text-align: center; width: 184px; box-shadow: var(--gl-shadow-blue);">
+            <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; color: var(--gl-primary); line-height: 33.9px;">UPSIDE POTENTIAL</div>
+            <div style="font-family: var(--font-big-shoulders); font-size: 55.59px; font-weight: 700; color: white; line-height: 61.246px;">8-10x<span style="font-size: 37px;">*</span></div>
+            <div style="font-family: var(--font-instrument); font-size: 11.89px; color: var(--gl-gray); line-height: 19.416px;">EBITDA Multiple</div>
+          </div>
+        </div>
+        <div class="component-label">Metric Card - Highlighted (border: 3px #2469ff, shadow: blue glow)</div>
+      </div>
+
+      <!-- Stat Card Small -->
+      <div class="component-card">
+        <div class="component-demo dark-bg">
+          <div style="background: var(--gl-dark-blue); border-radius: 19px; padding: 16px 24px; text-align: center; min-width: 120px;">
+            <div style="font-family: var(--font-big-shoulders); font-size: 37.658px; font-weight: 700; color: var(--gl-primary); line-height: 41.489px;">22%</div>
+            <div style="font-family: var(--font-instrument); font-size: 11.89px; color: var(--gl-gray); line-height: 19.416px;">EBITDA</div>
+          </div>
+        </div>
+        <div class="component-label">Stat Card - Small (bg: #030948, r: 19px)</div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="component-card">
+        <div class="component-demo dark-bg" style="padding: 32px;">
+          <div style="width: 100%; max-width: 300px;">
+            <div style="background: white; border-radius: 19px; height: 38px; position: relative; overflow: hidden;">
+              <div style="background: var(--gl-primary); border-radius: 19px; height: 100%; width: 25%; display: flex; align-items: center; padding-left: 16px;">
+                <span style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; color: white;">25% UTILIZED</span>
+              </div>
+              <span style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; color: var(--gl-navy); position: absolute; right: 16px; top: 50%; transform: translateY(-50%);">75% HEADROOM</span>
+            </div>
+          </div>
+        </div>
+        <div class="component-label">Progress Bar (white bg, blue fill, r: 19px, h: 38px)</div>
+      </div>
+
+      <!-- Confidential Badge -->
+      <div class="component-card">
+        <div class="component-demo dark-bg">
+          <div style="background: var(--gl-primary); border-radius: 6px; padding: 4px 12px;">
+            <span style="font-family: var(--font-instrument); font-size: 6.831px; font-weight: 500; color: white; text-transform: uppercase;">CONFIDENTIAL</span>
+          </div>
+        </div>
+        <div class="component-label">Badge - Confidential (bg: #2469ff, r: 6px)</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       4. LAYOUT PATTERNS
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">4. Layout Patterns</h2>
+    <p class="section-desc">Consistent structural patterns used across Figma pages.</p>
+
+    <div class="layout-demo">
+      <div class="layout-demo-inner" style="background: var(--gl-gradient-dark); padding: 40px;">
+        <!-- Section label -->
+        <div style="font-family: var(--font-outfit); font-size: 13.83px; color: var(--gl-light-gray); margin-bottom: 4px;">03 / VALUATION FRAMEWORK</div>
+        <!-- Heading with blue accent word -->
+        <div style="font-family: var(--font-outfit); font-size: 32px; font-weight: 700; color: white; margin-bottom: 16px;">
+          Potential <span style="color: var(--gl-primary);">Valuation Uplift</span>
+        </div>
+        <!-- Blue accent line -->
+        <div style="height: 4px; background: var(--gl-primary); margin-bottom: 20px;"></div>
+        <!-- Subhead / body text -->
+        <div style="font-family: var(--font-outfit); font-size: 13.83px; color: var(--gl-navy); line-height: 23.9px; max-width: 500px; color: white; opacity: 0.8;">
+          PLATFORM INTEGRATION FRAMEWORK
+        </div>
+      </div>
+      <div class="layout-label">Page Header Pattern: section label + heading (key word in blue) + 4px accent line + body text</div>
+    </div>
+
+    <div class="layout-demo">
+      <div class="layout-demo-inner" style="background: var(--gl-gradient-dark); padding: 40px;">
+        <div style="display: flex; gap: 24px; align-items: flex-start;">
+          <!-- Comparison table pattern -->
+          <div style="flex: 1;">
+            <div style="font-family: var(--font-outfit); font-size: 13.83px; font-weight: 700; color: white; line-height: 33.9px;">
+              VALUATION<br>RISK<br>CAPITAL<br>CONTRACTS<br>EXIT
+            </div>
+          </div>
+          <div style="flex: 1.5;">
+            <div style="font-family: var(--font-outfit); font-size: 12.83px; font-weight: 400; color: white; line-height: 33.9px;">
+              Asset-level metrics<br>Single asset concentration<br>Raised asset by asset<br>Custom, harder to finance<br>Sell the asset
+            </div>
+          </div>
+          <div style="flex: 1.5;">
+            <div style="font-family: var(--font-outfit); font-size: 12.83px; font-weight: 700; color: var(--gl-primary); line-height: 33.9px;">
+              Platform-level framework<br>Portfolio diversification<br>Platform-level access<br>Standardised<br>Multiple pathways
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layout-label">Comparison Table Pattern: Bold labels (left) | Regular white text (middle) | Bold blue text (right)</div>
+    </div>
+
+    <div class="layout-demo">
+      <div class="layout-demo-inner" style="background: var(--gl-gradient-dark); padding: 40px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 24px;">
+          <div style="font-family: var(--font-outfit); font-size: 21.419px; font-weight: 700; color: white; letter-spacing: -0.3px;">GRID<span style="color: var(--gl-primary);">LINE</span></div>
+          <div style="flex: 1;"></div>
+          <div style="background: var(--gl-primary); border-radius: 6px; padding: 4px 12px;">
+            <span style="font-family: var(--font-instrument); font-size: 6.831px; font-weight: 500; color: white;">CONFIDENTIAL</span>
+          </div>
+        </div>
+      </div>
+      <div class="layout-label">Footer Pattern: GRIDLINE logo (left) + CONFIDENTIAL badge (right)</div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       5. DESIGN TOKENS REFERENCE
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">5. Design Tokens</h2>
+    <p class="section-desc">Complete token reference for use in CSS variables and Tailwind config.</p>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Font Size Scale</h3>
+      <table class="token-table">
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Line Height</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>--size-mega</td><td>55.59px</td><td>61.246px</td><td>Hero metrics (Big Shoulders Bold)</td></tr>
+          <tr><td>--size-mega-secondary</td><td>37.658px</td><td>41.489px</td><td>Secondary metrics (Big Shoulders Bold)</td></tr>
+          <tr><td>--size-xxl</td><td>39.927px</td><td>56.942px</td><td>Section headings (Outfit Bold)</td></tr>
+          <tr><td>--size-xl</td><td>21.419px</td><td>26.996px</td><td>Logo footer / sub-headings (Outfit Bold)</td></tr>
+          <tr><td>--size-base</td><td>13.83px</td><td>23.9px</td><td>Body text, card labels (Outfit)</td></tr>
+          <tr><td>--size-sm</td><td>12.83px</td><td>33.9px</td><td>Comparison values (Outfit)</td></tr>
+          <tr><td>--size-xs</td><td>11.89px</td><td>19.416px</td><td>Metric captions (Instrument Sans)</td></tr>
+          <tr><td>--size-tiny</td><td>8.83px</td><td>16.9px</td><td>Disclaimers (Outfit Regular)</td></tr>
+          <tr><td>--size-micro</td><td>6.831px</td><td>8.538px</td><td>Confidential marks (Instrument Sans Medium)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Border Radius</h3>
+      <table class="token-table">
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>--radius-card</td><td>19px</td><td>All cards (metric cards, stat cards, badges)</td></tr>
+          <tr><td>--radius-full</td><td>9999px</td><td>Pills, badges, buttons</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Shadows</h3>
+      <table class="token-table">
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>--gl-shadow-blue</td><td>4px 4px 7px 3px rgba(96, 165, 250, 0.4)</td><td>Highlighted metric cards (blue glow)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Special Patterns</h3>
+      <table class="token-table">
+        <thead>
+          <tr><th>Pattern</th><th>Value</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Accent line</td><td>4px height, #2469ff, full-width</td><td>Horizontal separator below headings and above footers</td></tr>
+          <tr><td>Card border highlight</td><td>3px solid #2469ff</td><td>Highlighted / preferred card</td></tr>
+          <tr><td>Split layout</td><td>White top half + dark gradient bottom</td><td>Mixed content pages (overview, valuation)</td></tr>
+          <tr><td>Logo color split</td><td>"GRID" = white, "LINE" = #2469ff</td><td>Always two-tone</td></tr>
+          <tr><td>Heading color split</td><td>Key word in #2469ff, rest in white or #010825</td><td>All section headings</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       6. SITE AUDIT: FIGMA vs CURRENT CODE
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">6. Figma vs Code Audit</h2>
+    <p class="section-desc">Comparison of what the Figma design specifies versus what the current website implementation does. Items marked as mismatches need correction.</p>
+
+    <table class="audit-table">
+      <thead>
+        <tr><th>Element</th><th>Figma Spec</th><th>Current Code</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Background gradient</td>
+          <td>linear-gradient(105.39deg, rgb(2,6,23) 1.5%, rgb(2,9,42) 73.59%)</td>
+          <td>Uses bg-slate-950 (#0f172a) or inline #00030f in some sections</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Section heading size</td>
+          <td>39.927px Outfit Bold, line-height 56.942px</td>
+          <td>text-4xl (36px) or text-5xl (48px) - neither matches</td>
+          <td class="status-mismatch">Mismatch</td>
+        </tr>
+        <tr>
+          <td>Heading color pattern</td>
+          <td>Key word in #2469ff, rest in dark/white</td>
+          <td>Uses text-gradient class or inline color - inconsistent</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Metric numbers font</td>
+          <td>Big Shoulders Display Bold, 55.59px</td>
+          <td>Uses font-big-shoulders with text-6xl/7xl (60-72px) - oversized</td>
+          <td class="status-mismatch">Mismatch</td>
+        </tr>
+        <tr>
+          <td>Body text</td>
+          <td>Outfit Regular, 13.83px / 23.9px</td>
+          <td>Uses font-inter text-sm (14px) - should be Outfit, close size</td>
+          <td class="status-mismatch">Mismatch</td>
+        </tr>
+        <tr>
+          <td>Metric labels</td>
+          <td>Instrument Sans Regular, 11.89px, letter-spacing 0.3135px</td>
+          <td>Uses font-instrument-sans text-xs - close but generic letter-spacing</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Card background</td>
+          <td>#030948 (dark blue)</td>
+          <td>Uses bg-slate-900/50 with backdrop-blur - different look</td>
+          <td class="status-mismatch">Mismatch</td>
+        </tr>
+        <tr>
+          <td>Card border radius</td>
+          <td>19px</td>
+          <td>Uses rounded-3xl (24px) in some places, rounded-card (19px) in others</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Highlighted card border</td>
+          <td>3px solid #2469ff with blue glow shadow</td>
+          <td>Uses border-2 (2px) or border-3 (3px) - inconsistent</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Blue glow shadow</td>
+          <td>4px 4px 7px 3px rgba(96, 165, 250, 0.4)</td>
+          <td>Uses shadow-primary token - correct when used</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Accent line</td>
+          <td>4px height, #2469ff, full-width horizontal</td>
+          <td>Not consistently used; some sections use bg-gradient-to-r or border-t</td>
+          <td class="status-mismatch">Mismatch</td>
+        </tr>
+        <tr>
+          <td>Primary blue color</td>
+          <td>#2469ff</td>
+          <td>#2469ff (via --gridline-primary)</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Dark navy color</td>
+          <td>#010825</td>
+          <td>#010825 (via --gridline-navy)</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Muted text color</td>
+          <td>#94a3b8</td>
+          <td>#94a3b8 (via --gridline-gray)</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Section label color</td>
+          <td>#bebebe (e.g., "01 / THE OPPORTUNITY")</td>
+          <td>#bebebe (via --gridline-light-gray)</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Logo rendering</td>
+          <td>Outfit Bold, "GRID" white + "LINE" #2469ff, tight tracking</td>
+          <td>Uses font-outfit tracking-tighter - correct</td>
+          <td class="status-match">Match</td>
+        </tr>
+        <tr>
+          <td>Comparison table layout</td>
+          <td>3-column: Bold labels | Regular white | Bold blue</td>
+          <td>Uses HTML table with different styling approach</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td>Hero grid overlay</td>
+          <td>Not in Figma (presentation only)</td>
+          <td>SVG grid pattern with blue glow effects</td>
+          <td class="status-partial">Web-only</td>
+        </tr>
+        <tr>
+          <td>Web-specific: glassmorphism nav</td>
+          <td>Not in Figma (presentation only)</td>
+          <td>Glass effect with backdrop-blur</td>
+          <td class="status-partial">Web-only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       7. GUIDELINES
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">7. Design Guidelines</h2>
+    <p class="section-desc">Rules for maintaining visual consistency with the Figma source of truth.</p>
+
+    <div class="guidelines-grid">
+      <div class="guideline-card do">
+        <div class="guideline-header">Do</div>
+        <div class="guideline-body">
+          <ul>
+            <li>Use exact Figma font sizes (13.83px, 39.927px, 55.59px) via design tokens</li>
+            <li>Use <code>#030948</code> for cards on dark backgrounds</li>
+            <li>Use the 4px blue accent line as a section separator</li>
+            <li>Highlight key words in headings with <code>#2469ff</code></li>
+            <li>Use <code>19px</code> border-radius consistently on all cards</li>
+            <li>Use <code>3px solid #2469ff</code> + blue glow for highlighted cards</li>
+            <li>Use Outfit for headings and body, Instrument Sans for labels/captions, Big Shoulders for numbers</li>
+            <li>Use the dark gradient <code>linear-gradient(105.39deg, ...)</code> for dark page backgrounds</li>
+            <li>Keep body text at Outfit Regular 13.83px, not Inter</li>
+          </ul>
+        </div>
+      </div>
+      <div class="guideline-card dont">
+        <div class="guideline-header">Don't</div>
+        <div class="guideline-body">
+          <ul>
+            <li>Don't use Tailwind defaults like <code>text-4xl</code> or <code>rounded-3xl</code> instead of Figma tokens</li>
+            <li>Don't use <code>bg-slate-950</code> or <code>bg-slate-900</code> as dark backgrounds - use the gradient</li>
+            <li>Don't use <code>backdrop-blur</code> on metric cards (that's a different visual than Figma)</li>
+            <li>Don't use Inter for body text - Figma specifies Outfit</li>
+            <li>Don't scale up Big Shoulders numbers beyond 55.59px - that's the max in Figma</li>
+            <li>Don't mix <code>border-2</code> and <code>border-3</code> on highlighted cards - always 3px</li>
+            <li>Don't omit the 4px accent line from section headers</li>
+            <li>Don't use gradient text effects not present in Figma</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       8. CSS VARIABLES COPY-PASTE
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="section-title">8. CSS Variables (Copy-Paste)</h2>
+    <p class="section-desc">Drop this into your design-tokens.css file to align with Figma.</p>
+
+    <div style="background: #1e293b; border-radius: 12px; padding: 24px; overflow-x: auto;">
+      <pre style="font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.8; color: #e2e8f0; margin: 0; white-space: pre-wrap;">
+:root {
+  /* ─── Colors (Figma exact) ─── */
+  --gridline-primary:     #2469ff;
+  --gridline-primary-hover: #1d5ae6;
+  --gridline-navy:        #010825;
+  --gridline-dark-blue:   #030948;
+  --gridline-white:       #fdfdfd;
+  --gridline-gray:        #94a3b8;
+  --gridline-light-gray:  #bebebe;
+  --gridline-hero-bg:     #00030f;
+
+  /* ─── Gradient (Figma exact) ─── */
+  --gradient-dark: linear-gradient(105.39deg, rgb(2, 6, 23) 1.5%, rgb(2, 9, 42) 73.59%);
+
+  /* ─── Typography Scale (Figma exact) ─── */
+  --text-mega:        55.59px;
+  --text-mega-secondary: 37.658px;
+  --text-xxl:         39.927px;
+  --text-xl:          21.419px;
+  --text-base:        13.83px;
+  --text-sm:          12.83px;
+  --text-xs:          11.89px;
+  --text-tiny:        8.83px;
+  --text-micro:       6.831px;
+
+  --leading-mega:     61.246px;
+  --leading-mega-secondary: 41.489px;
+  --leading-xxl:      56.942px;
+  --leading-body:     23.9px;
+  --leading-label:    19.416px;
+  --leading-card:     33.9px;
+  --leading-tiny:     16.9px;
+  --leading-micro:    8.538px;
+
+  --ls-mega:          0.1086px;
+  --ls-xxl:           0.078px;
+  --ls-body:          0.027px;
+  --ls-label:         0.3135px;
+  --ls-tiny:          0.0172px;
+
+  /* ─── Spacing (Figma exact) ─── */
+  --radius-card:      19px;
+  --border-accent:    4px;
+  --border-highlight: 3px;
+  --shadow-blue-glow: 4px 4px 7px 3px rgba(96, 165, 250, 0.4);
+}
+      </pre>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

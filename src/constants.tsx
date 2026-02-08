@@ -1,10 +1,77 @@
 import React from 'react';
 import { InvestmentTier, NavItem } from './types';
 
+// Legacy nav items (kept for backward compatibility)
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Multiplier Model', href: '#rerating' },
   { label: 'Partnership', href: '#partnership' },
   { label: 'Investment', href: '#strategy' },
+];
+
+// Page-specific navigation
+export const HOME_NAV_ITEMS: NavItem[] = [
+  { label: 'For Owners', href: '/owners' },
+  { label: 'For Investors', href: '/investors' },
+];
+
+export const OWNERS_NAV_ITEMS: NavItem[] = [
+  { label: 'Why Partner', href: '#why-partner' },
+  { label: 'Comparison', href: '#comparison' },
+  { label: 'Options', href: '#partnership-options' },
+  { label: 'Arbitrage', href: '#arbitrage' },
+];
+
+export const INVESTORS_NAV_ITEMS: NavItem[] = [
+  { label: 'Overview', href: '#overview' },
+];
+
+// New partnership options for the owners page
+export const OWNERS_PARTNERSHIP_OPTIONS = [
+  {
+    title: 'Royalty + Platform Equity',
+    type: 'Primary Option',
+    typeLabel: 'Preferred',
+    icon: 'star',
+    points: [
+      'Ongoing royalty participation tied to asset-level performance',
+      'Minority equity participation in the GRIDLINE platform',
+      'No forced exit at closing',
+      'Preserves operating continuity',
+      'Aligns near-term income with long-term platform value',
+    ],
+    description: 'Best suited for owners seeking continued cash flow with exposure to institutional rerating.',
+    highlighted: true,
+  },
+  {
+    title: 'Owner Financing + Platform Equity',
+    type: 'Secondary Option',
+    typeLabel: 'Secondary',
+    icon: 'link',
+    points: [
+      'Agreed enterprise valuation',
+      'Deferred consideration via owner financing',
+      'Interest accrual over time',
+      'Repayment from free cash flow and/or future liquidity events',
+      'Minority platform equity participation',
+    ],
+    description: 'Best suited for owners seeking deferred liquidity with strong alignment.',
+    highlighted: false,
+  },
+  {
+    title: 'Partial Cash / Partial Equity',
+    type: 'Alternative Option',
+    typeLabel: 'Alternative',
+    icon: 'scale',
+    points: [
+      'Partial liquidity at closing',
+      'Remaining value contributed as platform equity',
+      'Increased capital and execution complexity',
+      'Longer timelines',
+      'Reduced alignment relative to primary structures',
+    ],
+    description: 'Used selectively where partial liquidity is required.',
+    highlighted: false,
+  },
 ];
 
 export const INVESTMENT_TIERS: InvestmentTier[] = [

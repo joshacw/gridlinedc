@@ -7,6 +7,7 @@ import { api } from "../../convex/_generated/api";
 interface EnquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultEnquiryType?: EnquiryType;
 }
 
 type EnquiryType = 'investor' | 'asset_owner' | null;
@@ -43,7 +44,7 @@ const HEARD_ABOUT_OPTIONS = [
   'Other'
 ];
 
-const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
+const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnquiryType }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -54,7 +55,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
     email: '',
     companyName: '',
     phoneNumber: '',
-    enquiryType: null,
+    enquiryType: defaultEnquiryType || null,
     heardAbout: ''
   });
 
@@ -83,7 +84,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
           email: '',
           companyName: '',
           phoneNumber: '',
-          enquiryType: null,
+          enquiryType: defaultEnquiryType || null,
           heardAbout: ''
         });
         setDcSurvey({

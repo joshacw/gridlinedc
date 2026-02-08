@@ -19,3 +19,5 @@ export interface NavItem {
   label: string;
   href: string;
 }
+
+export type PageContext = 'home' | 'owners' | 'investors';

@@ -53,11 +53,11 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
               <div className="space-y-3 text-left pl-4">
                 <div className="flex items-center gap-3">
                   <span className="text-slate-500 text-xs shrink-0">&#9675;</span>
-                  <p className="font-outfit text-sm-figma text-slate-300">Private market</p>
+                  <p className="font-outfit text-base text-slate-300">Private market</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-slate-500 text-xs shrink-0">&#9675;</span>
-                  <p className="font-outfit text-sm-figma text-slate-300">Illiquidity discount</p>
+                  <p className="font-outfit text-base text-slate-300">Illiquidity discount</p>
                 </div>
               </div>
             </div>
@@ -87,11 +87,11 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
                 <div className="space-y-3 text-left pl-4">
                   <div className="flex items-center gap-3">
                     <span className="text-white text-xs shrink-0">&#9679;</span>
-                    <p className="font-outfit text-sm-figma text-white/90">Public market</p>
+                    <p className="font-outfit text-base text-white/90">Public market</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-white text-xs shrink-0">&#9679;</span>
-                    <p className="font-outfit text-sm-figma text-white/90">Platform comparables</p>
+                    <p className="font-outfit text-base text-white/90">Platform comparables</p>
                   </div>
                 </div>
               </div>

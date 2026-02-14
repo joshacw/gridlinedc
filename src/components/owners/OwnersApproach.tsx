@@ -43,7 +43,7 @@ const OwnersApproach: React.FC = () => {
           <h2 className="font-outfit text-xxl font-bold mb-6">
             Our <span className="text-primary-blue">Approach</span>
           </h2>
-          <p className="font-outfit text-base-figma text-slate-600 leading-relaxed">
+          <p className="font-outfit text-lg text-slate-600 leading-relaxed">
             GRIDLINE actively sources partnership and acquisition opportunities that meet institutional criteria.
             We prioritize durable partnerships over one-off asset sales.
           </p>
@@ -56,7 +56,7 @@ const OwnersApproach: React.FC = () => {
                 <div className="p-3 bg-primary-blue/10 rounded-xl text-primary-blue shrink-0">
                   {item.icon}
                 </div>
-                <p className="font-outfit text-sm-figma text-slate-700 leading-relaxed pt-2">{item.title}</p>
+                <p className="font-outfit text-base text-slate-700 leading-relaxed pt-2">{item.title}</p>
               </div>
             ))}
           </div>

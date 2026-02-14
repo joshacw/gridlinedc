@@ -19,7 +19,7 @@ const OwnersCTA: React.FC<OwnersCTAProps> = ({ onCtaClick }) => {
         <h2 className="text-xxl font-outfit font-bold mb-6 text-slate-950">
           Explore Strategic Alternatives
         </h2>
-        <p className="text-slate-600 mb-12 max-w-xl mx-auto leading-relaxed">
+        <p className="text-lg text-slate-600 mb-12 max-w-xl mx-auto leading-relaxed">
           If you are a data center owner exploring strategic alternatives beyond a traditional asset sale, we welcome a confidential conversation.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -55,7 +55,7 @@ export default function InvestorsPageContent() {
                 <span className="text-primary-blue">Data Center Investment</span>
               </h1>
 
-              <p className="font-outfit text-base-figma text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+              <p className="font-outfit text-lg text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
                 We are preparing detailed investment information for qualified investors. Register your interest to receive our investor information pack when available.
               </p>
 
@@ -80,7 +80,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Platform Scale</h3>
-                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
+                <p className="font-outfit text-base text-slate-600 leading-relaxed">
                   Aggregated data center portfolio designed for institutional capital deployment.
                 </p>
               </div>
@@ -92,7 +92,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Valuation Arbitrage</h3>
-                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
+                <p className="font-outfit text-base text-slate-600 leading-relaxed">
                   Structural rerating from private-market multiples to institutional benchmarks.
                 </p>
               </div>
@@ -104,7 +104,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Public-Market Path</h3>
-                <p className="font-outfit text-sm-figma text-slate-600 leading-relaxed">
+                <p className="font-outfit text-base text-slate-600 leading-relaxed">
                   Governance and reporting aligned with public exchange requirements.
                 </p>
               </div>
@@ -124,7 +124,7 @@ export default function InvestorsPageContent() {
           </div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-xxl font-outfit font-bold mb-6 text-slate-950">Interested in GRIDLINE?</h2>
-            <p className="text-slate-600 mb-12 max-w-lg mx-auto leading-relaxed">
+            <p className="text-lg text-slate-600 mb-12 max-w-lg mx-auto leading-relaxed">
               Register your interest and our investment team will be in touch with detailed information when available.
             </p>
             <button

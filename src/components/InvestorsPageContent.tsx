@@ -80,7 +80,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Platform Scale</h3>
-                <p className="font-outfit text-base text-slate-600 leading-relaxed">
+                <p className="font-outfit text-lg text-slate-600 leading-relaxed">
                   Aggregated data center portfolio designed for institutional capital deployment.
                 </p>
               </div>
@@ -92,7 +92,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Valuation Arbitrage</h3>
-                <p className="font-outfit text-base text-slate-600 leading-relaxed">
+                <p className="font-outfit text-lg text-slate-600 leading-relaxed">
                   Structural rerating from private-market multiples to institutional benchmarks.
                 </p>
               </div>
@@ -104,7 +104,7 @@ export default function InvestorsPageContent() {
                   </svg>
                 </div>
                 <h3 className="font-outfit text-xl font-bold text-slate-900 mb-3">Public-Market Path</h3>
-                <p className="font-outfit text-base text-slate-600 leading-relaxed">
+                <p className="font-outfit text-lg text-slate-600 leading-relaxed">
                   Governance and reporting aligned with public exchange requirements.
                 </p>
               </div>

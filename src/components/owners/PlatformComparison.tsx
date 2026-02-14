@@ -38,7 +38,7 @@ const PlatformComparison: React.FC = () => {
                     <span className="text-slate-400 text-xl mt-0.5">&#9675;</span>
                     <div>
                       <div className="font-instrument-sans text-xs font-bold text-slate-900 uppercase tracking-wider">{item.label}</div>
-                      <div className="font-outfit text-base text-slate-600">{item.text}</div>
+                      <div className="font-outfit text-lg text-slate-600">{item.text}</div>
                     </div>
                   </li>
                 ))}
@@ -80,7 +80,7 @@ const PlatformComparison: React.FC = () => {
                     <span className="text-primary-blue text-xl mt-0.5">&#9679;</span>
                     <div>
                       <div className="font-instrument-sans text-xs font-bold text-primary-blue uppercase tracking-wider">{item.label}</div>
-                      <div className="font-outfit text-base text-white/80">{item.text}</div>
+                      <div className="font-outfit text-lg text-white/80">{item.text}</div>
                     </div>
                   </li>
                 ))}

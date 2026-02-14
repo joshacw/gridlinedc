@@ -36,7 +36,7 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-outfit text-xxl font-bold text-dark-navy mb-4">Partnership &amp; Acquisition Options</h2>
-          <p className="font-outfit text-gridline-gray max-w-3xl mx-auto text-base italic">
+          <p className="font-outfit text-gridline-gray max-w-3xl mx-auto text-lg italic">
             The following structures represent conceptual frameworks designed to align data center owners with GridLine&apos;s institutional platform strategy.
             Final terms are subject to diligence, structuring, and definitive documentation.
           </p>
@@ -67,14 +67,14 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
 
               <ul className="space-y-5 mb-6">
                 {option.points.map((point, pIdx) => (
-                  <li key={pIdx} className="flex gap-4 font-outfit text-sm text-gridline-gray leading-relaxed group/item">
+                  <li key={pIdx} className="flex gap-4 font-outfit text-lg text-gridline-gray leading-relaxed group/item">
                     <span className="text-primary-blue font-bold transition-transform group-hover/item:scale-125 inline-block">&#8226;</span>
                     {point}
                   </li>
                 ))}
               </ul>
 
-              <p className="font-outfit text-sm text-slate-500 italic mb-8">{option.description}</p>
+              <p className="font-outfit text-lg text-slate-500 italic mb-8">{option.description}</p>
 
               <div className="mt-auto">
                 <button

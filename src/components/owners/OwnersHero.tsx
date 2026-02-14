@@ -45,7 +45,7 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
             GRIDLINE is an institutional digital infrastructure platform that partners with data center owners to integrate high-quality, cash-flowing assets into a unified structure aligned with institutional and public-market standards.
           </p>
 
-          <p className="font-outfit text-base text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-outfit text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
             We focus on alignment-first partnerships that preserve operating continuity while unlocking institutional valuation potential through aggregation, governance, and scale — without forcing premature exits or misaligned outcomes.
           </p>
 

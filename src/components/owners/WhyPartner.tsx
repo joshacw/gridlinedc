@@ -23,7 +23,7 @@ const WhyPartner: React.FC = () => {
               </svg>
             </div>
             <h3 className="font-outfit text-xl font-bold text-primary-blue mb-3">Scale</h3>
-            <p className="font-outfit text-base text-slate-600 leading-relaxed">
+            <p className="font-outfit text-lg text-slate-600 leading-relaxed">
               Aggregated assets attract institutional capital, strategic buyers, and broader financing options.
             </p>
           </div>
@@ -36,7 +36,7 @@ const WhyPartner: React.FC = () => {
               </svg>
             </div>
             <h3 className="font-outfit text-xl font-bold text-primary-blue mb-3">Predictability</h3>
-            <p className="font-outfit text-base text-slate-600 leading-relaxed">
+            <p className="font-outfit text-lg text-slate-600 leading-relaxed">
               Standardized reporting, governance, and contracts reduce perceived execution risk.
             </p>
           </div>
@@ -49,7 +49,7 @@ const WhyPartner: React.FC = () => {
               </svg>
             </div>
             <h3 className="font-outfit text-xl font-bold text-primary-blue mb-3">Capital Efficiency</h3>
-            <p className="font-outfit text-base text-slate-600 leading-relaxed">
+            <p className="font-outfit text-lg text-slate-600 leading-relaxed">
               A platform-level balance sheet supports more efficient capital structures.
             </p>
           </div>

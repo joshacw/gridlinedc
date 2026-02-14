@@ -56,7 +56,7 @@ const OwnersApproach: React.FC = () => {
                 <div className="p-3 bg-primary-blue/10 rounded-xl text-primary-blue shrink-0">
                   {item.icon}
                 </div>
-                <p className="font-outfit text-base text-slate-700 leading-relaxed pt-2">{item.title}</p>
+                <p className="font-outfit text-lg text-slate-700 leading-relaxed pt-2">{item.title}</p>
               </div>
             ))}
           </div>

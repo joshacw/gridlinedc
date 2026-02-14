@@ -36,11 +36,11 @@ const HomeHero: React.FC = () => {
             <span className="text-primary-blue">Digital Infrastructure</span>
           </h1>
 
-          <p className="font-outfit text-base-figma text-slate-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-outfit text-lg text-slate-200 mb-4 max-w-3xl mx-auto leading-relaxed">
             GRIDLINE is an institutional platform focused on aggregating high-quality, cash-flow-positive data center assets into a scaled, governance-driven portfolio designed for long-term institutional participation.
           </p>
 
-          <p className="font-outfit text-base-figma text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-outfit text-lg text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
             We partner with data center owners and investors to build durable digital infrastructure platforms through disciplined acquisition, aggregation, and operational alignment.
           </p>
 
@@ -59,7 +59,7 @@ const HomeHero: React.FC = () => {
             </Link>
           </div>
 
-          <p className="font-outfit text-xs-figma text-slate-500 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-outfit text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Purpose-built for scale, predictability, and institutional standards — without speculative development or operational disruption.
           </p>
         </div>

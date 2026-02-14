@@ -53,7 +53,7 @@ const ValuationRerating: React.FC = () => {
               <tr className="bg-slate-50">
                 <th className="p-6 font-instrument-sans text-[10px] font-bold text-gridline-gray uppercase tracking-widest">What Changes</th>
                 <th className="p-6 font-instrument-sans text-[10px] font-bold text-gridline-gray uppercase tracking-widest">On Its Own</th>
-                <th className="p-6 font-instrument-sans text-[10px] font-bold text-primary-blue uppercase tracking-widest">Inside GridLine</th>
+                <th className="p-6 font-instrument-sans text-[10px] font-bold text-primary-blue uppercase tracking-widest">Inside GRIDLINE</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">

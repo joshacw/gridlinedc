@@ -6,7 +6,7 @@ const WhyPartner: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-outfit text-xxl font-bold mb-6">
-            Why Partner with <span className="text-primary-blue">GridLine</span>
+            Why Partner with <span className="text-primary-blue">GRIDLINE</span>
           </h2>
           <p className="font-outfit text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Stand-alone data centers are typically valued on asset-level cash flow and concentration risk.
@@ -57,7 +57,7 @@ const WhyPartner: React.FC = () => {
 
         <div className="text-center mt-12">
           <p className="font-instrument-sans text-sm text-slate-500 italic">
-            This structural arbitrage underpins GridLine&apos;s partnered transaction approach.
+            This structural arbitrage underpins GRIDLINE&apos;s partnered transaction approach.
           </p>
         </div>
       </div>

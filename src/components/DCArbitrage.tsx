@@ -32,7 +32,7 @@ const DCArbitrage: React.FC<DCArbitrageProps> = ({ onCtaClick }) => {
             <span className="font-bold">14–30x EBITDA</span> multiples reflect historical ranges observed in public-market data center
             platforms. This is illustrative of market dynamics, not a projection of specific outcomes.
             Actual valuations depend on market conditions, execution, scale, and other factors.
-            GridLine does not guarantee any valuation objective.
+            GRIDLINE does not guarantee any valuation objective.
           </p>
         </div>
 

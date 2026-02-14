@@ -51,7 +51,7 @@ const PartnershipValue: React.FC = () => {
         {/* Comparison Cards */}
         <div className="max-w-5xl mx-auto">
           <p className="text-center font-instrument-sans text-sm text-slate-500 mb-8 italic">
-            This structural undergirds GridLine's partnered transaction approach.
+            This structural undergirds GRIDLINE's partnered transaction approach.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

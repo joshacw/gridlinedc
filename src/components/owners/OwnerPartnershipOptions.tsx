@@ -37,7 +37,7 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
         <div className="text-center mb-16">
           <h2 className="font-outfit text-xxl font-bold text-dark-navy mb-4">Partnership &amp; Acquisition Options</h2>
           <p className="font-outfit text-gridline-gray max-w-3xl mx-auto text-lg italic">
-            The following structures represent conceptual frameworks designed to align data center owners with GridLine&apos;s institutional platform strategy.
+            The following structures represent conceptual frameworks designed to align data center owners with GRIDLINE&apos;s institutional platform strategy.
             Final terms are subject to diligence, structuring, and definitive documentation.
           </p>
         </div>

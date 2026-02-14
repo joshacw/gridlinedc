@@ -113,7 +113,7 @@ export const PARTNERSHIP_OPTIONS = [
       'Deferred consideration via vendor financing',
       'Interest accrual over time',
       'Repayment from free cash flow and/or liquidity events',
-      'Minority equity participation in GridLine'
+      'Minority equity participation in GRIDLINE'
     ]
   },
   {
@@ -134,7 +134,7 @@ export const PARTNERSHIP_OPTIONS = [
     points: [
       'No immediate liquidity',
       'Full exposure to early-stage platform risk',
-      'Limited alignment with GridLine governance objectives'
+      'Limited alignment with GRIDLINE governance objectives'
     ]
   }
 ];

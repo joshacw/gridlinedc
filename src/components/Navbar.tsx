@@ -29,10 +29,10 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`glass rounded-2xl flex items-center justify-between px-6 py-3 transition-all duration-300 ${isScrolled ? 'shadow-lg bg-white/80' : 'bg-white/40 shadow-sm'}`}>
+        <div className={`rounded-2xl flex items-center justify-between px-6 py-3 transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'} bg-white`}>
           <div className="flex items-center gap-4">
             {pageContext !== 'home' && (
-              <Link href="/" className="text-gridline-gray hover:text-primary-blue transition-colors mr-2">
+              <Link href="/" className="text-slate-900 hover:text-primary-blue transition-colors mr-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray hover:text-primary-blue transition-colors"
+                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-primary-blue transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -59,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
                 <a
                   key={item.label}
                   href={item.href}
-                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray hover:text-primary-blue transition-colors"
+                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-primary-blue transition-colors"
                 >
                   {item.label}
                 </a>

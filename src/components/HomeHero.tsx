@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const HomeHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-dark">
+    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-gradient-dark">
       {/* Grid Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 opacity-40">
@@ -36,11 +36,15 @@ const HomeHero: React.FC = () => {
             <span className="text-primary-blue">Digital Infrastructure</span>
           </h1>
 
-          <p className="font-outfit text-base-figma text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-            GRIDLINE provides a direct investment bridge into high-density data center infrastructure, purpose-built for platform scale and public-market readiness.
+          <p className="font-outfit text-base-figma text-slate-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+            GRIDLINE is an institutional platform focused on aggregating high-quality, cash-flow-positive data center assets into a scaled, governance-driven portfolio designed for long-term institutional participation.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <p className="font-outfit text-base-figma text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed">
+            We partner with data center owners and investors to build durable digital infrastructure platforms through disciplined acquisition, aggregation, and operational alignment.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <Link
               href="/owners"
               className="w-full sm:w-auto px-8 py-3.5 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-full font-outfit font-bold uppercase tracking-wider text-xs-figma transition-all shadow-lg shadow-primary-blue/30 hover:shadow-xl hover:shadow-primary-blue/40 active:scale-95 text-center"
@@ -54,6 +58,10 @@ const HomeHero: React.FC = () => {
               For Investors
             </Link>
           </div>
+
+          <p className="font-outfit text-xs-figma text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Purpose-built for scale, predictability, and institutional standards — without speculative development or operational disruption.
+          </p>
         </div>
       </div>
     </section>

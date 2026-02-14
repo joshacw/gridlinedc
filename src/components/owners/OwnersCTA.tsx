@@ -22,18 +22,12 @@ const OwnersCTA: React.FC<OwnersCTAProps> = ({ onCtaClick }) => {
         <p className="text-lg text-slate-600 mb-12 max-w-xl mx-auto leading-relaxed">
           If you are a data center owner exploring strategic alternatives beyond a traditional asset sale, we welcome a confidential conversation.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="text-center">
           <button
             onClick={onCtaClick}
-            className="px-10 py-5 bg-slate-950 text-white rounded-card font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs"
+            className="px-12 py-5 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-card font-bold transition-all shadow-lg shadow-primary-blue/30 hover:shadow-xl hover:shadow-primary-blue/40 uppercase tracking-widest text-sm active:scale-95"
           >
             Request Information Pack
-          </button>
-          <button
-            onClick={onCtaClick}
-            className="px-10 py-5 bg-white border border-slate-200 text-slate-900 rounded-card font-bold hover:bg-slate-50 transition-all uppercase tracking-widest text-xs"
-          >
-            Connect with Strategy Team
           </button>
         </div>
       </div>

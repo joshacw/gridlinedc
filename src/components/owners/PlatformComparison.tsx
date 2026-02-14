@@ -2,9 +2,9 @@ import React from 'react';
 
 const PlatformComparison: React.FC = () => {
   return (
-    <section id="comparison" className="py-20 bg-white border-t border-slate-100">
+    <section id="comparison" className="py-28 bg-white border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <h2 className="font-outfit text-xxl font-bold mb-6">
             Stand-Alone Asset vs. <span className="text-primary-blue">GRIDLINE</span> Platform
           </h2>
@@ -19,11 +19,12 @@ const PlatformComparison: React.FC = () => {
             {/* Standalone Asset Card */}
             <div className="bg-slate-50 rounded-card p-10 border-2 border-slate-200">
               <div className="text-center mb-8">
-                <div className="w-20 h-20 mx-auto mb-6 bg-slate-200 rounded-2xl flex items-center justify-center">
-                  <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-24 h-24 mx-auto mb-4 bg-slate-200 rounded-2xl flex items-center justify-center">
+                  <svg className="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                 </div>
+                <div className="font-big-shoulders text-3xl font-bold text-slate-400 mb-4">1×</div>
                 <h3 className="font-outfit text-2xl font-bold text-slate-900 mb-2">STAND-ALONE ASSET</h3>
               </div>
 
@@ -64,6 +65,7 @@ const PlatformComparison: React.FC = () => {
                     </div>
                   ))}
                 </div>
+                <div className="font-big-shoulders text-3xl font-bold text-primary-blue mb-4">4×</div>
                 <h3 className="font-outfit text-2xl font-bold text-white mb-2">
                   GRID<span className="text-primary-blue">LINE</span> PLATFORM
                 </h3>

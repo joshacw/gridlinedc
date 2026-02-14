@@ -32,12 +32,12 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
   };
 
   return (
-    <section id="partnership-options" className="py-24 bg-slate-50 border-t border-slate-100">
+    <section id="partnership-options" className="py-28 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-outfit text-xxl font-bold text-dark-navy mb-4">Partnership &amp; Acquisition Options</h2>
           <p className="font-outfit text-gridline-gray max-w-3xl mx-auto text-lg italic">
-            The following structures represent conceptual frameworks designed to align data center owners with GRIDLINE&apos;s institutional platform strategy.
+            The following structures represent conceptual frameworks designed to align technology infrastructure owners with GRIDLINE&apos;s institutional platform strategy.
             Final terms are subject to diligence, structuring, and definitive documentation.
           </p>
         </div>
@@ -46,10 +46,10 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
           {OWNERS_PARTNERSHIP_OPTIONS.map((option, idx) => (
             <div
               key={idx}
-              className={`relative bg-white p-10 rounded-card shadow-card border transition-all duration-500 hover:shadow-card-hover hover:-translate-y-1 ${
+              className={`relative bg-white p-10 rounded-card shadow-card border transition-all duration-500 hover:shadow-card-hover hover:-translate-y-1 flex flex-col ${
                 option.highlighted
                   ? 'border-primary-blue shadow-primary/20 ring-4 ring-primary-blue/5'
-                  : 'border-slate-100'
+                  : 'border-slate-200'
               }`}
             >
               <div className="flex justify-between items-start mb-8">
@@ -67,14 +67,14 @@ const OwnerPartnershipOptions: React.FC<OwnerPartnershipOptionsProps> = ({ onCta
 
               <ul className="space-y-5 mb-6">
                 {option.points.map((point, pIdx) => (
-                  <li key={pIdx} className="flex gap-4 font-outfit text-lg text-gridline-gray leading-relaxed group/item">
+                  <li key={pIdx} className="flex gap-4 font-outfit text-lg text-slate-600 leading-relaxed group/item">
                     <span className="text-primary-blue font-bold transition-transform group-hover/item:scale-125 inline-block">&#8226;</span>
                     {point}
                   </li>
                 ))}
               </ul>
 
-              <p className="font-outfit text-lg text-slate-500 italic mb-8">{option.description}</p>
+              <p className="font-outfit text-lg text-slate-600 italic mb-8">{option.description}</p>
 
               <div className="mt-auto">
                 <button

@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-primary-blue transition-colors"
+                  className="font-instrument-sans text-sm font-bold uppercase tracking-wider text-slate-900 hover:text-primary-blue transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -59,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
                 <a
                   key={item.label}
                   href={item.href}
-                  className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-primary-blue transition-colors"
+                  className="font-instrument-sans text-sm font-bold uppercase tracking-wider text-slate-900 hover:text-primary-blue transition-colors"
                 >
                   {item.label}
                 </a>
@@ -70,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
           <div className="flex items-center gap-4">
             <button
               onClick={onInquireClick}
-              className="bg-primary-blue hover:bg-cta-primary-hover text-white px-5 py-2.5 rounded-xl font-outfit text-xs font-bold uppercase tracking-widest transition-all shadow-primary hover:shadow-card-hover active:scale-95"
+              className="bg-primary-blue hover:bg-cta-primary-hover text-white px-5 py-2.5 rounded-xl font-outfit text-sm font-bold uppercase tracking-wider transition-all shadow-primary hover:shadow-card-hover active:scale-95"
             >
               Inquire
             </button>

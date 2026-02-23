@@ -109,7 +109,7 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
             onClick={onCtaClick}
             className="px-10 py-4 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-full font-outfit font-bold uppercase tracking-wider text-sm transition-all shadow-lg shadow-primary-blue/30 hover:shadow-xl hover:shadow-primary-blue/40 active:scale-95 mb-6"
           >
-            Register Interest
+            Explore Your Potential Upside
           </button>
 
           <p className="font-outfit text-sm text-slate-400 max-w-xl mx-auto mb-10">

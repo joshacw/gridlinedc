@@ -5,12 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
 import OwnersHero from './OwnersHero';
-import WhyPartner from './WhyPartner';
-import PlatformComparison from './PlatformComparison';
-import OwnerPartnershipOptions from './OwnerPartnershipOptions';
 import OwnersArbitrage from './OwnersArbitrage';
-import OwnersApproach from './OwnersApproach';
-import OwnersCTA from './OwnersCTA';
 import { OWNERS_NAV_ITEMS } from '@/constants';
 
 export default function OwnersPageContent() {
@@ -29,12 +24,7 @@ export default function OwnersPageContent() {
 
       <main>
         <OwnersHero onCtaClick={openModal} />
-        <WhyPartner />
-        <PlatformComparison />
-        <OwnerPartnershipOptions onCtaClick={openModal} />
         <OwnersArbitrage onCtaClick={openModal} />
-        <OwnersApproach />
-        <OwnersCTA onCtaClick={openModal} />
       </main>
 
       <Footer />

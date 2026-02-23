@@ -3,7 +3,7 @@ import OwnersPageContent from '@/components/owners/OwnersPageContent';
 
 export const metadata: Metadata = {
   title: 'For Data Center Owners | GRIDLINE',
-  description: 'Unlock institutional value for your data center. GRIDLINE partners with data center owners to integrate high-quality assets into a unified platform aligned with institutional and public-market standards.',
+  description: 'Discover how small data centre owners are multiplying valuations through industry partnerships and institutional finance. Exclusive for APAC facility owners.',
 };
 
 export default function OwnersPage() {

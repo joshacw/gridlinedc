@@ -33,27 +33,19 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
             <span className="font-instrument-sans text-xs-figma font-bold text-primary-blue uppercase tracking-[0.25em]">For Data Center Owners</span>
           </div>
 
-          <h1 className="font-big-shoulders text-mega font-bold tracking-tight mb-8 leading-[1.1]">
-            <span className="text-white">Unlock Institutional</span>
-            <br />
-            <span className="text-primary-blue">Value for Your</span>
-            <br />
-            <span className="text-primary-blue">Data Center</span>
+          <h1 className="font-outfit text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-8 leading-[1.2] text-white">
+            How Small Data Centre Owners Are Multiplying Valuations Through Industry Partnerships &amp; Institutional Finance
           </h1>
 
           <p className="font-outfit text-lg md:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-            GRIDLINE is an institutional digital infrastructure platform that partners with data center owners to integrate high-quality, cash-flowing assets into a unified structure aligned with institutional and public-market standards.
-          </p>
-
-          <p className="font-outfit text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            We focus on alignment-first partnerships that preserve operating continuity while unlocking institutional valuation potential through aggregation, governance, and scale — without forcing premature exits or misaligned outcomes.
+            Discover how facilities under 5MW are connecting to larger portfolios to unlock higher valuations without adding new infrastructure, landing new contracts or any significant investments. Exclusive for data centre owners in the APAC region with 100% ownership of their facility.
           </p>
 
           <button
             onClick={onCtaClick}
             className="px-10 py-4 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-full font-outfit font-bold uppercase tracking-wider text-sm transition-all shadow-lg shadow-primary-blue/30 hover:shadow-xl hover:shadow-primary-blue/40 active:scale-95"
           >
-            Request Information Pack
+            Register Interest
           </button>
         </div>
       </div>

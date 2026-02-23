@@ -112,7 +112,7 @@ const OwnersArbitrage: React.FC<OwnersArbitrageProps> = ({ onCtaClick }) => {
             onClick={onCtaClick}
             className="px-10 py-4 bg-primary-blue hover:bg-cta-primary-hover text-white rounded-full font-outfit font-bold uppercase tracking-wider text-sm transition-all shadow-lg shadow-primary-blue/30 active:scale-95"
           >
-            Request Information Pack
+            Register Interest
           </button>
         </div>
       </div>

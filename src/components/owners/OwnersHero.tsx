@@ -33,7 +33,7 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
             How Small Data Centre Owners Are Multiplying Valuations Through Industry Partnerships &amp; Institutional Finance
           </h1>
 
-          <p className="font-outfit text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-outfit text-lg md:text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
             Discover how facilities under 5MW are connecting to larger portfolios to unlock higher valuations without adding new infrastructure, landing new contracts or any significant investments.
           </p>
         </div>

@@ -4,7 +4,10 @@ import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
-import { INVESTORS_NAV_ITEMS } from '@/constants';
+const NAV_ITEMS = [
+  { label: 'For Owners', href: '/owners' },
+  { label: 'For Investors', href: '/investors' },
+];
 
 export default function InvestorsPageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +19,7 @@ export default function InvestorsPageContent() {
     <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
       <Navbar
         onInquireClick={openModal}
-        navItems={INVESTORS_NAV_ITEMS}
+        navItems={NAV_ITEMS}
         pageContext="investors"
       />
 
@@ -112,29 +115,6 @@ export default function InvestorsPageContent() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="py-32 bg-slate-50 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-              <pattern id="invDotPattern" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="currentColor" className="text-slate-900" />
-              </pattern>
-              <rect width="100%" height="100%" fill="url(#invDotPattern)" />
-            </svg>
-          </div>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-xxl font-outfit font-bold mb-6 text-slate-950">Interested in GRIDLINE?</h2>
-            <p className="text-lg text-slate-600 mb-12 max-w-lg mx-auto leading-relaxed">
-              Register your interest and our investment team will be in touch with detailed information when available.
-            </p>
-            <button
-              onClick={openModal}
-              className="px-10 py-5 bg-slate-950 text-white rounded-card font-bold hover:bg-blue-600 transition-all shadow-2xl shadow-slate-300 uppercase tracking-widest text-xs"
-            >
-              Register Interest
-            </button>
-          </div>
-        </section>
       </main>
 
       <Footer />

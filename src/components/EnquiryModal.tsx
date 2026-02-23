@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 
 interface EnquiryModalProps {
   isOpen: boolean;
@@ -35,9 +36,11 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const submitContactInfo = useAction(api.enquiries.submitContactInfo);
-  const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
+  const submitEnquiry = useMutation(api.enquiries.submit);
   const storeProgressToken = useMutation(api.enquiries.storeProgressToken);
+  const createGHLContact = useAction(api.enquiries.createGHLContact);
+  const updateGhlContactId = useMutation(api.enquiries.updateGhlContactId);
+  const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
@@ -98,12 +101,12 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     );
   };
 
-  // Asset owner flow: submit contact info → create token → redirect to progress page
+  // Asset owner flow: save to DB → store token → redirect → GHL sync in background
   const handleAssetOwnerSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Step 1: Submit contact info to Convex + GHL
-      const result = await submitContactInfo({
+      // Step 1: Save to DB directly via mutation (returns reliable Id)
+      const enquiryId: Id<"enquiries"> = await submitEnquiry({
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
@@ -113,21 +116,33 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         submittedAt: new Date().toISOString(),
       });
 
-      // Step 2: Generate token client-side and store via direct mutation
+      // Step 2: Generate token and store via mutation
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let token = "";
       for (let i = 0; i < 24; i++) {
         token += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      await storeProgressToken({
-        token,
-        enquiryId: result.enquiryId as any,
-      });
+      await storeProgressToken({ token, enquiryId });
 
-      // Step 3: Redirect
+      // Step 3: Redirect immediately
       setIsRedirecting(true);
       window.location.href = `/progress/${token}`;
+
+      // Step 4: Fire-and-forget GHL contact creation (runs server-side, survives navigation)
+      createGHLContact({
+        name: contactInfo.name,
+        email: contactInfo.email,
+        companyName: contactInfo.companyName,
+        phoneNumber: contactInfo.phoneNumber || undefined,
+        enquiryType: contactInfo.enquiryType as string,
+        heardAbout: contactInfo.heardAbout,
+        submittedAt: new Date().toISOString(),
+      }).then(async (ghlResult) => {
+        if (ghlResult.contactId) {
+          await updateGhlContactId({ id: enquiryId, ghlContactId: ghlResult.contactId });
+        }
+      }).catch(err => console.error('GHL sync failed (non-blocking):', err));
     } catch (error) {
       console.error('Error submitting enquiry:', error);
       setIsSuccess(true);

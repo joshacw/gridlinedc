@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAction } from "convex/react";
-import { useRouter } from "next/navigation";
+
 import { api } from "../../convex/_generated/api";
 
 interface EnquiryModalProps {
@@ -32,7 +32,6 @@ const HEARD_ABOUT_OPTIONS = [
 ];
 
 const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnquiryType }) => {
-  const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -113,10 +112,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
       });
 
       if (result.progressToken) {
-        onClose();
-        router.push(`/progress/${result.progressToken}`);
+        window.location.href = `/progress/${result.progressToken}`;
       } else {
-        // Fallback if no token (shouldn't happen for asset_owner)
+        console.warn('No progress token returned for asset_owner, enquiryId:', result.enquiryId);
         setIsSuccess(true);
       }
     } catch (error) {

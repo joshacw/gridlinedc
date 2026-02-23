@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAction } from "convex/react";
-
+import { useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 interface EnquiryModalProps {
@@ -38,6 +37,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const [isRedirecting, setIsRedirecting] = useState(false);
   const submitContactInfo = useAction(api.enquiries.submitContactInfo);
   const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
+  const storeProgressToken = useMutation(api.enquiries.storeProgressToken);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
@@ -98,10 +98,11 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     );
   };
 
-  // Asset owner flow: submit contact info → redirect to progress page
+  // Asset owner flow: submit contact info → create token → redirect to progress page
   const handleAssetOwnerSubmit = async () => {
     setIsSubmitting(true);
     try {
+      // Step 1: Submit contact info to Convex + GHL
       const result = await submitContactInfo({
         name: contactInfo.name,
         email: contactInfo.email,
@@ -112,16 +113,24 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         submittedAt: new Date().toISOString(),
       });
 
-      if (result.progressToken) {
-        setIsRedirecting(true);
-        window.location.href = `/progress/${result.progressToken}`;
-        return;
-      } else {
-        console.warn('No progress token returned for asset_owner, enquiryId:', result.enquiryId);
-        setIsSuccess(true);
+      // Step 2: Generate token client-side and store via direct mutation
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let token = "";
+      for (let i = 0; i < 24; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
       }
+
+      await storeProgressToken({
+        token,
+        enquiryId: result.enquiryId as any,
+      });
+
+      // Step 3: Redirect
+      setIsRedirecting(true);
+      window.location.href = `/progress/${token}`;
     } catch (error) {
       console.error('Error submitting enquiry:', error);
+      setIsSuccess(true);
     } finally {
       setIsSubmitting(false);
     }

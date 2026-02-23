@@ -253,7 +253,7 @@ export const submitContactInfo = action({
     heardAbout: v.string(),
     submittedAt: v.string(),
   },
-  handler: async (ctx, args): Promise<{ enquiryId: string; ghlContactId: string | null; ghlSuccess: boolean; progressToken: string | null }> => {
+  handler: async (ctx, args): Promise<{ enquiryId: string; ghlContactId: string | null; ghlSuccess: boolean }> => {
     // Create contact in GHL first
     const ghlResult: { success: boolean; contactId: string | null } = await ctx.runAction(api.enquiries.createGHLContact, {
       name: args.name,
@@ -271,26 +271,10 @@ export const submitContactInfo = action({
       ghlContactId: ghlResult.contactId || undefined,
     });
 
-    // Generate progress token for asset owners
-    let progressToken: string | null = null;
-    if (args.enquiryType === "asset_owner") {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let token = "";
-      for (let i = 0; i < 24; i++) {
-        token += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      await ctx.runMutation(api.enquiries.storeProgressToken, {
-        token,
-        enquiryId: enquiryId as any,
-      });
-      progressToken = token;
-    }
-
     return {
       enquiryId,
       ghlContactId: ghlResult.contactId,
       ghlSuccess: ghlResult.success,
-      progressToken,
     };
   },
 });

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAction } from "convex/react";
+import { useRouter } from "next/navigation";
 import { api } from "../../convex/_generated/api";
 
 interface EnquiryModalProps {
@@ -21,20 +22,6 @@ interface ContactInfo {
   heardAbout: string;
 }
 
-interface DCOwnerSurvey {
-  ownershipStructure: string;
-  currentPowerUtilisation: string;
-  powerScalability: string;
-  customerBase: string;
-  customerConcentration: string;
-  contractTenure: string;
-  anchorTenants: string;
-  networkConnectivity: string;
-  annualRevenue: string;
-  ebitdaRange: string;
-  capitalOutlook: string;
-}
-
 const HEARD_ABOUT_OPTIONS = [
   'LinkedIn',
   'Industry Event',
@@ -45,10 +32,12 @@ const HEARD_ABOUT_OPTIONS = [
 ];
 
 const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnquiryType }) => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const submitEnquiry = useAction(api.enquiries.submitWithWebhook);
+  const submitContactInfo = useAction(api.enquiries.submitContactInfo);
+  const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
@@ -57,20 +46,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     phoneNumber: '',
     enquiryType: defaultEnquiryType || null,
     heardAbout: ''
-  });
-
-  const [dcSurvey, setDcSurvey] = useState<DCOwnerSurvey>({
-    ownershipStructure: '',
-    currentPowerUtilisation: '',
-    powerScalability: '',
-    customerBase: '',
-    customerConcentration: '',
-    contractTenure: '',
-    anchorTenants: '',
-    networkConnectivity: '',
-    annualRevenue: '',
-    ebitdaRange: '',
-    capitalOutlook: ''
   });
 
   // Reset form when modal closes
@@ -86,19 +61,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           phoneNumber: '',
           enquiryType: defaultEnquiryType || null,
           heardAbout: ''
-        });
-        setDcSurvey({
-          ownershipStructure: '',
-          currentPowerUtilisation: '',
-          powerScalability: '',
-          customerBase: '',
-          customerConcentration: '',
-          contractTenure: '',
-          anchorTenants: '',
-          networkConnectivity: '',
-          annualRevenue: '',
-          ebitdaRange: '',
-          capitalOutlook: ''
         });
       }, 300);
     }
@@ -120,10 +82,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     setContactInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSurveyChange = (field: keyof DCOwnerSurvey, value: string) => {
-    setDcSurvey(prev => ({ ...prev, [field]: value }));
-  };
-
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -140,38 +98,61 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     );
   };
 
-  const handleSubmit = async () => {
+  // Asset owner flow: submit contact info → redirect to progress page
+  const handleAssetOwnerSubmit = async () => {
     setIsSubmitting(true);
-
     try {
-      await submitEnquiry({
+      const result = await submitContactInfo({
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
         enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
         heardAbout: contactInfo.heardAbout,
-        survey: contactInfo.enquiryType === 'asset_owner' ? {
-          ownershipStructure: dcSurvey.ownershipStructure || undefined,
-          currentPowerUtilisation: dcSurvey.currentPowerUtilisation || undefined,
-          powerScalability: dcSurvey.powerScalability || undefined,
-          customerBase: dcSurvey.customerBase || undefined,
-          customerConcentration: dcSurvey.customerConcentration || undefined,
-          contractTenure: dcSurvey.contractTenure || undefined,
-          anchorTenants: dcSurvey.anchorTenants || undefined,
-          networkConnectivity: dcSurvey.networkConnectivity || undefined,
-          annualRevenue: dcSurvey.annualRevenue || undefined,
-          ebitdaRange: dcSurvey.ebitdaRange || undefined,
-          capitalOutlook: dcSurvey.capitalOutlook || undefined,
-        } : undefined,
         submittedAt: new Date().toISOString(),
       });
 
+      if (result.progressToken) {
+        onClose();
+        router.push(`/progress/${result.progressToken}`);
+      } else {
+        // Fallback if no token (shouldn't happen for asset_owner)
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error('Error submitting enquiry:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Investor flow: submit via legacy webhook (no progress page)
+  const handleInvestorSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      await submitWithWebhook({
+        name: contactInfo.name,
+        email: contactInfo.email,
+        companyName: contactInfo.companyName,
+        phoneNumber: contactInfo.phoneNumber || undefined,
+        enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
+        heardAbout: contactInfo.heardAbout,
+        submittedAt: new Date().toISOString(),
+      });
       setIsSuccess(true);
     } catch (error) {
       console.error('Error submitting enquiry:', error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Step 1 "Continue" handler: for asset owners, submit and redirect. For investors, go to step 2.
+  const handleContinue = () => {
+    if (contactInfo.enquiryType === 'asset_owner') {
+      handleAssetOwnerSubmit();
+    } else {
+      setStep(2);
     }
   };
 
@@ -298,94 +279,14 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
       </div>
 
       <button
-        onClick={() => setStep(2)}
-        disabled={!isContactValid()}
+        onClick={handleContinue}
+        disabled={!isContactValid() || isSubmitting}
         className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
       >
-        Continue
+        {isSubmitting ? 'Submitting...' : 'Continue'}
       </button>
     </div>
   );
-
-  const isSurveyValid = () => {
-    return (
-      dcSurvey.ownershipStructure.trim() !== '' &&
-      dcSurvey.currentPowerUtilisation.trim() !== '' &&
-      dcSurvey.powerScalability.trim() !== '' &&
-      dcSurvey.customerBase.trim() !== '' &&
-      dcSurvey.customerConcentration.trim() !== '' &&
-      dcSurvey.contractTenure.trim() !== '' &&
-      dcSurvey.anchorTenants.trim() !== '' &&
-      dcSurvey.networkConnectivity.trim() !== '' &&
-      dcSurvey.annualRevenue.trim() !== '' &&
-      dcSurvey.ebitdaRange.trim() !== '' &&
-      dcSurvey.capitalOutlook.trim() !== ''
-    );
-  };
-
-  const renderStep2AssetOwner = () => {
-    const questions = [
-      { key: 'ownershipStructure', label: 'Ownership Structure', question: 'Is the data centre fully owned, or are there any external shareholders or partners involved?', placeholder: 'e.g., Fully owned / 70% owned with 30% external partner' },
-      { key: 'currentPowerUtilisation', label: 'Current Power Utilisation', question: 'What is the current IT load and overall power utilisation of the facility?', placeholder: 'e.g., 5MW IT load, 60% utilisation' },
-      { key: 'powerScalability', label: 'Power Scalability', question: 'What is the maximum designed power capacity the facility can scale to?', placeholder: 'e.g., 20MW maximum capacity' },
-      { key: 'customerBase', label: 'Customer Base', question: 'Approximately how many active customer contracts are in place?', placeholder: 'e.g., 15 active contracts' },
-      { key: 'customerConcentration', label: 'Customer Concentration', question: 'What percentage of total revenue is generated by the top three customers?', placeholder: 'e.g., Top 3 customers = 65% of revenue' },
-      { key: 'contractTenure', label: 'Contract Tenure', question: 'What is the typical contract length and renewal profile across customers?', placeholder: 'e.g., 3-5 year terms, 85% renewal rate' },
-      { key: 'anchorTenants', label: 'Anchor Tenant(s)', question: 'Who are the anchor tenant(s), and what is the remaining contract term in place?', placeholder: 'e.g., Major telco, 8 years remaining' },
-      { key: 'networkConnectivity', label: 'Network Connectivity', question: 'How many network carriers are available on-site or through existing partnerships?', placeholder: 'e.g., 6 carriers on-site' },
-      { key: 'annualRevenue', label: 'Annual Revenue', question: 'What is the current annual revenue (and, if available, historical year-on-year figures)?', placeholder: 'e.g., MYR 25M (2024), MYR 22M (2023)' },
-      { key: 'ebitdaRange', label: 'EBITDA Range', question: 'What is the typical EBITDA range or margin for the facility?', placeholder: 'e.g., 35-40% EBITDA margin' },
-      { key: 'capitalOutlook', label: 'Capital & Maintenance Outlook', question: 'Are there any major maintenance events or capital expenditures anticipated within the next 12 to 24 months?', placeholder: 'e.g., Generator upgrade planned Q3 2025' }
-    ];
-
-    return (
-      <div className="space-y-6">
-        <div className="text-center mb-6">
-          <div className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-3">
-            Data Center Profile
-          </div>
-          <h2 className="text-xl font-outfit font-bold text-slate-900 mb-2">Tell us about your facility</h2>
-          <p className="text-slate-500 text-sm">This information helps us understand your asset and identify the best partnership structure. All fields are required.</p>
-        </div>
-
-        <div className="space-y-5 max-h-[50vh] overflow-y-auto pr-2 -mr-2">
-          {questions.map(({ key, label, question, placeholder }) => (
-            <div key={key} className="bg-slate-50 rounded-2xl p-4">
-              <label className="block text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">
-                {label} *
-              </label>
-              <p className="text-sm text-slate-700 mb-3">{question}</p>
-              <textarea
-                value={dcSurvey[key as keyof DCOwnerSurvey]}
-                onChange={(e) => handleSurveyChange(key as keyof DCOwnerSurvey, e.target.value)}
-                placeholder={placeholder}
-                rows={2}
-                className={`w-full px-4 py-3 bg-white border rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none ${
-                  dcSurvey[key as keyof DCOwnerSurvey].trim() === '' ? 'border-slate-200' : 'border-green-300'
-                }`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-4 pt-4">
-          <button
-            onClick={() => setStep(1)}
-            className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all"
-          >
-            Back
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting || !isSurveyValid()}
-            className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Enquiry'}
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   const renderStep2Investor = () => (
     <div className="space-y-6">
@@ -416,7 +317,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           Back
         </button>
         <button
-          onClick={handleSubmit}
+          onClick={handleInvestorSubmit}
           disabled={isSubmitting}
           className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
         >
@@ -448,6 +349,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
   if (!isOpen) return null;
 
+  // Determine if we need a progress indicator (only for investor 2-step flow)
+  const showProgress = !isSuccess && contactInfo.enquiryType === 'investor' && step === 2;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -468,15 +372,15 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           </svg>
         </button>
 
-        {/* Progress indicator */}
-        {!isSuccess && (
+        {/* Progress indicator (only for investor flow step 2) */}
+        {showProgress && (
           <div className="px-8 pt-8">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <div className={`h-1.5 w-16 rounded-full transition-colors ${step >= 1 ? 'bg-blue-600' : 'bg-slate-200'}`} />
-              <div className={`h-1.5 w-16 rounded-full transition-colors ${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`} />
+              <div className="h-1.5 w-16 rounded-full bg-blue-600" />
+              <div className="h-1.5 w-16 rounded-full bg-blue-600" />
             </div>
             <p className="text-center text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-              Step {step} of 2
+              Step 2 of 2
             </p>
           </div>
         )}
@@ -487,8 +391,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
             renderSuccess()
           ) : step === 1 ? (
             renderStep1()
-          ) : contactInfo.enquiryType === 'asset_owner' ? (
-            renderStep2AssetOwner()
           ) : (
             renderStep2Investor()
           )}

@@ -218,7 +218,37 @@ export const updateGHLContactSurvey = action({
   },
 });
 
-// Submit contact info (step 1) - creates contact in GHL and saves to DB
+// Generate a progress token for an enquiry and set initial pipeline state
+export const createProgressToken = mutation({
+  args: { enquiryId: v.id("enquiries") },
+  handler: async (ctx, args) => {
+    // Generate a URL-safe token
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 24; i++) {
+      token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    await ctx.db.insert("progressTokens", {
+      token,
+      enquiryId: args.enquiryId,
+      createdAt: new Date().toISOString(),
+    });
+
+    // Set initial pipeline state — steps 1 + 2 auto-completed
+    await ctx.db.patch(args.enquiryId, {
+      pipelineStep: 3,
+      pipelineSteps: {
+        visitedWebsite: { completedAt: new Date().toISOString() },
+        registeredInterest: { completedAt: new Date().toISOString() },
+      },
+    });
+
+    return token;
+  },
+});
+
+// Submit contact info (step 1) - creates contact in GHL, saves to DB, generates progress token
 export const submitContactInfo = action({
   args: {
     name: v.string(),
@@ -229,7 +259,7 @@ export const submitContactInfo = action({
     heardAbout: v.string(),
     submittedAt: v.string(),
   },
-  handler: async (ctx, args): Promise<{ enquiryId: string; ghlContactId: string | null; ghlSuccess: boolean }> => {
+  handler: async (ctx, args): Promise<{ enquiryId: string; ghlContactId: string | null; ghlSuccess: boolean; progressToken: string | null }> => {
     // Create contact in GHL first
     const ghlResult: { success: boolean; contactId: string | null } = await ctx.runAction(api.enquiries.createGHLContact, {
       name: args.name,
@@ -247,10 +277,19 @@ export const submitContactInfo = action({
       ghlContactId: ghlResult.contactId || undefined,
     });
 
+    // Generate progress token for asset owners
+    let progressToken: string | null = null;
+    if (args.enquiryType === "asset_owner") {
+      progressToken = await ctx.runMutation(api.enquiries.createProgressToken, {
+        enquiryId: enquiryId as any,
+      });
+    }
+
     return {
       enquiryId,
       ghlContactId: ghlResult.contactId,
       ghlSuccess: ghlResult.success,
+      progressToken,
     };
   },
 });

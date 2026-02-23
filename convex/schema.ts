@@ -26,12 +26,38 @@ export default defineSchema({
       capitalOutlook: v.optional(v.string()),
     })),
 
+    // Pipeline tracking
+    pipelineStep: v.optional(v.number()), // Current active step (1-12)
+    pipelineSteps: v.optional(v.object({
+      visitedWebsite: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      registeredInterest: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      bookMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      shareDCDetails: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      haveMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      confirmNextSteps: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      shareFinancials: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      prepareReport: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      presentOffer: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      dueDiligence: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      loi: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      closing: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+    })),
+
     // Metadata
     submittedAt: v.string(),
-    status: v.optional(v.string()), // e.g., "new", "contacted", "qualified", "closed"
-    ghlContactId: v.optional(v.string()), // GoHighLevel contact ID
+    status: v.optional(v.string()),
+    ghlContactId: v.optional(v.string()),
   })
     .index("by_email", ["email"])
     .index("by_type", ["enquiryType"])
-    .index("by_status", ["status"]),
+    .index("by_status", ["status"])
+    .index("by_ghlContactId", ["ghlContactId"]),
+
+  progressTokens: defineTable({
+    token: v.string(),
+    enquiryId: v.id("enquiries"),
+    createdAt: v.string(),
+  })
+    .index("by_token", ["token"])
+    .index("by_enquiry", ["enquiryId"]),
 });

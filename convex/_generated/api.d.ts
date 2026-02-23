@@ -9,6 +9,8 @@
  */
 
 import type * as enquiries from "../enquiries.js";
+import type * as http from "../http.js";
+import type * as progress from "../progress.js";
 
 import type {
   ApiFromModules,
@@ -18,6 +20,8 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   enquiries: typeof enquiries;
+  http: typeof http;
+  progress: typeof progress;
 }>;
 
 /**

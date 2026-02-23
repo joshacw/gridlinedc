@@ -222,45 +222,48 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         </div>
       </div>
 
-      <div>
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">
-          I am a *
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => handleContactChange('enquiryType', 'investor')}
-            className={`p-4 rounded-2xl border-2 transition-all ${
-              contactInfo.enquiryType === 'investor'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-            }`}
-          >
-            <div className="flex flex-col items-center gap-2">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-bold text-sm">Investor</span>
-            </div>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleContactChange('enquiryType', 'asset_owner')}
-            className={`p-4 rounded-2xl border-2 transition-all ${
-              contactInfo.enquiryType === 'asset_owner'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-            }`}
-          >
-            <div className="flex flex-col items-center gap-2">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-              <span className="font-bold text-sm">Data Center Owner</span>
-            </div>
-          </button>
+      {/* Only show type selector when not pre-set by page context */}
+      {!defaultEnquiryType && (
+        <div>
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">
+            I am a *
+          </label>
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => handleContactChange('enquiryType', 'investor')}
+              className={`p-4 rounded-2xl border-2 transition-all ${
+                contactInfo.enquiryType === 'investor'
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-bold text-sm">Investor</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleContactChange('enquiryType', 'asset_owner')}
+              className={`p-4 rounded-2xl border-2 transition-all ${
+                contactInfo.enquiryType === 'asset_owner'
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span className="font-bold text-sm">Data Center Owner</span>
+              </div>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div>
         <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">

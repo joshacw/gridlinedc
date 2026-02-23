@@ -218,19 +218,15 @@ export const updateGHLContactSurvey = action({
   },
 });
 
-// Generate a progress token for an enquiry and set initial pipeline state
-export const createProgressToken = mutation({
-  args: { enquiryId: v.id("enquiries") },
+// Store a progress token and set initial pipeline state
+export const storeProgressToken = mutation({
+  args: {
+    token: v.string(),
+    enquiryId: v.id("enquiries"),
+  },
   handler: async (ctx, args) => {
-    // Generate a URL-safe token
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let token = "";
-    for (let i = 0; i < 24; i++) {
-      token += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
     await ctx.db.insert("progressTokens", {
-      token,
+      token: args.token,
       enquiryId: args.enquiryId,
       createdAt: new Date().toISOString(),
     });
@@ -243,8 +239,6 @@ export const createProgressToken = mutation({
         registeredInterest: { completedAt: new Date().toISOString() },
       },
     });
-
-    return token;
   },
 });
 
@@ -280,9 +274,16 @@ export const submitContactInfo = action({
     // Generate progress token for asset owners
     let progressToken: string | null = null;
     if (args.enquiryType === "asset_owner") {
-      progressToken = await ctx.runMutation(api.enquiries.createProgressToken, {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let token = "";
+      for (let i = 0; i < 24; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      await ctx.runMutation(api.enquiries.storeProgressToken, {
+        token,
         enquiryId: enquiryId as any,
       });
+      progressToken = token;
     }
 
     return {

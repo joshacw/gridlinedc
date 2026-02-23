@@ -35,6 +35,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const submitContactInfo = useAction(api.enquiries.submitContactInfo);
   const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
 
@@ -112,7 +113,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
       });
 
       if (result.progressToken) {
+        setIsRedirecting(true);
         window.location.href = `/progress/${result.progressToken}`;
+        return;
       } else {
         console.warn('No progress token returned for asset_owner, enquiryId:', result.enquiryId);
         setIsSuccess(true);
@@ -328,6 +331,17 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     </div>
   );
 
+  const renderRedirecting = () => (
+    <div className="text-center py-12">
+      <div className="w-16 h-16 mx-auto mb-6 relative">
+        <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
+        <div className="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
+      </div>
+      <h2 className="text-xl font-outfit font-bold text-slate-900 mb-2">Setting up your dashboard</h2>
+      <p className="text-slate-500 text-sm">Redirecting you to your personalized progress page...</p>
+    </div>
+  );
+
   const renderSuccess = () => (
     <div className="text-center py-8">
       <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -388,7 +402,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
         {/* Content */}
         <div className="p-8">
-          {isSuccess ? (
+          {isRedirecting ? (
+            renderRedirecting()
+          ) : isSuccess ? (
             renderSuccess()
           ) : step === 1 ? (
             renderStep1()

@@ -169,8 +169,8 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const renderStep1 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-outfit font-bold text-slate-900 mb-2">Get in Touch</h2>
-        <p className="text-slate-500 text-sm">Tell us about yourself and how we can help.</p>
+        <h2 className="text-2xl font-outfit font-bold text-slate-900 mb-2">Explore Your Potential Upside</h2>
+        <p className="text-slate-500 text-sm">Exclusive for data centre owners in the APAC region.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

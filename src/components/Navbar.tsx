@@ -30,14 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`rounded-2xl flex items-center justify-between px-6 py-3 transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'} bg-white`}>
-          <div className="flex items-center gap-4">
-            {pageContext !== 'home' && (
-              <Link href="/" className="text-slate-900 hover:text-primary-blue transition-colors mr-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-              </Link>
-            )}
+          <div className="flex items-center">
             <Link href="/">
               <span className="font-outfit text-2xl font-bold tracking-tighter text-dark-navy">
                 GRID<span className="text-primary-blue">LINE</span>

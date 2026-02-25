@@ -12,7 +12,7 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
         <div className="text-center max-w-5xl mx-auto mb-16">
           <h1 className="mb-8">
             <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight leading-tight">
-              How <span className="text-[#4a9eff]">Small Data Centre Owners</span> Are
+              How <span className="text-[#4a9eff]">Small Data Centre Owners Are</span>
             </div>
             <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#4a9eff] mb-4 tracking-tight leading-tight">
               Multiplying Valuations

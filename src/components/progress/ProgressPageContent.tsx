@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { PIPELINE_STEPS } from '@/constants';
@@ -13,6 +13,14 @@ interface Props {
 
 export default function ProgressPageContent({ token }: Props) {
   const data = useQuery(api.progress.getByToken, { token });
+
+  // Suppress "Leave site?" dialog caused by Convex's real-time connection
+  useEffect(() => {
+    window.onbeforeunload = null;
+    const suppress = () => { window.onbeforeunload = null; };
+    const interval = setInterval(suppress, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Loading state
   if (data === undefined) {

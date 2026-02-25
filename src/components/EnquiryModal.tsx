@@ -130,9 +130,10 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
       await storeProgressToken({ token, enquiryId });
 
-      // Step 3: Redirect immediately
+      // Step 3: Build progress URL and redirect
+      const progressUrl = `${window.location.origin}/progress/${token}`;
       setIsRedirecting(true);
-      window.location.href = `/progress/${token}`;
+      window.location.href = progressUrl;
 
       // Step 4: Fire-and-forget GHL contact creation (runs server-side, survives navigation)
       createGHLContact({
@@ -143,6 +144,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         dcLocation: contactInfo.dcLocation || undefined,
         enquiryType: contactInfo.enquiryType as string,
         heardAbout: contactInfo.heardAbout,
+        progressUrl,
         submittedAt: new Date().toISOString(),
       }).then(async (ghlResult) => {
         if (ghlResult.contactId) {

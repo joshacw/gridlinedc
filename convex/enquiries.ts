@@ -93,6 +93,7 @@ export const createGHLContact = action({
     enquiryType: v.string(),
     heardAbout: v.string(),
     dcLocation: v.optional(v.string()),
+    progressUrl: v.optional(v.string()),
     submittedAt: v.string(),
   },
   handler: async (ctx, args) => {
@@ -119,6 +120,7 @@ export const createGHLContact = action({
         { key: "contact.enquiry_type", field_value: args.enquiryType },
         { key: "contact.heard_about", field_value: args.heardAbout },
         { key: "contact.dc_location", field_value: args.dcLocation || "" },
+        { key: "contact.progress_url", field_value: args.progressUrl || "" },
       ],
     };
 

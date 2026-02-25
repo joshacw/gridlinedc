@@ -130,9 +130,10 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
       await storeProgressToken({ token, enquiryId });
 
-      // Step 3: Build progress URL and redirect
+      // Step 3: Build progress URL and redirect (clear beforeunload to prevent "Leave site?" dialog)
       const progressUrl = `${window.location.origin}/progress/${token}`;
       setIsRedirecting(true);
+      window.onbeforeunload = null;
       window.location.href = progressUrl;
 
       // Step 4: Fire-and-forget GHL contact creation (runs server-side, survives navigation)

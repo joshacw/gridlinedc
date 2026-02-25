@@ -34,7 +34,7 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
       <div className="lg:hidden">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full bg-[#030948] rounded-[19px] p-4 flex items-center justify-between"
+          className="w-full bg-[#0d1b33] rounded-lg p-4 flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
@@ -44,8 +44,8 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
                   <div
                     key={step.number}
                     className={`h-1.5 rounded-full transition-all ${
-                      state === 'completed' ? 'w-4 bg-[#2469ff]' :
-                      state === 'active' ? 'w-6 bg-[#2469ff]' :
+                      state === 'completed' ? 'w-4 bg-[#4a9eff]' :
+                      state === 'active' ? 'w-6 bg-[#4a9eff]' :
                       'w-2 bg-slate-600'
                     }`}
                   />
@@ -71,7 +71,7 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
         )}
 
         {expanded && (
-          <div className="mt-3 bg-[#030948] rounded-[19px] p-4 space-y-1">
+          <div className="mt-3 bg-[#0d1b33] rounded-lg p-4 space-y-1">
             {renderStepList(preSteps, currentStep, 'Getting Started')}
             {currentStep > 6 && renderStepList(postSteps, currentStep, 'Next Steps')}
           </div>
@@ -80,17 +80,17 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
 
       {/* Desktop: full vertical stepper */}
       <div className="hidden lg:block sticky top-8">
-        <div className="bg-[#030948] rounded-[19px] p-6">
+        <div className="bg-[#0d1b33] rounded-lg p-6">
           {/* Progress summary */}
           <div className="flex items-center justify-between mb-6">
             <span className="text-xs text-slate-400 uppercase tracking-widest font-medium">Progress</span>
-            <span className="text-xs text-[#2469ff] font-bold">{completedCount} / {steps.length}</span>
+            <span className="text-xs text-[#4a9eff] font-bold">{completedCount} / {steps.length}</span>
           </div>
 
           {/* Progress bar */}
           <div className="h-1 bg-slate-700/50 rounded-full mb-8 overflow-hidden">
             <div
-              className="h-full bg-[#2469ff] rounded-full transition-all duration-700"
+              className="h-full bg-[#4a9eff] rounded-full transition-all duration-700"
               style={{ width: `${(completedCount / steps.length) * 100}%` }}
             />
           </div>
@@ -136,15 +136,15 @@ function StepItem({ step, state, isLast }: { step: StepDef; state: 'completed' |
       {/* Indicator column */}
       <div className="flex flex-col items-center">
         {state === 'completed' ? (
-          <div className="w-7 h-7 rounded-full bg-[#2469ff] flex items-center justify-center flex-shrink-0">
+          <div className="w-7 h-7 rounded-full bg-[#4a9eff] flex items-center justify-center flex-shrink-0">
             <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
           </div>
         ) : state === 'active' ? (
-          <div className="w-7 h-7 rounded-full border-2 border-[#2469ff] bg-[#2469ff]/10 flex items-center justify-center flex-shrink-0 relative">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#2469ff]" />
-            <div className="absolute inset-0 rounded-full border-2 border-[#2469ff] animate-ping opacity-30" />
+          <div className="w-7 h-7 rounded-full border-2 border-[#4a9eff] bg-[#4a9eff]/10 flex items-center justify-center flex-shrink-0 relative">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#4a9eff]" />
+            <div className="absolute inset-0 rounded-full border-2 border-[#4a9eff] animate-ping opacity-30" />
           </div>
         ) : (
           <div className="w-7 h-7 rounded-full border border-slate-600/40 bg-slate-800/30 flex items-center justify-center flex-shrink-0">
@@ -155,8 +155,8 @@ function StepItem({ step, state, isLast }: { step: StepDef; state: 'completed' |
         )}
         {!isLast && (
           <div className={`w-px h-6 ${
-            state === 'completed' ? 'bg-[#2469ff]/40' :
-            state === 'active' ? 'bg-[#2469ff]/20' :
+            state === 'completed' ? 'bg-[#4a9eff]/40' :
+            state === 'active' ? 'bg-[#4a9eff]/20' :
             'bg-slate-700/30'
           }`} />
         )}
@@ -188,14 +188,14 @@ function renderStepList(steps: StepDef[], currentStep: number, title: string) {
         return (
           <div key={step.number} className="flex items-center gap-2 py-1.5">
             {state === 'completed' ? (
-              <div className="w-5 h-5 rounded-full bg-[#2469ff] flex items-center justify-center flex-shrink-0">
+              <div className="w-5 h-5 rounded-full bg-[#4a9eff] flex items-center justify-center flex-shrink-0">
                 <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
             ) : state === 'active' ? (
-              <div className="w-5 h-5 rounded-full border-2 border-[#2469ff] bg-[#2469ff]/10 flex items-center justify-center flex-shrink-0">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#2469ff]" />
+              <div className="w-5 h-5 rounded-full border-2 border-[#4a9eff] bg-[#4a9eff]/10 flex items-center justify-center flex-shrink-0">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#4a9eff]" />
               </div>
             ) : (
               <div className="w-5 h-5 rounded-full border border-slate-600/40 flex items-center justify-center flex-shrink-0">

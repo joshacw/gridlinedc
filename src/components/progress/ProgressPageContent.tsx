@@ -20,7 +20,7 @@ export default function ProgressPageContent({ token }: Props) {
       <div className="min-h-screen bg-gradient-dark flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-slate-400 text-sm font-outfit">Loading your progress...</p>
+          <p className="text-slate-400 text-sm">Loading your progress...</p>
         </div>
       </div>
     );
@@ -36,13 +36,13 @@ export default function ProgressPageContent({ token }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-outfit font-bold text-white mb-3">Link Not Found</h1>
+          <h1 className="text-2xl font-bold text-white mb-3">Link Not Found</h1>
           <p className="text-slate-400 mb-8">
             This progress link is invalid or has expired. If you recently registered, please check your email for the correct link.
           </p>
           <a
             href="/"
-            className="inline-block px-8 py-3 bg-[#2469ff] hover:bg-[#1d5ae6] text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all"
+            className="inline-block px-8 py-3 bg-[#4a9eff] hover:bg-[#5aa8ff] text-white rounded-lg font-bold uppercase tracking-widest text-xs transition-all"
           >
             Back to Home
           </a>
@@ -58,8 +58,8 @@ export default function ProgressPageContent({ token }: Props) {
     <div className="min-h-screen bg-gradient-dark text-white">
       {/* Minimal navbar */}
       <nav className="py-6 px-6 sm:px-8 flex items-center justify-between">
-        <a href="/" className="font-outfit text-2xl font-bold tracking-tighter">
-          GRID<span className="text-[#2469ff]">LINE</span>
+        <a href="/" className="text-2xl font-bold tracking-tighter">
+          GRID<span className="text-[#4a9eff]">LINE</span>
         </a>
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -72,7 +72,7 @@ export default function ProgressPageContent({ token }: Props) {
         <p className="text-slate-400 text-xs sm:text-sm font-medium uppercase tracking-widest mb-2">
           Welcome back, {firstName}
         </p>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-outfit font-bold">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
           Your Onboarding Progress
         </h1>
         <p className="text-slate-400 mt-2 text-sm sm:text-base max-w-2xl">

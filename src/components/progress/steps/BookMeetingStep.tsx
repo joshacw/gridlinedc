@@ -38,15 +38,15 @@ export default function BookMeetingStep({ enquiryId }: Props) {
   return (
     <div className="space-y-6">
       {/* Header card */}
-      <div className="bg-[#030948] rounded-[19px] p-6 sm:p-8">
+      <div className="bg-[#0d1b33] rounded-lg p-6 sm:p-8">
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 bg-[#2469ff]/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <svg className="w-6 h-6 text-[#2469ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-12 h-12 bg-[#4a9eff]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg className="w-6 h-6 text-[#4a9eff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-outfit font-bold text-white">Book Your Meeting</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-white">Book Your Meeting</h2>
             <p className="text-slate-400 mt-1 text-sm sm:text-base">
               Schedule a time with our team to discuss your data centre and explore partnership options.
             </p>
@@ -54,7 +54,7 @@ export default function BookMeetingStep({ enquiryId }: Props) {
         </div>
 
         {/* What to expect */}
-        <div className="bg-slate-800/30 rounded-2xl p-5 mb-6">
+        <div className="bg-slate-800/30 rounded-lg p-5 mb-6">
           <p className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-3">What to expect</p>
           <ul className="space-y-2">
             {[
@@ -63,7 +63,7 @@ export default function BookMeetingStep({ enquiryId }: Props) {
               'Overview of GRIDLINE partnership structures and next steps',
             ].map((item, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                <svg className="w-4 h-4 text-[#2469ff] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-[#4a9eff] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 {item}
@@ -78,7 +78,7 @@ export default function BookMeetingStep({ enquiryId }: Props) {
           style={{ width: '100%', border: 'none', overflow: 'hidden' }}
           scrolling="no"
           id="fM4FD1UfwWqblr5tLSuH_1771808208511"
-          className="min-h-[600px] sm:min-h-[700px] rounded-2xl"
+          className="min-h-[600px] sm:min-h-[700px] rounded-lg"
           title="Schedule a Meeting"
         />
       </div>
@@ -87,7 +87,7 @@ export default function BookMeetingStep({ enquiryId }: Props) {
       <button
         onClick={handleConfirm}
         disabled={confirming}
-        className="w-full py-4 bg-[#2469ff] hover:bg-[#1d5ae6] text-white rounded-[19px] font-bold uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-4 bg-[#4a9eff] hover:bg-[#5aa8ff] text-white rounded-lg font-bold uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {confirming ? 'Confirming...' : "I've Booked My Meeting"}
       </button>

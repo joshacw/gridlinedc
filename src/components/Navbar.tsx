@@ -2,19 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { HOME_NAV_ITEMS } from '@/constants';
-import { NavItem, PageContext } from '@/types';
 
-interface NavbarProps {
-  onInquireClick?: () => void;
-  navItems?: NavItem[];
-  pageContext?: PageContext;
-}
+const NAV_ITEMS = [
+  { label: 'About', href: '/about' },
+  { label: 'For Owners', href: '/owners' },
+  { label: 'For Investors', href: '/investors' },
+];
 
-const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext = 'home' }) => {
+const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const items = navItems || HOME_NAV_ITEMS;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,49 +20,28 @@ const Navbar: React.FC<NavbarProps> = ({ onInquireClick, navItems, pageContext =
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isInternalLink = (href: string) => href.startsWith('/');
-
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/5 border-b border-white/10 ${isScrolled ? 'backdrop-blur-sm' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`rounded-2xl flex items-center justify-between px-6 py-3 transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'} bg-white`}>
+        <div className="flex items-center justify-between py-6 px-0">
           <div className="flex items-center">
             <Link href="/">
-              <span className="font-outfit text-2xl font-bold tracking-tighter text-dark-navy">
-                GRID<span className="text-primary-blue">LINE</span>
+              <span className="text-2xl font-bold tracking-tighter text-white">
+                GRID<span className="text-[#4a9eff]">LINE</span>
               </span>
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {items.map((item) =>
-              isInternalLink(item.href) ? (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="font-instrument-sans text-sm font-bold uppercase tracking-wider text-slate-900 hover:text-primary-blue transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="font-instrument-sans text-sm font-bold uppercase tracking-wider text-slate-900 hover:text-primary-blue transition-colors"
-                >
-                  {item.label}
-                </a>
-              )
-            )}
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={onInquireClick}
-              className="bg-primary-blue hover:bg-cta-primary-hover text-white px-5 py-2.5 rounded-xl font-outfit text-sm font-bold uppercase tracking-wider transition-all shadow-primary hover:shadow-card-hover active:scale-95"
-            >
-              Inquire
-            </button>
+          <div className="hidden md:flex items-center space-x-10">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-sm font-medium uppercase tracking-wider text-white/80 hover:text-white transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

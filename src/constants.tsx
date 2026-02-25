@@ -1,29 +1,5 @@
 import React from 'react';
-import { InvestmentTier, NavItem } from './types';
-
-// Legacy nav items (kept for backward compatibility)
-export const NAV_ITEMS: NavItem[] = [
-  { label: 'Multiplier Model', href: '#rerating' },
-  { label: 'Partnership', href: '#partnership' },
-  { label: 'Investment', href: '#strategy' },
-];
-
-// Page-specific navigation
-export const HOME_NAV_ITEMS: NavItem[] = [
-  { label: 'For Owners', href: '/owners' },
-  { label: 'For Investors', href: '/investors' },
-];
-
-export const OWNERS_NAV_ITEMS: NavItem[] = [
-  { label: 'Why Partner', href: '#why-partner' },
-  { label: 'Comparison', href: '#comparison' },
-  { label: 'Options', href: '#partnership-options' },
-  { label: 'Arbitrage', href: '#arbitrage' },
-];
-
-export const INVESTORS_NAV_ITEMS: NavItem[] = [
-  { label: 'Overview', href: '#overview' },
-];
+import { InvestmentTier } from './types';
 
 // New partnership options for the owners page
 export const OWNERS_PARTNERSHIP_OPTIONS = [

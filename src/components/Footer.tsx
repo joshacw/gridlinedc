@@ -1,46 +1,62 @@
 import React from 'react';
+import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-dark-navy text-white py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-          <div className="md:col-span-1">
-             <div className="flex items-center mb-6">
-                <span className="font-outfit text-2xl font-bold tracking-tighter">
-                  GRID<span className="text-primary-blue">LINE</span>
-                </span>
-              </div>
-              <p className="font-outfit text-gridline-gray text-sm leading-relaxed mb-6">
-                Aggregating premier digital infrastructure assets for the public markets.
-              </p>
+    <footer className="px-8 py-12 bg-white border-t border-[#0a1e3d]/10">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+          {/* Logo + Description */}
+          <div>
+            <div className="mb-4">
+              <span className="text-xl font-bold tracking-tighter text-[#0a1e3d]">
+                GRID<span className="text-[#4a9eff]">LINE</span>
+              </span>
+            </div>
+            <p className="text-sm text-[#0a1e3d]/60 leading-relaxed">
+              Institutional digital infrastructure platform
+            </p>
           </div>
 
+          {/* Platform */}
           <div>
-            <h4 className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray mb-6">Investment</h4>
-            <ul className="space-y-4 text-gridline-gray text-sm">
-              <li><a href="#" className="font-outfit hover:text-white transition-colors">Core Growth</a></li>
-              <li><a href="#" className="font-outfit hover:text-white transition-colors">Seed Capital</a></li>
-              <li><a href="#" className="font-outfit hover:text-white transition-colors">Performance</a></li>
+            <h4 className="text-sm font-semibold mb-4 text-[#0a1e3d]/90 tracking-wide">Platform</h4>
+            <ul className="space-y-3">
+              <li><Link href="/owners" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">For Owners</Link></li>
+              <li><Link href="/investors" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">For Investors</Link></li>
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Governance</a></li>
             </ul>
           </div>
 
+          {/* Regions */}
           <div>
-            <h4 className="font-instrument-sans text-xs font-bold uppercase tracking-widest text-gridline-gray mb-6">Company</h4>
-            <ul className="space-y-4 text-gridline-gray text-sm">
-              <li><a href="#" className="font-outfit hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="font-outfit hover:text-white transition-colors">Contact</a></li>
+            <h4 className="text-sm font-semibold mb-4 text-[#0a1e3d]/90 tracking-wide">Regions</h4>
+            <ul className="space-y-3">
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">APAC</a></li>
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">North America</a></li>
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">EMEA</a></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4 text-[#0a1e3d]/90 tracking-wide">Legal</h4>
+            <ul className="space-y-3">
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Terms</a></li>
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Privacy</a></li>
+              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Disclaimers</a></li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-dark-blue flex flex-col md:flex-row justify-between items-center gap-4 text-gridline-gray font-instrument-sans text-[10px] uppercase tracking-widest font-bold">
-          <p>&copy; 2025 GRIDLINE. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-primary-blue transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary-blue transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary-blue transition-colors">Disclosures</a>
-          </div>
+        {/* Disclaimer + Copyright */}
+        <div className="pt-8 border-t border-[#0a1e3d]/10">
+          <p className="text-xs text-[#0a1e3d]/40 leading-relaxed mb-4">
+            This website does not constitute an offer of securities. All investments involve risk, including possible loss of principal. Past performance does not guarantee future results. GRIDLINE operates under applicable securities regulations in each jurisdiction.
+          </p>
+          <p className="text-xs text-[#0a1e3d]/40">
+            &copy; 2026 GRIDLINE. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

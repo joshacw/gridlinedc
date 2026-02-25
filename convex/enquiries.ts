@@ -13,6 +13,7 @@ export const submit = mutation({
     phoneNumber: v.optional(v.string()),
     enquiryType: v.union(v.literal("investor"), v.literal("asset_owner")),
     heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
     survey: v.optional(v.object({
       ownershipStructure: v.optional(v.string()),
       currentPowerUtilisation: v.optional(v.string()),
@@ -91,6 +92,7 @@ export const createGHLContact = action({
     phoneNumber: v.optional(v.string()),
     enquiryType: v.string(),
     heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
     submittedAt: v.string(),
   },
   handler: async (ctx, args) => {
@@ -116,6 +118,7 @@ export const createGHLContact = action({
       customFields: [
         { key: "contact.enquiry_type", field_value: args.enquiryType },
         { key: "contact.heard_about", field_value: args.heardAbout },
+        { key: "contact.dc_location", field_value: args.dcLocation || "" },
       ],
     };
 
@@ -251,6 +254,7 @@ export const submitContactInfo = action({
     phoneNumber: v.optional(v.string()),
     enquiryType: v.union(v.literal("investor"), v.literal("asset_owner")),
     heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
     submittedAt: v.string(),
   },
   handler: async (ctx, args): Promise<{ enquiryId: string; ghlContactId: string | null; ghlSuccess: boolean }> => {
@@ -262,6 +266,7 @@ export const submitContactInfo = action({
       phoneNumber: args.phoneNumber,
       enquiryType: args.enquiryType,
       heardAbout: args.heardAbout,
+      dcLocation: args.dcLocation,
       submittedAt: args.submittedAt,
     });
 
@@ -324,6 +329,7 @@ export const submitWithWebhook = action({
     phoneNumber: v.optional(v.string()),
     enquiryType: v.union(v.literal("investor"), v.literal("asset_owner")),
     heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
     survey: v.optional(v.object({
       ownershipStructure: v.optional(v.string()),
       currentPowerUtilisation: v.optional(v.string()),
@@ -348,6 +354,7 @@ export const submitWithWebhook = action({
       phoneNumber: args.phoneNumber,
       enquiryType: args.enquiryType,
       heardAbout: args.heardAbout,
+      dcLocation: args.dcLocation,
       submittedAt: args.submittedAt,
     });
 

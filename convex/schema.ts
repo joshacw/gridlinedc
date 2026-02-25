@@ -10,6 +10,7 @@ export default defineSchema({
     phoneNumber: v.optional(v.string()),
     enquiryType: v.union(v.literal("investor"), v.literal("asset_owner")),
     heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
 
     // DC Owner Survey (optional - only for asset_owner type)
     survey: v.optional(v.object({

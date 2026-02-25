@@ -18,6 +18,7 @@ interface ContactInfo {
   email: string;
   companyName: string;
   phoneNumber: string;
+  dcLocation: string;
   enquiryType: EnquiryType;
   heardAbout: string;
 }
@@ -47,6 +48,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     email: '',
     companyName: '',
     phoneNumber: '',
+    dcLocation: '',
     enquiryType: defaultEnquiryType || null,
     heardAbout: ''
   });
@@ -62,6 +64,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           email: '',
           companyName: '',
           phoneNumber: '',
+          dcLocation: '',
           enquiryType: defaultEnquiryType || null,
           heardAbout: ''
         });
@@ -97,6 +100,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
       isValidEmail(contactInfo.email) &&
       contactInfo.companyName.trim() !== '' &&
       contactInfo.enquiryType !== null &&
+      contactInfo.dcLocation.trim() !== '' &&
       contactInfo.heardAbout !== ''
     );
   };
@@ -111,6 +115,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
+        dcLocation: contactInfo.dcLocation || undefined,
         enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
         heardAbout: contactInfo.heardAbout,
         submittedAt: new Date().toISOString(),
@@ -135,6 +140,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
+        dcLocation: contactInfo.dcLocation || undefined,
         enquiryType: contactInfo.enquiryType as string,
         heardAbout: contactInfo.heardAbout,
         submittedAt: new Date().toISOString(),
@@ -160,6 +166,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
+        dcLocation: contactInfo.dcLocation || undefined,
         enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
         heardAbout: contactInfo.heardAbout,
         submittedAt: new Date().toISOString(),
@@ -247,6 +254,36 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         </div>
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            Location of the DC Asset *
+          </label>
+          <input
+            type="text"
+            value={contactInfo.dcLocation}
+            onChange={(e) => handleContactChange('dcLocation', e.target.value)}
+            placeholder="Singapore"
+            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            How did you hear about GRIDLINE? *
+          </label>
+          <select
+            value={contactInfo.heardAbout}
+            onChange={(e) => handleContactChange('heardAbout', e.target.value)}
+            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+          >
+            <option value="">Select an option</option>
+            {HEARD_ABOUT_OPTIONS.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Only show type selector when not pre-set by page context */}
       {!defaultEnquiryType && (
         <div>
@@ -289,22 +326,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           </div>
         </div>
       )}
-
-      <div>
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
-          How did you hear about GRIDLINE? *
-        </label>
-        <select
-          value={contactInfo.heardAbout}
-          onChange={(e) => handleContactChange('heardAbout', e.target.value)}
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-        >
-          <option value="">Select an option</option>
-          {HEARD_ABOUT_OPTIONS.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
-      </div>
 
       <button
         onClick={handleContinue}

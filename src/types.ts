@@ -21,3 +21,22 @@ export interface NavItem {
 }
 
 export type PageContext = 'home' | 'owners' | 'investors';
+
+// DC Survey Question types
+export interface SurveyQuestionBase {
+  key: string;
+  label: string;
+  question: string;
+}
+
+export interface SurveyChoiceQuestion extends SurveyQuestionBase {
+  type: 'choice';
+  options: string[];
+}
+
+export interface SurveyTextQuestion extends SurveyQuestionBase {
+  type: 'text';
+  placeholder: string;
+}
+
+export type SurveyQuestion = SurveyChoiceQuestion | SurveyTextQuestion;

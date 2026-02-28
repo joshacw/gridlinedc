@@ -1,10 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
+import GridOverlay from '@/components/GridOverlay';
 
 const HomeHero: React.FC = () => {
   return (
-    <section className="min-h-[85vh] flex items-center justify-center px-8 py-20 bg-[#0a1628]">
-      <div className="max-w-5xl mx-auto text-center">
+    <section className="relative min-h-[85vh] flex items-center justify-center px-8 py-20 bg-[#0a1628]">
+      <GridOverlay />
+      <div className="max-w-5xl mx-auto text-center relative z-10">
         <h1 className="mb-6">
           <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-3 tracking-tight leading-tight">
             Secure the Future of

@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import GridOverlay from '@/components/GridOverlay';
 
 const CAPABILITIES = [
   {
@@ -45,21 +46,13 @@ const CAPABILITIES = [
 export default function AboutPageContent() {
   return (
     <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
-      {/* Subtle grid overlay — visible on dark sections */}
-      <div
-        className="fixed inset-0 opacity-60 pointer-events-none z-10"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(74,158,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(74,158,255,0.08) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
       <Navbar />
 
       <main>
         {/* Hero Banner */}
-        <section className="pt-32 pb-16 lg:pt-40 lg:pb-20 bg-[#0a1628]">
-          <div className="max-w-4xl mx-auto px-8">
+        <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-[#0a1628]">
+          <GridOverlay />
+          <div className="max-w-4xl mx-auto px-8 relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
               About <span className="text-[#4a9eff]">GRIDLINE</span>
             </h1>

@@ -1,4 +1,5 @@
 import React from 'react';
+import GridOverlay from '@/components/GridOverlay';
 
 interface OwnersHeroProps {
   onCtaClick?: () => void;
@@ -7,6 +8,7 @@ interface OwnersHeroProps {
 const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
   return (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-[#0a1628]">
+      <GridOverlay />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Headline + Subtext */}
         <div className="text-center max-w-5xl mx-auto mb-16">

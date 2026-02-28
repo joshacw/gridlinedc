@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
+import GridOverlay from '@/components/GridOverlay';
 
 export default function InvestorsPageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,20 +14,12 @@ export default function InvestorsPageContent() {
 
   return (
     <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
-      {/* Subtle grid overlay — visible on dark sections */}
-      <div
-        className="fixed inset-0 opacity-60 pointer-events-none z-10"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(74,158,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(74,158,255,0.08) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
       <Navbar />
 
       <main>
         {/* Hero + Cards (single dark section) */}
         <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-[#0a1628]">
+          <GridOverlay />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
             <div className="text-center max-w-4xl mx-auto mb-20">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#4a9eff]/10 border border-[#4a9eff]/30 mb-8">

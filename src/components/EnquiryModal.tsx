@@ -93,14 +93,22 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     return emailRegex.test(email);
   };
 
+  const isValidPhone = (phone: string) => {
+    if (!phone.trim()) return true; // optional field
+    const digits = phone.replace(/[\s\-\(\)\+\.]/g, '');
+    return /^\d{7,15}$/.test(digits);
+  };
+
   const isContactValid = () => {
+    const isInvestor = contactInfo.enquiryType === 'investor';
     return (
       contactInfo.name.trim() !== '' &&
       contactInfo.email.trim() !== '' &&
       isValidEmail(contactInfo.email) &&
       contactInfo.companyName.trim() !== '' &&
+      isValidPhone(contactInfo.phoneNumber) &&
       contactInfo.enquiryType !== null &&
-      contactInfo.dcLocation.trim() !== '' &&
+      (isInvestor || contactInfo.dcLocation.trim() !== '') &&
       contactInfo.heardAbout !== ''
     );
   };
@@ -194,8 +202,14 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const renderStep1 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-outfit font-bold text-slate-900 mb-2">Explore Your Potential Upside</h2>
-        <p className="text-slate-500 text-sm">Exclusive for data centre owners in the APAC region.</p>
+        <h2 className="text-2xl font-outfit font-bold text-slate-900 mb-2">
+          {defaultEnquiryType === 'investor' ? 'Explore The GridLine Opportunity' : 'Explore Your Potential Upside'}
+        </h2>
+        <p className="text-slate-500 text-sm">
+          {defaultEnquiryType === 'investor'
+            ? 'Limited time opportunity for early stage investors.'
+            : 'Exclusive for data centre owners in the APAC region.'}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -252,27 +266,34 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
             value={contactInfo.phoneNumber}
             onChange={(e) => handleContactChange('phoneNumber', e.target.value)}
             placeholder="+60 12 345 6789"
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+            className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${
+              contactInfo.phoneNumber && !isValidPhone(contactInfo.phoneNumber) ? 'border-red-400' : 'border-slate-200'
+            }`}
           />
+          {contactInfo.phoneNumber && !isValidPhone(contactInfo.phoneNumber) && (
+            <p className="text-red-500 text-xs mt-1">Please enter a valid phone number</p>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className={`grid grid-cols-1 ${defaultEnquiryType !== 'investor' ? 'sm:grid-cols-2' : ''} gap-4`}>
+        {defaultEnquiryType !== 'investor' && (
+          <div>
+            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+              Location of the DC Asset *
+            </label>
+            <input
+              type="text"
+              value={contactInfo.dcLocation}
+              onChange={(e) => handleContactChange('dcLocation', e.target.value)}
+              placeholder="Singapore"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+            />
+          </div>
+        )}
         <div>
           <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
-            Location of the DC Asset *
-          </label>
-          <input
-            type="text"
-            value={contactInfo.dcLocation}
-            onChange={(e) => handleContactChange('dcLocation', e.target.value)}
-            placeholder="Singapore"
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
-            How did you hear about GRIDLINE? *
+            How did you hear about us? *
           </label>
           <select
             value={contactInfo.heardAbout}

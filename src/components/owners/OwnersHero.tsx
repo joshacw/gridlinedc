@@ -10,7 +10,7 @@ const OwnersHero: React.FC<OwnersHeroProps> = ({ onCtaClick }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Headline + Subtext */}
         <div className="text-center max-w-5xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white tracking-tight leading-tight mb-8">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white tracking-tight leading-tight mb-8 text-balance">
             How <span className="text-[#4a9eff]">Small Data Centre Owners Are Multiplying Valuations</span> Through Industry Partnerships &amp; Institutional Finance
           </h1>
 

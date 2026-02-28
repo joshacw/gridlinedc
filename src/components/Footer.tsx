@@ -42,9 +42,9 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-sm font-semibold mb-4 text-[#0a1e3d]/90 tracking-wide">Legal</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Terms</a></li>
-              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Privacy</a></li>
-              <li><a href="#" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Disclaimers</a></li>
+              <li><Link href="/terms" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Terms</Link></li>
+              <li><Link href="/privacy" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Privacy</Link></li>
+              <li><Link href="/disclaimers" className="text-sm text-[#0a1e3d]/50 hover:text-[#0a1e3d] transition-colors">Disclaimers</Link></li>
             </ul>
           </div>
         </div>

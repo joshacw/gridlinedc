@@ -53,7 +53,7 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
               })}
             </div>
             <span className="text-sm text-white font-medium">
-              Step {currentStep} of 12
+              Step {currentStep} of {steps.length}
             </span>
           </div>
           <svg
@@ -73,7 +73,7 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
         {expanded && (
           <div className="mt-3 bg-[#0d1b33] rounded-lg p-4 space-y-1">
             {renderStepList(preSteps, currentStep, 'Getting Started')}
-            {currentStep > 6 && renderStepList(postSteps, currentStep, 'Next Steps')}
+            {postSteps.length > 0 && currentStep > preSteps[preSteps.length - 1]?.number && renderStepList(postSteps, currentStep, 'Next Steps')}
           </div>
         )}
       </div>
@@ -110,9 +110,11 @@ export default function ProgressStepper({ steps, currentStep }: Props) {
             </div>
           </div>
 
-          {/* Post-meeting steps */}
+          {/* Post steps */}
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-4">Partnership Process</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-4">
+              {steps.length <= 5 ? 'Investment Process' : 'Partnership Process'}
+            </p>
             <div className="space-y-1">
               {postSteps.map((step, i) => (
                 <StepItem

@@ -32,6 +32,7 @@ http.route({
 
     // Map GHL pipeline stage names to step numbers and keys
     const STAGE_MAP: Record<string, { step: number; key: string }> = {
+      // DC Owner pipeline stages
       "Have Meeting": { step: 5, key: "haveMeeting" },
       "Confirm Next Steps": { step: 6, key: "confirmNextSteps" },
       "Share Financials": { step: 7, key: "shareFinancials" },
@@ -40,6 +41,11 @@ http.route({
       "Due Diligence": { step: 10, key: "dueDiligence" },
       "LOI": { step: 11, key: "loi" },
       "Closing": { step: 12, key: "closing" },
+      // Investor pipeline stages
+      "Explore Opportunity": { step: 2, key: "investorExploreMeeting" },
+      "Request Offer Detail": { step: 3, key: "investorRequestDetail" },
+      "Execute SAFE": { step: 4, key: "investorExecuteSafe" },
+      "Invest": { step: 5, key: "investorInvest" },
     };
 
     const stageInfo = STAGE_MAP[pipelineStage];

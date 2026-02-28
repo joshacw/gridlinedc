@@ -39,9 +39,11 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const [isRedirecting, setIsRedirecting] = useState(false);
   const submitEnquiry = useMutation(api.enquiries.submit);
   const storeProgressToken = useMutation(api.enquiries.storeProgressToken);
+  const storeInvestorProgressToken = useMutation(api.enquiries.storeInvestorProgressToken);
   const createGHLContact = useAction(api.enquiries.createGHLContact);
+  const createGHLOpportunity = useAction(api.enquiries.createGHLOpportunity);
   const updateGhlContactId = useMutation(api.enquiries.updateGhlContactId);
-  const submitWithWebhook = useAction(api.enquiries.submitWithWebhook);
+  const updateGhlOpportunityId = useMutation(api.enquiries.updateGhlOpportunityId);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
@@ -113,6 +115,10 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     );
   };
 
+  // GHL Pipeline IDs
+  const GHL_PIPELINE_INVESTOR = "vaMWg7E7OUATkFu5FWSp";
+  const GHL_PIPELINE_DC_OWNER = "RZjD4cW2ONonKOH2BLW6";
+
   // Asset owner flow: save to DB → store token → redirect → GHL sync in background
   const handleAssetOwnerSubmit = async () => {
     setIsSubmitting(true);
@@ -124,7 +130,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
         dcLocation: contactInfo.dcLocation || undefined,
-        enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
+        enquiryType: "asset_owner",
         heardAbout: contactInfo.heardAbout,
         submittedAt: new Date().toISOString(),
       });
@@ -138,26 +144,36 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
       await storeProgressToken({ token, enquiryId });
 
-      // Step 3: Build progress URL and redirect (clear beforeunload to prevent "Leave site?" dialog)
+      // Step 3: Build progress URL and redirect
       const progressUrl = `${window.location.origin}/progress/${token}`;
       setIsRedirecting(true);
       window.onbeforeunload = null;
       window.location.href = progressUrl;
 
-      // Step 4: Fire-and-forget GHL contact creation (runs server-side, survives navigation)
+      // Step 4: Fire-and-forget GHL contact + opportunity creation
       createGHLContact({
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
         dcLocation: contactInfo.dcLocation || undefined,
-        enquiryType: contactInfo.enquiryType as string,
+        enquiryType: "asset_owner",
         heardAbout: contactInfo.heardAbout,
         progressUrl,
         submittedAt: new Date().toISOString(),
       }).then(async (ghlResult) => {
         if (ghlResult.contactId) {
           await updateGhlContactId({ id: enquiryId, ghlContactId: ghlResult.contactId });
+          // Also create GHL opportunity
+          const oppResult = await createGHLOpportunity({
+            contactId: ghlResult.contactId,
+            pipelineId: GHL_PIPELINE_DC_OWNER,
+            name: contactInfo.name,
+            email: contactInfo.email,
+          });
+          if (oppResult.opportunityId) {
+            await updateGhlOpportunityId({ id: enquiryId, ghlOpportunityId: oppResult.opportunityId });
+          }
         }
       }).catch(err => console.error('GHL sync failed (non-blocking):', err));
     } catch (error) {
@@ -168,34 +184,75 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     }
   };
 
-  // Investor flow: submit via legacy webhook (no progress page)
+  // Investor flow: save to DB → store token → redirect → GHL sync in background
   const handleInvestorSubmit = async () => {
     setIsSubmitting(true);
     try {
-      await submitWithWebhook({
+      // Step 1: Save to DB
+      const enquiryId: Id<"enquiries"> = await submitEnquiry({
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
-        dcLocation: contactInfo.dcLocation || undefined,
-        enquiryType: contactInfo.enquiryType as "investor" | "asset_owner",
+        enquiryType: "investor",
         heardAbout: contactInfo.heardAbout,
         submittedAt: new Date().toISOString(),
       });
-      setIsSuccess(true);
+
+      // Step 2: Generate token and store with investor pipeline
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let token = "";
+      for (let i = 0; i < 24; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      await storeInvestorProgressToken({ token, enquiryId });
+
+      // Step 3: Build progress URL and redirect
+      const progressUrl = `${window.location.origin}/progress/${token}`;
+      setIsRedirecting(true);
+      window.onbeforeunload = null;
+      window.location.href = progressUrl;
+
+      // Step 4: Fire-and-forget GHL contact + opportunity creation
+      createGHLContact({
+        name: contactInfo.name,
+        email: contactInfo.email,
+        companyName: contactInfo.companyName,
+        phoneNumber: contactInfo.phoneNumber || undefined,
+        enquiryType: "investor",
+        heardAbout: contactInfo.heardAbout,
+        progressUrl,
+        submittedAt: new Date().toISOString(),
+      }).then(async (ghlResult) => {
+        if (ghlResult.contactId) {
+          await updateGhlContactId({ id: enquiryId, ghlContactId: ghlResult.contactId });
+          // Also create GHL opportunity
+          const oppResult = await createGHLOpportunity({
+            contactId: ghlResult.contactId,
+            pipelineId: GHL_PIPELINE_INVESTOR,
+            name: contactInfo.name,
+            email: contactInfo.email,
+          });
+          if (oppResult.opportunityId) {
+            await updateGhlOpportunityId({ id: enquiryId, ghlOpportunityId: oppResult.opportunityId });
+          }
+        }
+      }).catch(err => console.error('GHL sync failed (non-blocking):', err));
     } catch (error) {
       console.error('Error submitting enquiry:', error);
+      setIsSuccess(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Step 1 "Continue" handler: for asset owners, submit and redirect. For investors, go to step 2.
+  // Both flows now submit and redirect on step 1
   const handleContinue = () => {
     if (contactInfo.enquiryType === 'asset_owner') {
       handleAssetOwnerSubmit();
     } else {
-      setStep(2);
+      handleInvestorSubmit();
     }
   };
 
@@ -361,45 +418,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     </div>
   );
 
-  const renderStep2Investor = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-6">
-        <div className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-3">
-          Investor Enquiry
-        </div>
-        <h2 className="text-xl font-outfit font-bold text-slate-900 mb-2">Thank you for your interest</h2>
-        <p className="text-slate-500 text-sm">Our investment team will be in touch shortly to discuss opportunities.</p>
-      </div>
-
-      <div className="bg-slate-50 rounded-2xl p-6 text-center">
-        <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <p className="text-slate-600 text-sm leading-relaxed">
-          We&apos;re preparing our investor survey. In the meantime, your contact details have been captured and a member of our team will reach out within 48 hours.
-        </p>
-      </div>
-
-      <div className="flex gap-4 pt-4">
-        <button
-          onClick={() => setStep(1)}
-          className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all"
-        >
-          Back
-        </button>
-        <button
-          onClick={handleInvestorSubmit}
-          disabled={isSubmitting}
-          className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Enquiry'}
-        </button>
-      </div>
-    </div>
-  );
-
   const renderRedirecting = () => (
     <div className="text-center py-12">
       <div className="w-16 h-16 mx-auto mb-6 relative">
@@ -433,9 +451,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
   if (!isOpen) return null;
 
-  // Determine if we need a progress indicator (only for investor 2-step flow)
-  const showProgress = !isSuccess && contactInfo.enquiryType === 'investor' && step === 2;
-
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -456,29 +471,14 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
           </svg>
         </button>
 
-        {/* Progress indicator (only for investor flow step 2) */}
-        {showProgress && (
-          <div className="px-8 pt-8">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="h-1.5 w-16 rounded-full bg-blue-600" />
-              <div className="h-1.5 w-16 rounded-full bg-blue-600" />
-            </div>
-            <p className="text-center text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-              Step 2 of 2
-            </p>
-          </div>
-        )}
-
         {/* Content */}
         <div className="p-8">
           {isRedirecting ? (
             renderRedirecting()
           ) : isSuccess ? (
             renderSuccess()
-          ) : step === 1 ? (
-            renderStep1()
           ) : (
-            renderStep2Investor()
+            renderStep1()
           )}
         </div>
       </div>

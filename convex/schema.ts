@@ -27,9 +27,20 @@ export default defineSchema({
       capitalOutlook: v.optional(v.string()),
     })),
 
+    // Investor Survey (optional - only for investor type)
+    investorSurvey: v.optional(v.object({
+      investorType: v.optional(v.string()),
+      accreditationStatus: v.optional(v.string()),
+      investmentRange: v.optional(v.string()),
+      investmentTimeline: v.optional(v.string()),
+      geographicPreference: v.optional(v.string()),
+      priorDCExperience: v.optional(v.string()),
+    })),
+
     // Pipeline tracking
-    pipelineStep: v.optional(v.number()), // Current active step (1-12)
+    pipelineStep: v.optional(v.number()), // Current active step
     pipelineSteps: v.optional(v.object({
+      // DC Owner steps
       visitedWebsite: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       registeredInterest: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       bookMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
@@ -42,12 +53,19 @@ export default defineSchema({
       dueDiligence: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       loi: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       closing: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      // Investor steps
+      investorRegisterInterest: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      investorExploreMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      investorRequestDetail: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      investorExecuteSafe: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      investorInvest: v.optional(v.object({ completedAt: v.optional(v.string()) })),
     })),
 
     // Metadata
     submittedAt: v.string(),
     status: v.optional(v.string()),
     ghlContactId: v.optional(v.string()),
+    ghlOpportunityId: v.optional(v.string()),
   })
     .index("by_email", ["email"])
     .index("by_type", ["enquiryType"])

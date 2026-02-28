@@ -197,7 +197,62 @@ export const DC_SURVEY_QUESTIONS: SurveyQuestion[] = [
   },
 ];
 
-// Pipeline steps configuration
+// Investor Pipeline steps configuration (5 steps)
+export const INVESTOR_PIPELINE_STEPS = [
+  { number: 1, key: 'investorRegisterInterest', label: 'Register Interest', description: 'Contact info submitted', phase: 'pre' as const },
+  { number: 2, key: 'investorExploreMeeting', label: 'Explore Opportunity', description: 'Book a meeting with our team', phase: 'pre' as const },
+  { number: 3, key: 'investorRequestDetail', label: 'Request Offer Detail', description: 'Complete the investor survey', phase: 'pre' as const },
+  { number: 4, key: 'investorExecuteSafe', label: 'Execute SAFE', description: 'Sign the SAFE agreement', phase: 'post' as const },
+  { number: 5, key: 'investorInvest', label: 'Invest', description: 'Complete your investment', phase: 'post' as const },
+];
+
+// Investor Survey Questions (used on investor progress page survey step)
+export const INVESTOR_SURVEY_QUESTIONS: SurveyQuestion[] = [
+  {
+    key: 'investorType',
+    label: 'Investor Type',
+    question: 'Which best describes you as an investor?',
+    type: 'choice',
+    options: ['Individual / Angel', 'Family Office', 'Venture Capital', 'Private Equity', 'Institutional Fund', 'Corporate / Strategic'],
+  },
+  {
+    key: 'accreditationStatus',
+    label: 'Accreditation Status',
+    question: 'What is your accreditation status?',
+    type: 'choice',
+    options: ['Accredited Investor', 'Qualified Purchaser', 'Sophisticated Investor', 'Not yet accredited', 'Unsure'],
+  },
+  {
+    key: 'investmentRange',
+    label: 'Investment Range',
+    question: 'What is your typical investment range?',
+    type: 'choice',
+    options: ['<$100K', '$100K–$500K', '$500K–$1M', '$1M–$5M', '$5M+'],
+  },
+  {
+    key: 'investmentTimeline',
+    label: 'Investment Timeline',
+    question: 'What is your expected investment timeline?',
+    type: 'choice',
+    options: ['Immediately', 'Within 3 months', '3–6 months', '6–12 months', '12+ months'],
+  },
+  {
+    key: 'geographicPreference',
+    label: 'Geographic Preference',
+    question: 'Do you have a geographic preference for data centre investments?',
+    type: 'choice',
+    options: ['APAC only', 'Global – no preference', 'North America', 'Europe', 'Other'],
+  },
+  {
+    key: 'priorDCExperience',
+    label: 'Prior DC Experience',
+    question: 'Do you have prior experience investing in data centres or digital infrastructure?',
+    type: 'choice',
+    options: ['Yes – actively invested', 'Yes – limited exposure', 'No – but interested', 'No – exploring for the first time'],
+  },
+];
+
+// DC Owner Pipeline steps configuration (12 steps)
 export const PIPELINE_STEPS = [
   { number: 1, key: 'visitedWebsite', label: 'Visit Website', description: 'You found us', phase: 'pre' as const },
   { number: 2, key: 'registeredInterest', label: 'Register Interest', description: 'Contact info submitted', phase: 'pre' as const },

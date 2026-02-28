@@ -7,14 +7,18 @@ import DCDetailsSurveyStep from './steps/DCDetailsSurveyStep';
 import HaveMeetingStep from './steps/HaveMeetingStep';
 import ConfirmNextStepsStep from './steps/ConfirmNextStepsStep';
 import PostMeetingStep from './steps/PostMeetingStep';
+import InvestorBookMeetingStep from './steps/InvestorBookMeetingStep';
+import InvestorSurveyStep from './steps/InvestorSurveyStep';
 
 interface EnquiryData {
   _id: Id<"enquiries">;
   name: string;
   email: string;
   companyName: string;
+  enquiryType: 'investor' | 'asset_owner';
   pipelineStep?: number;
   survey?: Record<string, string | undefined>;
+  investorSurvey?: Record<string, string | undefined>;
 }
 
 interface Props {
@@ -23,7 +27,7 @@ interface Props {
   enquiryData: EnquiryData;
 }
 
-const POST_MEETING_STEPS: Record<number, { label: string; description: string; detail: string }> = {
+const DC_POST_MEETING_STEPS: Record<number, { label: string; description: string; detail: string }> = {
   7: {
     label: 'Share Financials',
     description: 'Provide financial documentation for your data centre.',
@@ -56,7 +60,30 @@ const POST_MEETING_STEPS: Record<number, { label: string; description: string; d
   },
 };
 
+const INVESTOR_POST_STEPS: Record<number, { label: string; description: string; detail: string }> = {
+  4: {
+    label: 'Execute SAFE',
+    description: 'Sign the SAFE agreement.',
+    detail: 'The Simple Agreement for Future Equity (SAFE) outlines the terms of your investment. Our team will walk you through the agreement and ensure all questions are addressed before signing.',
+  },
+  5: {
+    label: 'Invest',
+    description: 'Complete your investment.',
+    detail: 'Finalise your investment commitment and complete the funding process. Once complete, you will receive confirmation and access to investor updates and reporting.',
+  },
+};
+
 export default function StepPanel({ currentStep, enquiryId, enquiryData }: Props) {
+  const isInvestor = enquiryData.enquiryType === 'investor';
+
+  if (isInvestor) {
+    return <InvestorStepPanel currentStep={currentStep} enquiryId={enquiryId} enquiryData={enquiryData} />;
+  }
+
+  return <DCOwnerStepPanel currentStep={currentStep} enquiryId={enquiryId} enquiryData={enquiryData} />;
+}
+
+function DCOwnerStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
   if (currentStep === 3) {
     return <BookMeetingStep enquiryId={enquiryId} />;
   }
@@ -74,7 +101,7 @@ export default function StepPanel({ currentStep, enquiryId, enquiryData }: Props
   }
 
   if (currentStep >= 7 && currentStep <= 12) {
-    const stepInfo = POST_MEETING_STEPS[currentStep];
+    const stepInfo = DC_POST_MEETING_STEPS[currentStep];
     return (
       <PostMeetingStep
         stepNumber={currentStep}
@@ -85,7 +112,6 @@ export default function StepPanel({ currentStep, enquiryId, enquiryData }: Props
     );
   }
 
-  // Steps 1-2 are auto-complete, step > 12 means done
   if (currentStep > 12) {
     return (
       <div className="bg-[#0d1b33] rounded-lg p-8 sm:p-10 text-center">
@@ -97,6 +123,50 @@ export default function StepPanel({ currentStep, enquiryId, enquiryData }: Props
         <h2 className="text-2xl font-bold text-white mb-3">Partnership Complete</h2>
         <p className="text-slate-400 max-w-md mx-auto">
           Congratulations! Your data centre is now part of the GRIDLINE platform. Our team will be in touch with next steps.
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+function InvestorStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
+  // Step 2: Book meeting / explore opportunity
+  if (currentStep === 2) {
+    return <InvestorBookMeetingStep enquiryId={enquiryId} />;
+  }
+
+  // Step 3: Investor survey
+  if (currentStep === 3) {
+    return <InvestorSurveyStep enquiryId={enquiryId} existingSurvey={enquiryData.investorSurvey} />;
+  }
+
+  // Steps 4-5: Post-meeting managed steps
+  if (currentStep >= 4 && currentStep <= 5) {
+    const stepInfo = INVESTOR_POST_STEPS[currentStep];
+    return (
+      <PostMeetingStep
+        stepNumber={currentStep}
+        label={stepInfo.label}
+        description={stepInfo.description}
+        detail={stepInfo.detail}
+      />
+    );
+  }
+
+  // Step > 5: completed
+  if (currentStep > 5) {
+    return (
+      <div className="bg-[#0d1b33] rounded-lg p-8 sm:p-10 text-center">
+        <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-white mb-3">Investment Complete</h2>
+        <p className="text-slate-400 max-w-md mx-auto">
+          Thank you for investing with GRIDLINE. You will receive ongoing investor updates and reporting from our team.
         </p>
       </div>
     );

@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { PIPELINE_STEPS } from '@/constants';
+import { PIPELINE_STEPS, INVESTOR_PIPELINE_STEPS } from '@/constants';
 import ProgressStepper from './ProgressStepper';
 import StepPanel from './StepPanel';
 import GridOverlay from '@/components/GridOverlay';
@@ -68,7 +68,9 @@ export default function ProgressPageContent({ token }: Props) {
     );
   }
 
-  const currentStep = data.pipelineStep || 3;
+  const isInvestor = data.enquiryType === 'investor';
+  const steps = isInvestor ? INVESTOR_PIPELINE_STEPS : PIPELINE_STEPS;
+  const currentStep = data.pipelineStep || (isInvestor ? 2 : 3);
   const firstName = data.name?.split(' ')[0] || 'there';
 
   return (
@@ -91,10 +93,12 @@ export default function ProgressPageContent({ token }: Props) {
           Welcome back, {firstName}
         </p>
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-          Your Onboarding Progress
+          {isInvestor ? 'Your Investment Progress' : 'Your Onboarding Progress'}
         </h1>
         <p className="text-slate-400 mt-2 text-sm sm:text-base max-w-2xl">
-          Track your journey to partnering with GRIDLINE. Complete each step to move forward in the process.
+          {isInvestor
+            ? 'Track your journey to investing with GRIDLINE. Complete each step to move forward in the process.'
+            : 'Track your journey to partnering with GRIDLINE. Complete each step to move forward in the process.'}
         </p>
       </div>
 
@@ -104,7 +108,7 @@ export default function ProgressPageContent({ token }: Props) {
           {/* Left: Stepper */}
           <div className="lg:w-[340px] flex-shrink-0">
             <ProgressStepper
-              steps={PIPELINE_STEPS}
+              steps={steps}
               currentStep={currentStep}
             />
           </div>

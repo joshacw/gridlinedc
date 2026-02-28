@@ -108,6 +108,65 @@ export const submitSurveyFromProgress = action({
   },
 });
 
+// Save investor survey data to the enquiry record
+export const saveInvestorSurvey = mutation({
+  args: {
+    enquiryId: v.id("enquiries"),
+    investorSurvey: v.object({
+      investorType: v.optional(v.string()),
+      accreditationStatus: v.optional(v.string()),
+      investmentRange: v.optional(v.string()),
+      investmentTimeline: v.optional(v.string()),
+      geographicPreference: v.optional(v.string()),
+      priorDCExperience: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.enquiryId, { investorSurvey: args.investorSurvey });
+  },
+});
+
+// Submit investor survey from progress page — saves to Convex + syncs to GHL + advances step
+export const submitInvestorSurveyFromProgress = action({
+  args: {
+    enquiryId: v.id("enquiries"),
+    investorSurvey: v.object({
+      investorType: v.optional(v.string()),
+      accreditationStatus: v.optional(v.string()),
+      investmentRange: v.optional(v.string()),
+      investmentTimeline: v.optional(v.string()),
+      geographicPreference: v.optional(v.string()),
+      priorDCExperience: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    // 1. Save investor survey data
+    await ctx.runMutation(api.progress.saveInvestorSurvey, {
+      enquiryId: args.enquiryId,
+      investorSurvey: args.investorSurvey,
+    });
+
+    // 2. Get the enquiry to find ghlContactId
+    const enquiry = await ctx.runQuery(api.enquiries.getById, { id: args.enquiryId });
+
+    // 3. Sync to GHL if we have a contact ID
+    if (enquiry?.ghlContactId) {
+      await ctx.runAction(api.enquiries.updateGHLContactInvestorSurvey, {
+        contactId: enquiry.ghlContactId,
+        investorSurvey: args.investorSurvey,
+      });
+    }
+
+    // 4. Advance the pipeline step
+    await ctx.runMutation(api.progress.advanceStep, {
+      enquiryId: args.enquiryId,
+      stepKey: "investorRequestDetail",
+    });
+
+    return { success: true };
+  },
+});
+
 // Update step from GHL webhook (looks up by ghlContactId)
 export const updateStepFromWebhook = mutation({
   args: {

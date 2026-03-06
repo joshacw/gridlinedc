@@ -32,6 +32,15 @@ const HEARD_ABOUT_OPTIONS = [
   'Other'
 ];
 
+// Suppress Convex's beforeunload listener that causes "Leave site?" dialog on redirect
+function suppressBeforeUnload() {
+  window.onbeforeunload = null;
+  // Convex uses addEventListener, so intercept in capture phase to block it
+  window.addEventListener('beforeunload', (e) => {
+    e.stopImmediatePropagation();
+  }, { capture: true, once: true });
+}
+
 const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnquiryType }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -156,7 +165,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
       // Step 4: Redirect (GHL sync continues server-side)
       setIsRedirecting(true);
-      window.onbeforeunload = null;
+      suppressBeforeUnload();
       window.location.href = progressUrl;
     } catch (error) {
       console.error('Error submitting enquiry:', error);
@@ -205,7 +214,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
 
       // Step 4: Redirect (GHL sync continues server-side)
       setIsRedirecting(true);
-      window.onbeforeunload = null;
+      suppressBeforeUnload();
       window.location.href = progressUrl;
     } catch (error) {
       console.error('Error submitting enquiry:', error);

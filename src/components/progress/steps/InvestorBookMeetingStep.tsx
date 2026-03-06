@@ -5,8 +5,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-// Placeholder — replace with actual investor calendar URL when ready
-const GHL_INVESTOR_CALENDAR_URL = "https://l.ifted.net/widget/booking/fM4FD1UfwWqblr5tLSuH";
+const GHL_INVESTOR_CALENDAR_URL = "https://l.ifted.net/widget/booking/CZCvEqQHt5JXLZBxQJBl";
 const GHL_FORM_EMBED_SCRIPT = "https://l.ifted.net/js/form_embed.js";
 
 interface Props {

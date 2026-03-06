@@ -1,6 +1,7 @@
-import { mutation, query, action } from "./_generated/server";
+import { mutation, query, action, internalAction } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
+import { internal } from "./_generated/api";
 
 const GHL_API_BASE = "https://services.leadconnectorhq.com";
 const GHL_LOCATION_ID = "pDeHDxXRGXbQ8RnErHWV";
@@ -223,11 +224,20 @@ export const updateGHLContactSurvey = action({
   },
 });
 
-// Store a progress token and set initial pipeline state
+// Store a progress token and set initial pipeline state + schedule GHL sync
 export const storeProgressToken = mutation({
   args: {
     token: v.string(),
     enquiryId: v.id("enquiries"),
+    // Contact info for GHL sync
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    companyName: v.optional(v.string()),
+    phoneNumber: v.optional(v.string()),
+    heardAbout: v.optional(v.string()),
+    dcLocation: v.optional(v.string()),
+    progressUrl: v.optional(v.string()),
+    pipelineId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert("progressTokens", {
@@ -244,6 +254,22 @@ export const storeProgressToken = mutation({
         registeredInterest: { completedAt: new Date().toISOString() },
       },
     });
+
+    // Schedule GHL sync server-side (runs even after client navigates away)
+    if (args.name && args.email && args.companyName && args.heardAbout && args.progressUrl && args.pipelineId) {
+      await ctx.scheduler.runAfter(0, internal.enquiries.syncToGHL, {
+        enquiryId: args.enquiryId,
+        name: args.name,
+        email: args.email,
+        companyName: args.companyName,
+        phoneNumber: args.phoneNumber,
+        enquiryType: "asset_owner",
+        heardAbout: args.heardAbout,
+        dcLocation: args.dcLocation,
+        progressUrl: args.progressUrl,
+        pipelineId: args.pipelineId,
+      });
+    }
   },
 });
 
@@ -466,11 +492,19 @@ export const updateGHLContactInvestorSurvey = action({
   },
 });
 
-// Store a progress token and set initial investor pipeline state
+// Store a progress token and set initial investor pipeline state + schedule GHL sync
 export const storeInvestorProgressToken = mutation({
   args: {
     token: v.string(),
     enquiryId: v.id("enquiries"),
+    // Contact info for GHL sync
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    companyName: v.optional(v.string()),
+    phoneNumber: v.optional(v.string()),
+    heardAbout: v.optional(v.string()),
+    progressUrl: v.optional(v.string()),
+    pipelineId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert("progressTokens", {
@@ -486,6 +520,79 @@ export const storeInvestorProgressToken = mutation({
         investorRegisterInterest: { completedAt: new Date().toISOString() },
       },
     });
+
+    // Schedule GHL sync server-side
+    if (args.name && args.email && args.companyName && args.heardAbout && args.progressUrl && args.pipelineId) {
+      await ctx.scheduler.runAfter(0, internal.enquiries.syncToGHL, {
+        enquiryId: args.enquiryId,
+        name: args.name,
+        email: args.email,
+        companyName: args.companyName,
+        phoneNumber: args.phoneNumber,
+        enquiryType: "investor",
+        heardAbout: args.heardAbout,
+        progressUrl: args.progressUrl,
+        pipelineId: args.pipelineId,
+      });
+    }
+  },
+});
+
+// Server-side GHL sync — scheduled from mutations so it runs even after client navigates away
+export const syncToGHL = internalAction({
+  args: {
+    enquiryId: v.id("enquiries"),
+    name: v.string(),
+    email: v.string(),
+    companyName: v.string(),
+    phoneNumber: v.optional(v.string()),
+    enquiryType: v.string(),
+    heardAbout: v.string(),
+    dcLocation: v.optional(v.string()),
+    progressUrl: v.string(),
+    pipelineId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Step 1: Create GHL contact
+    const ghlResult = await ctx.runAction(api.enquiries.createGHLContact, {
+      name: args.name,
+      email: args.email,
+      companyName: args.companyName,
+      phoneNumber: args.phoneNumber,
+      enquiryType: args.enquiryType,
+      heardAbout: args.heardAbout,
+      dcLocation: args.dcLocation,
+      progressUrl: args.progressUrl,
+      submittedAt: new Date().toISOString(),
+    });
+
+    if (!ghlResult.contactId) {
+      console.error("syncToGHL: Failed to create contact, skipping opportunity creation");
+      return;
+    }
+
+    // Store GHL contact ID
+    await ctx.runMutation(api.enquiries.updateGhlContactId, {
+      id: args.enquiryId,
+      ghlContactId: ghlResult.contactId,
+    });
+
+    // Step 2: Create GHL opportunity
+    const oppResult = await ctx.runAction(api.enquiries.createGHLOpportunity, {
+      contactId: ghlResult.contactId,
+      pipelineId: args.pipelineId,
+      name: args.name,
+      email: args.email,
+    });
+
+    if (oppResult.opportunityId) {
+      await ctx.runMutation(api.enquiries.updateGhlOpportunityId, {
+        id: args.enquiryId,
+        ghlOpportunityId: oppResult.opportunityId,
+      });
+    }
+
+    console.log("syncToGHL: Complete for", args.email, "contact:", ghlResult.contactId, "opp:", oppResult.opportunityId);
   },
 });
 

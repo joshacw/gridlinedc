@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAction, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 
@@ -40,10 +40,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const submitEnquiry = useMutation(api.enquiries.submit);
   const storeProgressToken = useMutation(api.enquiries.storeProgressToken);
   const storeInvestorProgressToken = useMutation(api.enquiries.storeInvestorProgressToken);
-  const createGHLContact = useAction(api.enquiries.createGHLContact);
-  const createGHLOpportunity = useAction(api.enquiries.createGHLOpportunity);
-  const updateGhlContactId = useMutation(api.enquiries.updateGhlContactId);
-  const updateGhlOpportunityId = useMutation(api.enquiries.updateGhlOpportunityId);
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
@@ -119,7 +115,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
   const GHL_PIPELINE_INVESTOR = "vaMWg7E7OUATkFu5FWSp";
   const GHL_PIPELINE_DC_OWNER = "RZjD4cW2ONonKOH2BLW6";
 
-  // Asset owner flow: save to DB → store token → redirect → GHL sync in background
+  // Asset owner flow: save to DB → store token (schedules GHL sync server-side) → redirect
   const handleAssetOwnerSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -135,47 +131,33 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         submittedAt: new Date().toISOString(),
       });
 
-      // Step 2: Generate token and store via mutation
+      // Step 2: Generate token
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let token = "";
       for (let i = 0; i < 24; i++) {
         token += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      await storeProgressToken({ token, enquiryId });
-
-      // Step 3: Build progress URL and redirect
       const progressUrl = `${window.location.origin}/progress/${token}`;
-      setIsRedirecting(true);
-      window.onbeforeunload = null;
-      window.location.href = progressUrl;
 
-      // Step 4: Fire-and-forget GHL contact + opportunity creation
-      createGHLContact({
+      // Step 3: Store token + schedule GHL sync server-side (runs even after navigation)
+      await storeProgressToken({
+        token,
+        enquiryId,
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
-        dcLocation: contactInfo.dcLocation || undefined,
-        enquiryType: "asset_owner",
         heardAbout: contactInfo.heardAbout,
+        dcLocation: contactInfo.dcLocation || undefined,
         progressUrl,
-        submittedAt: new Date().toISOString(),
-      }).then(async (ghlResult) => {
-        if (ghlResult.contactId) {
-          await updateGhlContactId({ id: enquiryId, ghlContactId: ghlResult.contactId });
-          // Also create GHL opportunity
-          const oppResult = await createGHLOpportunity({
-            contactId: ghlResult.contactId,
-            pipelineId: GHL_PIPELINE_DC_OWNER,
-            name: contactInfo.name,
-            email: contactInfo.email,
-          });
-          if (oppResult.opportunityId) {
-            await updateGhlOpportunityId({ id: enquiryId, ghlOpportunityId: oppResult.opportunityId });
-          }
-        }
-      }).catch(err => console.error('GHL sync failed (non-blocking):', err));
+        pipelineId: GHL_PIPELINE_DC_OWNER,
+      });
+
+      // Step 4: Redirect (GHL sync continues server-side)
+      setIsRedirecting(true);
+      window.onbeforeunload = null;
+      window.location.href = progressUrl;
     } catch (error) {
       console.error('Error submitting enquiry:', error);
       setIsSuccess(true);
@@ -184,7 +166,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
     }
   };
 
-  // Investor flow: save to DB → store token → redirect → GHL sync in background
+  // Investor flow: save to DB → store token (schedules GHL sync server-side) → redirect
   const handleInvestorSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -199,46 +181,32 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         submittedAt: new Date().toISOString(),
       });
 
-      // Step 2: Generate token and store with investor pipeline
+      // Step 2: Generate token
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let token = "";
       for (let i = 0; i < 24; i++) {
         token += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      await storeInvestorProgressToken({ token, enquiryId });
-
-      // Step 3: Build progress URL and redirect
       const progressUrl = `${window.location.origin}/progress/${token}`;
-      setIsRedirecting(true);
-      window.onbeforeunload = null;
-      window.location.href = progressUrl;
 
-      // Step 4: Fire-and-forget GHL contact + opportunity creation
-      createGHLContact({
+      // Step 3: Store token + schedule GHL sync server-side (runs even after navigation)
+      await storeInvestorProgressToken({
+        token,
+        enquiryId,
         name: contactInfo.name,
         email: contactInfo.email,
         companyName: contactInfo.companyName,
         phoneNumber: contactInfo.phoneNumber || undefined,
-        enquiryType: "investor",
         heardAbout: contactInfo.heardAbout,
         progressUrl,
-        submittedAt: new Date().toISOString(),
-      }).then(async (ghlResult) => {
-        if (ghlResult.contactId) {
-          await updateGhlContactId({ id: enquiryId, ghlContactId: ghlResult.contactId });
-          // Also create GHL opportunity
-          const oppResult = await createGHLOpportunity({
-            contactId: ghlResult.contactId,
-            pipelineId: GHL_PIPELINE_INVESTOR,
-            name: contactInfo.name,
-            email: contactInfo.email,
-          });
-          if (oppResult.opportunityId) {
-            await updateGhlOpportunityId({ id: enquiryId, ghlOpportunityId: oppResult.opportunityId });
-          }
-        }
-      }).catch(err => console.error('GHL sync failed (non-blocking):', err));
+        pipelineId: GHL_PIPELINE_INVESTOR,
+      });
+
+      // Step 4: Redirect (GHL sync continues server-side)
+      setIsRedirecting(true);
+      window.onbeforeunload = null;
+      window.location.href = progressUrl;
     } catch (error) {
       console.error('Error submitting enquiry:', error);
       setIsSuccess(true);

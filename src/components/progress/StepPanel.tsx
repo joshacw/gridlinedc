@@ -9,16 +9,25 @@ import ConfirmNextStepsStep from './steps/ConfirmNextStepsStep';
 import PostMeetingStep from './steps/PostMeetingStep';
 import InvestorBookMeetingStep from './steps/InvestorBookMeetingStep';
 import InvestorSurveyStep from './steps/InvestorSurveyStep';
+import CompatibilityScoreStep from './steps/CompatibilityScoreStep';
 
 interface EnquiryData {
   _id: Id<"enquiries">;
   name: string;
   email: string;
   companyName: string;
-  enquiryType: 'investor' | 'asset_owner';
+  enquiryType: 'investor' | 'asset_owner' | 'compatibility';
   pipelineStep?: number;
   survey?: Record<string, string | undefined>;
   investorSurvey?: Record<string, string | undefined>;
+  compatibilityScore?: {
+    score: number;
+    scoreLabel: string;
+    band1Score: number;
+    band2Score: number;
+    band3Score: number;
+    answers: Record<string, boolean>;
+  };
 }
 
 interface Props {
@@ -74,9 +83,11 @@ const INVESTOR_POST_STEPS: Record<number, { label: string; description: string; 
 };
 
 export default function StepPanel({ currentStep, enquiryId, enquiryData }: Props) {
-  const isInvestor = enquiryData.enquiryType === 'investor';
+  if (enquiryData.enquiryType === 'compatibility') {
+    return <CompatibilityStepPanel currentStep={currentStep} enquiryId={enquiryId} enquiryData={enquiryData} />;
+  }
 
-  if (isInvestor) {
+  if (enquiryData.enquiryType === 'investor') {
     return <InvestorStepPanel currentStep={currentStep} enquiryId={enquiryId} enquiryData={enquiryData} />;
   }
 
@@ -113,6 +124,88 @@ function DCOwnerStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
   }
 
   if (currentStep > 12) {
+    return (
+      <div className="bg-[#0d1b33] rounded-lg p-8 sm:p-10 text-center">
+        <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-white mb-3">Partnership Complete</h2>
+        <p className="text-slate-400 max-w-md mx-auto">
+          Congratulations! Your data centre is now part of the GRIDLINE platform. Our team will be in touch with next steps.
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+const COMPAT_POST_STEPS: Record<number, { label: string; description: string; detail: string }> = {
+  6: {
+    label: 'Share Financials',
+    description: 'Provide financial documentation for your data centre.',
+    detail: 'Our team will guide you through the financial documentation required. This typically includes annual revenue figures, operating costs, EBITDA, and capital expenditure history.',
+  },
+  7: {
+    label: 'Prepare Report',
+    description: 'GRIDLINE is preparing your valuation report.',
+    detail: 'Our analysts are reviewing your facility data and financials to prepare a comprehensive valuation and partnership proposal tailored to your asset.',
+  },
+  8: {
+    label: 'Present Offer',
+    description: 'Review the partnership proposal.',
+    detail: 'We will present our partnership offer including the recommended structure, valuation, and terms. This is your opportunity to review and discuss all details with our team.',
+  },
+  9: {
+    label: 'Due Diligence',
+    description: 'Formal verification process underway.',
+    detail: 'The due diligence phase involves a thorough review of legal, financial, and operational aspects of your data centre to ensure alignment and readiness for partnership.',
+  },
+  10: {
+    label: 'Closing',
+    description: 'Finalising the partnership agreement.',
+    detail: 'The final step — all agreements are signed, and your data centre officially becomes part of the GRIDLINE platform. Welcome to the future of data centre infrastructure.',
+  },
+};
+
+function CompatibilityStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
+  // Step 2: View score + PDF
+  if (currentStep === 2 && enquiryData.compatibilityScore) {
+    return <CompatibilityScoreStep enquiryId={enquiryId} compatibilityScore={enquiryData.compatibilityScore} />;
+  }
+
+  // Step 3: DC details survey
+  if (currentStep === 3) {
+    return <DCDetailsSurveyStep enquiryId={enquiryId} existingSurvey={enquiryData.survey} />;
+  }
+
+  // Step 4: Book meeting
+  if (currentStep === 4) {
+    return <BookMeetingStep enquiryId={enquiryId} />;
+  }
+
+  // Step 5: Have meeting
+  if (currentStep === 5) {
+    return <HaveMeetingStep name={enquiryData.name} />;
+  }
+
+  // Steps 6-10: Post-meeting managed steps
+  if (currentStep >= 6 && currentStep <= 10) {
+    const stepInfo = COMPAT_POST_STEPS[currentStep];
+    return (
+      <PostMeetingStep
+        stepNumber={currentStep}
+        label={stepInfo.label}
+        description={stepInfo.description}
+        detail={stepInfo.detail}
+      />
+    );
+  }
+
+  // Completed
+  if (currentStep > 10) {
     return (
       <div className="bg-[#0d1b33] rounded-lg p-8 sm:p-10 text-center">
         <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">

@@ -6,6 +6,37 @@ import { internal } from "./_generated/api";
 const GHL_API_BASE = "https://services.leadconnectorhq.com";
 const GHL_LOCATION_ID = "pDeHDxXRGXbQ8RnErHWV";
 
+// GHL Custom Field IDs (from /locations/{id}/customFields endpoint)
+const GHL_FIELDS = {
+  enquiryType: "uOrrwNz7fWVgKqiDqu1v",       // SINGLE_OPTIONS: "Investor", "Asset Owner"
+  heardAbout: "RE65vRKgb6FArgPYIfcY",
+  progressUrl: "2BjxVIRiKEn4HI7MTGgr",
+  dcLocation: "AKWAIumL9iJNa4hyoV4a",
+  dcOwnershipStructure: "urw0ugDA9M47UKbW6wM1",
+  dcCurrentPowerUtilisation: "3XCtlY41vAGnw89EkY4n",
+  dcPowerScalability: "8WzdohaBsJBzS41rVHjB",
+  dcCustomerBase: "mRLSEZ5OLq7ptOtMSzj3",
+  dcCustomerConcentration: "pQTdI5iwSxMwgwkYBJeP",
+  dcContractTenure: "LykVN5SGLfVmWleIdrs0",
+  dcAnchorTenants: "i3Z23WdquQlcvdSwzWC1",
+  dcNetworkConnectivity: "y4idzzRPEH8bETT9pzeH",
+  dcAnnualRevenue: "cspTDDjhm0JCSPC1JuLk",
+  dcEbitdaRange: "sSucxuxlAgYQYYDkcSN7",
+  dcCapitalOutlook: "GasXu4m0hZdJLNSF07aS",
+  // Investor survey fields
+  investorType: "jqHWGaGVWD11Mt8PnLw5",
+  accreditationStatus: "khYrllUN16VOjadDB9rl",
+  investmentRange: "IOozC8p0RnML9xYMWVJ5",
+  investmentTimeline: "0SQdlvdzfvde72fuh5Tr",
+  geographicPreference: "LNWr1Jq1Y72R2svVTyrk",
+  priorDCExperience: "DVcU51aoCWVA3bVWmub2",
+} as const;
+
+// Map internal enquiry type to GHL picklist value
+function ghlEnquiryTypeLabel(type: string): string {
+  return type === "investor" ? "Investor" : "Asset Owner";
+}
+
 export const submit = mutation({
   args: {
     name: v.string(),
@@ -118,10 +149,10 @@ export const createGHLContact = action({
       companyName: args.companyName,
       locationId: GHL_LOCATION_ID,
       customFields: [
-        { key: "contact.enquiry_type", field_value: args.enquiryType },
-        { key: "contact.heard_about", field_value: args.heardAbout },
-        { key: "contact.dc_location", field_value: args.dcLocation || "" },
-        { key: "contact.progress_url", field_value: args.progressUrl || "" },
+        { id: GHL_FIELDS.enquiryType, field_value: ghlEnquiryTypeLabel(args.enquiryType) },
+        { id: GHL_FIELDS.heardAbout, field_value: args.heardAbout },
+        { id: GHL_FIELDS.dcLocation, field_value: args.dcLocation || "" },
+        { id: GHL_FIELDS.progressUrl, field_value: args.progressUrl || "" },
       ],
     };
 
@@ -178,19 +209,19 @@ export const updateGHLContactSurvey = action({
       return { success: false, reason: "api_key_not_configured" };
     }
 
-    // Build custom fields array for survey data
+    // Build custom fields array for survey data using field IDs
     const customFields = [
-      { key: "contact.dc_ownership_structure", field_value: args.survey.ownershipStructure || "" },
-      { key: "contact.dc_current_power_utilisation", field_value: args.survey.currentPowerUtilisation || "" },
-      { key: "contact.dc_power_scalability", field_value: args.survey.powerScalability || "" },
-      { key: "contact.dc_customer_base", field_value: args.survey.customerBase || "" },
-      { key: "contact.dc_customer_concentration", field_value: args.survey.customerConcentration || "" },
-      { key: "contact.dc_contract_tenure", field_value: args.survey.contractTenure || "" },
-      { key: "contact.dc_anchor_tenants", field_value: args.survey.anchorTenants || "" },
-      { key: "contact.dc_network_connectivity", field_value: args.survey.networkConnectivity || "" },
-      { key: "contact.dc_annual_revenue", field_value: args.survey.annualRevenue || "" },
-      { key: "contact.dc_ebitda_range", field_value: args.survey.ebitdaRange || "" },
-      { key: "contact.dc_capital_outlook", field_value: args.survey.capitalOutlook || "" },
+      { id: GHL_FIELDS.dcOwnershipStructure, field_value: args.survey.ownershipStructure || "" },
+      { id: GHL_FIELDS.dcCurrentPowerUtilisation, field_value: args.survey.currentPowerUtilisation || "" },
+      { id: GHL_FIELDS.dcPowerScalability, field_value: args.survey.powerScalability || "" },
+      { id: GHL_FIELDS.dcCustomerBase, field_value: args.survey.customerBase || "" },
+      { id: GHL_FIELDS.dcCustomerConcentration, field_value: args.survey.customerConcentration || "" },
+      { id: GHL_FIELDS.dcContractTenure, field_value: args.survey.contractTenure || "" },
+      { id: GHL_FIELDS.dcAnchorTenants, field_value: args.survey.anchorTenants || "" },
+      { id: GHL_FIELDS.dcNetworkConnectivity, field_value: args.survey.networkConnectivity || "" },
+      { id: GHL_FIELDS.dcAnnualRevenue, field_value: args.survey.annualRevenue || "" },
+      { id: GHL_FIELDS.dcEbitdaRange, field_value: args.survey.ebitdaRange || "" },
+      { id: GHL_FIELDS.dcCapitalOutlook, field_value: args.survey.capitalOutlook || "" },
     ];
 
     const payload = {
@@ -457,12 +488,12 @@ export const updateGHLContactInvestorSurvey = action({
     }
 
     const customFields = [
-      { key: "contact.investor_type", field_value: args.investorSurvey.investorType || "" },
-      { key: "contact.accreditation_status", field_value: args.investorSurvey.accreditationStatus || "" },
-      { key: "contact.investment_range", field_value: args.investorSurvey.investmentRange || "" },
-      { key: "contact.investment_timeline", field_value: args.investorSurvey.investmentTimeline || "" },
-      { key: "contact.geographic_preference", field_value: args.investorSurvey.geographicPreference || "" },
-      { key: "contact.prior_dc_experience", field_value: args.investorSurvey.priorDCExperience || "" },
+      { id: GHL_FIELDS.investorType, field_value: args.investorSurvey.investorType || "" },
+      { id: GHL_FIELDS.accreditationStatus, field_value: args.investorSurvey.accreditationStatus || "" },
+      { id: GHL_FIELDS.investmentRange, field_value: args.investorSurvey.investmentRange || "" },
+      { id: GHL_FIELDS.investmentTimeline, field_value: args.investorSurvey.investmentTimeline || "" },
+      { id: GHL_FIELDS.geographicPreference, field_value: args.investorSurvey.geographicPreference || "" },
+      { id: GHL_FIELDS.priorDCExperience, field_value: args.investorSurvey.priorDCExperience || "" },
     ];
 
     try {

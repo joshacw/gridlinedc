@@ -8,9 +8,29 @@ export default defineSchema({
     email: v.string(),
     companyName: v.string(),
     phoneNumber: v.optional(v.string()),
-    enquiryType: v.union(v.literal("investor"), v.literal("asset_owner")),
+    enquiryType: v.union(v.literal("investor"), v.literal("asset_owner"), v.literal("compatibility")),
     heardAbout: v.string(),
     dcLocation: v.optional(v.string()),
+
+    // Compatibility Score (optional - only for compatibility type)
+    compatibilityScore: v.optional(v.object({
+      score: v.number(),
+      scoreLabel: v.string(),
+      band1Score: v.number(),
+      band2Score: v.number(),
+      band3Score: v.number(),
+      answers: v.object({
+        q1: v.boolean(),
+        q2: v.boolean(),
+        q3: v.boolean(),
+        q4: v.boolean(),
+        q5: v.boolean(),
+        q6: v.boolean(),
+        q7: v.boolean(),
+        q8: v.boolean(),
+        q9: v.boolean(),
+      }),
+    })),
 
     // DC Owner Survey (optional - only for asset_owner type)
     survey: v.optional(v.object({
@@ -53,6 +73,12 @@ export default defineSchema({
       dueDiligence: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       loi: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       closing: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      // Compatibility steps
+      compatAssessment: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      compatViewScore: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      compatShareDetails: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      compatBookMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      compatHaveMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       // Investor steps
       investorRegisterInterest: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       investorExploreMeeting: v.optional(v.object({ completedAt: v.optional(v.string()) })),

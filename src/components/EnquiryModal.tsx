@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
@@ -32,16 +33,8 @@ const HEARD_ABOUT_OPTIONS = [
   'Other'
 ];
 
-// Suppress Convex's beforeunload listener that causes "Leave site?" dialog on redirect
-function suppressBeforeUnload() {
-  window.onbeforeunload = null;
-  // Convex uses addEventListener, so intercept in capture phase to block it
-  window.addEventListener('beforeunload', (e) => {
-    e.stopImmediatePropagation();
-  }, { capture: true, once: true });
-}
-
 const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnquiryType }) => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -163,10 +156,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         pipelineId: GHL_PIPELINE_DC_OWNER,
       });
 
-      // Step 4: Redirect (GHL sync continues server-side)
+      // Step 4: Client-side navigate (no beforeunload dialog)
       setIsRedirecting(true);
-      suppressBeforeUnload();
-      window.location.href = progressUrl;
+      router.push(`/progress/${token}`);
     } catch (error) {
       console.error('Error submitting enquiry:', error);
       setIsSuccess(true);
@@ -212,10 +204,9 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose, defaultEnq
         pipelineId: GHL_PIPELINE_INVESTOR,
       });
 
-      // Step 4: Redirect (GHL sync continues server-side)
+      // Step 4: Client-side navigate (no beforeunload dialog)
       setIsRedirecting(true);
-      suppressBeforeUnload();
-      window.location.href = progressUrl;
+      router.push(`/progress/${token}`);
     } catch (error) {
       console.error('Error submitting enquiry:', error);
       setIsSuccess(true);

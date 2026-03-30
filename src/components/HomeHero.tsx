@@ -27,7 +27,7 @@ const HomeHero: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
           <Link
-            href="/owners"
+            href="/score"
             className="w-full sm:w-auto px-8 py-3.5 bg-[#4a9eff] hover:bg-[#5aa8ff] text-white rounded-lg font-semibold uppercase tracking-wider text-sm transition-all text-center"
           >
             For Data Center Owners

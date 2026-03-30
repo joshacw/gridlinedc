@@ -16,7 +16,7 @@ function generateToken(): string {
 export default function CompatibilityScore({ webhookUrl: _webhookUrl }: CompatibilityScoreProps) {
   const router = useRouter();
   const submitToGHL = useAction(api.compatibility.submitScore);
-  const [stage, setStage] = useState<QuizStage>("quiz");
+  const [stage, setStage] = useState<QuizStage>("welcome");
   const [answers, setAnswers] = useState<Record<number, boolean>>({});
   const [contactForm, setContactForm] = useState<ContactFormData>({
     firstName: "",
@@ -104,6 +104,34 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
   };
 
   const rating = scores ? getRating(scores.total) : null;
+
+  // ── Welcome Stage ──
+  if (stage === "welcome") {
+    return (
+      <div className="max-w-[720px] mx-auto px-4 py-16 sm:py-24 sm:px-6">
+        <div className="text-center">
+          <p className="text-2xl font-bold tracking-tighter text-white mb-8">
+            GRID<span className="text-[#4a9eff]">LINE</span>
+          </p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+            Is your data centre a fit<br className="hidden sm:block" /> for the GridLine platform?
+          </h1>
+          <p className="text-[#94a3b8] text-base sm:text-lg leading-relaxed max-w-lg mx-auto mb-4">
+            Answer 9 short questions to find out how well your facility aligns with our acquisition criteria. Takes under 2 minutes.
+          </p>
+          <p className="text-[#94a3b8]/60 text-sm max-w-md mx-auto mb-10">
+            Your answers are confidential and used solely to assess compatibility. No commitment required.
+          </p>
+          <button
+            onClick={() => setStage("quiz")}
+            className="px-10 py-4 rounded-lg text-base font-bold uppercase tracking-wider bg-[#4a9eff] text-white hover:bg-[#5aa8ff] shadow-[4px_4px_7px_3px_rgba(96,165,250,0.4)] transition-all duration-200 cursor-pointer"
+          >
+            Start Now
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // ── Quiz Stage ──
   if (stage === "quiz") {
@@ -325,48 +353,5 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
     );
   }
 
-  // ── Result Stage ──
-  return (
-    <div className="max-w-[720px] mx-auto px-4 py-12 sm:px-6">
-      <div className="text-center">
-        {/* Wordmark */}
-        <p className="text-sm uppercase tracking-[0.2em] text-[#94a3b8] mb-6">
-          Your result from{" "}
-          <span className="font-bold text-white">GRID</span>
-          <span className="font-bold text-[#4a9eff]">LINE</span>
-        </p>
-
-        {/* Rating label */}
-        <div className="mb-6">
-          <div className="inline-block bg-[#0d1b33] border border-white/10 rounded-[19px] px-8 py-6">
-            <p className="text-3xl sm:text-4xl font-bold text-white">
-              {rating?.label}
-            </p>
-          </div>
-        </div>
-
-        {/* Message */}
-        <p className="text-[#94a3b8] text-sm leading-relaxed max-w-md mx-auto mb-10">
-          {rating?.message}
-        </p>
-
-        {/* Webhook error */}
-        {webhookError && (
-          <p className="text-amber-400 text-xs mb-6">{webhookError}</p>
-        )}
-
-        {/* CTA */}
-        <a
-          href="#book-call"
-          className="inline-block px-8 py-3 rounded-lg text-sm font-bold uppercase tracking-wider bg-[#4a9eff] text-white hover:bg-[#5aa8ff] shadow-[4px_4px_7px_3px_rgba(96,165,250,0.4)] transition-all duration-200"
-        >
-          Book a Call
-        </a>
-
-        <p className="text-[#94a3b8]/60 text-xs mt-4">
-          A member of our acquisitions team will be in touch.
-        </p>
-      </div>
-    </div>
-  );
+  return null;
 }

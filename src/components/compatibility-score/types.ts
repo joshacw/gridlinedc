@@ -1,4 +1,4 @@
-export type QuizStage = "quiz" | "contact" | "result";
+export type QuizStage = "welcome" | "quiz" | "contact";
 
 export interface Question {
   id: number;

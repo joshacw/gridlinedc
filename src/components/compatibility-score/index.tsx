@@ -7,7 +7,50 @@ import { api } from "../../../convex/_generated/api";
 import type { QuizStage, ContactFormData, CompatibilityScoreProps } from "./types";
 import { SECTIONS, QUESTIONS, computeDetailedScores } from "./questions";
 import PlacesAutocomplete from "./PlacesAutocomplete";
-import type { SurveyQuestion } from "@/types";
+import type { SurveyQuestion, SurveyChoiceQuestion } from "@/types";
+
+function getGridClass(options: string[]): string {
+  const maxLen = Math.max(...options.map((o) => o.length));
+  const count = options.length;
+  if (maxLen <= 10 && count === 4) return "grid grid-cols-2 sm:grid-cols-4 gap-2";
+  if (maxLen <= 24) return "grid grid-cols-2 gap-2";
+  return "space-y-2.5";
+}
+
+function ChoiceOptions({
+  question,
+  answers,
+  onAnswer,
+}: {
+  question: SurveyChoiceQuestion;
+  answers: Record<string, string>;
+  onAnswer: (key: string, value: string) => void;
+}) {
+  const gridClass = getGridClass(question.options);
+  const isGrid = gridClass !== "space-y-2.5";
+  return (
+    <div className={gridClass}>
+      {question.options.map((option: string) => {
+        const isSelected = answers[question.key] === option;
+        return (
+          <button
+            key={option}
+            onClick={() => onAnswer(question.key, option)}
+            className={`w-full px-5 py-3.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+              isGrid ? "text-center" : "text-left"
+            } ${
+              isSelected
+                ? "bg-[#4a9eff] text-white border border-[#4a9eff] shadow-[0_0_12px_rgba(74,158,255,0.3)]"
+                : "bg-transparent text-[#94a3b8] border border-white/20 hover:border-white/40 hover:text-white"
+            }`}
+          >
+            {option}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 function generateToken(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -206,24 +249,11 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
                 </p>
 
                 {question.type === "choice" ? (
-                  <div className="space-y-2.5">
-                    {question.options.map((option: string) => {
-                      const isSelected = answers[question.key] === option;
-                      return (
-                        <button
-                          key={option}
-                          onClick={() => handleAnswer(question.key, option)}
-                          className={`w-full text-left px-5 py-3.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
-                            isSelected
-                              ? "bg-[#4a9eff] text-white border border-[#4a9eff] shadow-[0_0_12px_rgba(74,158,255,0.3)]"
-                              : "bg-transparent text-[#94a3b8] border border-white/20 hover:border-white/40 hover:text-white"
-                          }`}
-                        >
-                          {option}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <ChoiceOptions
+                    question={question}
+                    answers={answers}
+                    onAnswer={handleAnswer}
+                  />
                 ) : (
                   <input
                     type="text"

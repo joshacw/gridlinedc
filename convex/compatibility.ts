@@ -23,6 +23,11 @@ const SCORE_FIELDS = {
   q9: "QdsbfLuhYcyNPSrHsfMe",
   facilityName: "UnYsc7lTtdBl63pyEaeY",
   country: "YJC3QZfipyOVqP39FZd1",
+  organisationName: "Djx9Nbc25Zychb2ZjuMN",
+  facilityLocation: "fvJ3RCrgR7huc7NNBoQi",
+  contactRole: "9ellKQaxPS19cAr2NvYq",
+  contactPhone: "wy5hLlosh7W9mbQXwTKY",
+  facilitySizeMW: "3iDCk1HVyVADzA6ecj8a",
 } as const;
 
 // One-time setup: create all custom fields in GHL and return their IDs
@@ -51,6 +56,10 @@ export const setupCustomFields = action({
       { name: "Compat Q9 - Under 5MW", dataType: "SINGLE_OPTIONS", options: ["Yes", "No"] },
       { name: "Facility Name", dataType: "TEXT" },
       { name: "Compatibility Country", dataType: "TEXT" },
+      { name: "Organisation Name", dataType: "TEXT" },
+      { name: "Facility Location", dataType: "TEXT" },
+      { name: "Contact Role", dataType: "TEXT" },
+      { name: "Contact Phone", dataType: "TEXT" },
     ];
 
     const results: Record<string, string> = {};
@@ -107,8 +116,13 @@ export const setupCustomFields = action({
 export const createEnquiry = mutation({
   args: {
     firstName: v.string(),
+    organisationName: v.optional(v.string()),
     facilityName: v.string(),
+    facilityLocation: v.optional(v.string()),
+    facilitySizeMW: v.optional(v.string()),
+    role: v.optional(v.string()),
     email: v.string(),
+    phoneNumber: v.optional(v.string()),
     country: v.string(),
     score: v.number(),
     scoreLabel: v.string(),
@@ -135,6 +149,11 @@ export const createEnquiry = mutation({
       name: args.firstName,
       email: args.email,
       companyName: args.facilityName,
+      organisationName: args.organisationName,
+      role: args.role,
+      phoneNumber: args.phoneNumber,
+      dcLocation: args.facilityLocation,
+      facilitySizeMW: args.facilitySizeMW,
       enquiryType: "compatibility",
       heardAbout: "compatibility-score",
       compatibilityScore: {
@@ -168,8 +187,13 @@ export const createEnquiry = mutation({
 export const submitScore = action({
   args: {
     firstName: v.string(),
+    organisationName: v.optional(v.string()),
     facilityName: v.string(),
+    facilityLocation: v.optional(v.string()),
+    facilitySizeMW: v.optional(v.string()),
+    role: v.optional(v.string()),
     email: v.string(),
+    phoneNumber: v.optional(v.string()),
     country: v.string(),
     score: v.number(),
     scoreLabel: v.string(),
@@ -195,8 +219,13 @@ export const submitScore = action({
     // 1. Create enquiry + progress token via mutation
     const { enquiryId } = await ctx.runMutation(api.compatibility.createEnquiry, {
       firstName: args.firstName,
+      organisationName: args.organisationName,
       facilityName: args.facilityName,
+      facilityLocation: args.facilityLocation,
+      facilitySizeMW: args.facilitySizeMW,
+      role: args.role,
       email: args.email,
+      phoneNumber: args.phoneNumber,
       country: args.country,
       score: args.score,
       scoreLabel: args.scoreLabel,
@@ -236,14 +265,34 @@ export const submitScore = action({
       { id: "2BjxVIRiKEn4HI7MTGgr", field_value: args.progressUrl }, // progressUrl field (shared with enquiries)
     ];
 
-    const payload = {
+    // Add new custom fields only if IDs are configured
+    if (SCORE_FIELDS.organisationName) {
+      customFields.push({ id: SCORE_FIELDS.organisationName, field_value: args.organisationName ?? "" });
+    }
+    if (SCORE_FIELDS.facilityLocation) {
+      customFields.push({ id: SCORE_FIELDS.facilityLocation, field_value: args.facilityLocation ?? "" });
+    }
+    if (SCORE_FIELDS.contactRole) {
+      customFields.push({ id: SCORE_FIELDS.contactRole, field_value: args.role ?? "" });
+    }
+    if (SCORE_FIELDS.facilitySizeMW) {
+      customFields.push({ id: SCORE_FIELDS.facilitySizeMW, field_value: args.facilitySizeMW ?? "" });
+    }
+    if (SCORE_FIELDS.contactPhone) {
+      customFields.push({ id: SCORE_FIELDS.contactPhone, field_value: args.phoneNumber ?? "" });
+    }
+
+    const payload: Record<string, unknown> = {
       firstName: args.firstName,
       email: args.email,
-      companyName: args.facilityName,
+      companyName: args.organisationName || args.facilityName,
       locationId: GHL_LOCATION_ID,
       customFields,
       tags: ["compatibility-score", args.scoreLabel.toLowerCase().replace(/\s+/g, "-")],
     };
+
+    if (args.phoneNumber) payload.phone = args.phoneNumber;
+    if (args.facilityLocation) payload.address1 = args.facilityLocation;
 
     try {
       const response = await fetch(`${GHL_API_BASE}/contacts/`, {

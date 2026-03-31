@@ -7,6 +7,7 @@ import { api } from "../../../convex/_generated/api";
 import type { QuizStage, ContactFormData, CompatibilityScoreProps } from "./types";
 import { QUESTIONS, BANDS } from "./questions";
 import { computeAllScores, getRating } from "./scoring";
+import PlacesAutocomplete from "./PlacesAutocomplete";
 
 function generateToken(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -19,9 +20,15 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
   const [stage, setStage] = useState<QuizStage>("welcome");
   const [answers, setAnswers] = useState<Record<number, boolean>>({});
   const [contactForm, setContactForm] = useState<ContactFormData>({
-    firstName: "",
+    organisationName: "",
     facilityName: "",
+    facilityLocation: "",
+    facilityPlaceId: "",
+    facilitySizeMW: "",
+    firstName: "",
+    role: "",
     email: "",
+    phoneNumber: "",
     country: "",
   });
   const [currentBand, setCurrentBand] = useState(0);
@@ -53,10 +60,11 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email);
   const isFormValid =
-    contactForm.firstName.trim() !== "" &&
+    contactForm.organisationName.trim() !== "" &&
     contactForm.facilityName.trim() !== "" &&
-    isEmailValid &&
-    contactForm.country.trim() !== "";
+    contactForm.facilityLocation.trim() !== "" &&
+    contactForm.firstName.trim() !== "" &&
+    isEmailValid;
 
   const handleSubmit = async () => {
     if (!scores || !isFormValid) return;
@@ -70,8 +78,13 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
     try {
       await submitToGHL({
         firstName: contactForm.firstName.trim(),
+        organisationName: contactForm.organisationName.trim(),
         facilityName: contactForm.facilityName.trim(),
+        facilityLocation: contactForm.facilityLocation.trim(),
+        facilitySizeMW: contactForm.facilitySizeMW.trim() || undefined,
+        role: contactForm.role.trim() || undefined,
         email: contactForm.email.trim(),
+        phoneNumber: contactForm.phoneNumber.trim() || undefined,
         country: contactForm.country.trim(),
         score: scores.total,
         scoreLabel: rating.label,
@@ -257,95 +270,191 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
 
   // ── Contact Stage ──
   if (stage === "contact") {
+    const inputBase =
+      "w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all";
+    const labelBase =
+      "block text-[11px] font-semibold uppercase tracking-wider text-[#94a3b8] mb-1.5";
+
     return (
-      <div className="max-w-[720px] mx-auto px-4 py-12 sm:px-6">
-        <div className="text-center mb-10">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#4a9eff] font-semibold mb-3">
+      <div className="max-w-[680px] mx-auto px-4 py-10 sm:py-14 sm:px-6">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <p className="text-xs uppercase tracking-[0.25em] text-[#4a9eff] font-semibold mb-2">
             Almost There
           </p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1.5">
             See your compatibility result
           </h2>
           <p className="text-[#94a3b8] text-sm">
-            Enter your details below to view your rating.
+            Tell us about your facility and we&apos;ll show your score.
           </p>
         </div>
 
-        <div className="bg-[#0d1b33] border border-white/10 rounded-[19px] p-6 sm:p-8">
-          <div className="space-y-5">
+        {/* Section 1 — Organisation */}
+        <div className="bg-[#0d1b33]/80 border border-white/[0.08] rounded-[19px] p-5 sm:p-7 mb-3">
+          <div className="flex items-center gap-2.5 mb-5">
+            <span className="w-6 h-6 rounded-full bg-[#4a9eff]/15 text-[#4a9eff] text-[11px] flex items-center justify-center font-bold shrink-0">
+              1
+            </span>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              Your Organisation
+            </h3>
+          </div>
+          <div>
+            <label className={labelBase}>Organisation / Owner Name</label>
+            <input
+              type="text"
+              value={contactForm.organisationName}
+              onChange={(e) => setContactForm((f) => ({ ...f, organisationName: e.target.value }))}
+              placeholder="e.g. Acme Holdings Ltd"
+              className={`${inputBase} !text-lg !py-3.5`}
+              autoFocus
+            />
+          </div>
+        </div>
+
+        {/* Section 2 — Facility */}
+        <div className="bg-[#0d1b33]/80 border border-white/[0.08] rounded-[19px] p-5 sm:p-7 mb-3">
+          <div className="flex items-center gap-2.5 mb-5">
+            <span className="w-6 h-6 rounded-full bg-[#4a9eff]/15 text-[#4a9eff] text-[11px] flex items-center justify-center font-bold shrink-0">
+              2
+            </span>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              Your Facility
+            </h3>
+          </div>
+          <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94a3b8] mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                value={contactForm.firstName}
-                onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))}
-                placeholder="John"
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94a3b8] mb-2">
-                Facility Name
-              </label>
+              <label className={labelBase}>Facility / Asset Name</label>
               <input
                 type="text"
                 value={contactForm.facilityName}
                 onChange={(e) => setContactForm((f) => ({ ...f, facilityName: e.target.value }))}
-                placeholder="Acme Data Centre"
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all"
+                placeholder="e.g. London Docklands DC1"
+                className={inputBase}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_140px] gap-4">
+              <div>
+                <label className={labelBase}>Facility Location</label>
+                <PlacesAutocomplete
+                  value={contactForm.facilityLocation}
+                  onChange={(val) => setContactForm((f) => ({ ...f, facilityLocation: val }))}
+                  onPlaceSelect={(place) =>
+                    setContactForm((f) => ({
+                      ...f,
+                      facilityLocation: place.address,
+                      facilityPlaceId: place.placeId,
+                      country: place.country || f.country,
+                    }))
+                  }
+                  placeholder="Start typing an address..."
+                  className={inputBase}
+                />
+                {contactForm.country && (
+                  <p className="text-[#4a9eff]/70 text-xs mt-1.5 flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {contactForm.country}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className={labelBase}>Size (MW)</label>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={contactForm.facilitySizeMW}
+                  onChange={(e) => setContactForm((f) => ({ ...f, facilitySizeMW: e.target.value }))}
+                  placeholder="e.g. 2.5"
+                  className={inputBase}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3 — Representative */}
+        <div className="bg-[#0d1b33]/80 border border-white/[0.08] rounded-[19px] p-5 sm:p-7 mb-6">
+          <div className="flex items-center gap-2.5 mb-5">
+            <span className="w-6 h-6 rounded-full bg-[#4a9eff]/15 text-[#4a9eff] text-[11px] flex items-center justify-center font-bold shrink-0">
+              3
+            </span>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              Your Details
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelBase}>Full Name</label>
+              <input
+                type="text"
+                value={contactForm.firstName}
+                onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))}
+                placeholder="John Smith"
+                className={inputBase}
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94a3b8] mb-2">
-                Email
-              </label>
+              <label className={labelBase}>Role / Title</label>
+              <input
+                type="text"
+                value={contactForm.role}
+                onChange={(e) => setContactForm((f) => ({ ...f, role: e.target.value }))}
+                placeholder="Managing Director"
+                className={inputBase}
+              />
+            </div>
+            <div>
+              <label className={labelBase}>Email</label>
               <input
                 type="email"
                 value={contactForm.email}
                 onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
                 placeholder="john@company.com"
-                className={`w-full bg-white/5 border rounded-lg px-4 py-3 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all ${
-                  contactForm.email && !isEmailValid ? "border-red-500/50" : "border-white/20"
+                className={`${inputBase} ${
+                  contactForm.email && !isEmailValid ? "!border-red-500/50" : ""
                 }`}
               />
               {contactForm.email && !isEmailValid && (
-                <p className="text-red-400 text-xs mt-1">Please enter a valid email address.</p>
+                <p className="text-red-400 text-xs mt-1">Please enter a valid email.</p>
               )}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94a3b8] mb-2">
-                Country
-              </label>
+              <label className={labelBase}>Phone Number</label>
               <input
-                type="text"
-                value={contactForm.country}
-                onChange={(e) => setContactForm((f) => ({ ...f, country: e.target.value }))}
-                placeholder="United Kingdom"
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all"
+                type="tel"
+                value={contactForm.phoneNumber}
+                onChange={(e) => setContactForm((f) => ({ ...f, phoneNumber: e.target.value }))}
+                placeholder="+44 7700 900000"
+                className={inputBase}
               />
             </div>
           </div>
+        </div>
 
-          <div className="mt-8 text-center">
-            <button
-              onClick={handleSubmit}
-              disabled={!isFormValid || isSubmitting}
-              className={`px-8 py-3 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                isFormValid && !isSubmitting
-                  ? "bg-[#4a9eff] text-white hover:bg-[#5aa8ff] shadow-[4px_4px_7px_3px_rgba(96,165,250,0.4)]"
-                  : "bg-white/5 text-[#94a3b8]/50 border border-white/10 cursor-not-allowed"
-              }`}
-            >
-              {isSubmitting ? "Submitting..." : "View My Result"}
-            </button>
-          </div>
+        {/* Submit */}
+        <div className="text-center">
+          {webhookError && (
+            <p className="text-red-400 text-sm mb-3">{webhookError}</p>
+          )}
+          <button
+            onClick={handleSubmit}
+            disabled={!isFormValid || isSubmitting}
+            className={`w-full sm:w-auto px-12 py-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+              isFormValid && !isSubmitting
+                ? "bg-[#4a9eff] text-white hover:bg-[#5aa8ff] shadow-[4px_4px_7px_3px_rgba(96,165,250,0.4)] hover:shadow-[4px_4px_14px_4px_rgba(96,165,250,0.5)]"
+                : "bg-white/5 text-[#94a3b8]/50 border border-white/10 cursor-not-allowed"
+            }`}
+          >
+            {isSubmitting ? "Submitting..." : "View My Result"}
+          </button>
         </div>
 
         <button
           onClick={() => { setCurrentBand(BANDS.length - 1); setStage("quiz"); }}
-          className="mt-6 mx-auto block text-xs text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+          className="mt-5 mx-auto block text-xs text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
         >
           ← Back to questions
         </button>

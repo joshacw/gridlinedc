@@ -7,10 +7,13 @@ export default defineSchema({
     name: v.string(),
     email: v.string(),
     companyName: v.string(),
+    organisationName: v.optional(v.string()),
+    role: v.optional(v.string()),
     phoneNumber: v.optional(v.string()),
     enquiryType: v.union(v.literal("investor"), v.literal("asset_owner"), v.literal("compatibility")),
     heardAbout: v.string(),
     dcLocation: v.optional(v.string()),
+    facilitySizeMW: v.optional(v.string()),
 
     // Compatibility Score (optional - only for compatibility type)
     compatibilityScore: v.optional(v.object({

@@ -13,9 +13,15 @@ export interface Band {
 }
 
 export interface ContactFormData {
-  firstName: string;
+  organisationName: string;
   facilityName: string;
+  facilityLocation: string;
+  facilityPlaceId: string;
+  facilitySizeMW: string;
+  firstName: string;
+  role: string;
   email: string;
+  phoneNumber: string;
   country: string;
 }
 
@@ -29,9 +35,14 @@ export interface CompatibilityScoreProps {
 }
 
 export interface WebhookPayload {
-  firstName: string;
+  organisationName: string;
   facilityName: string;
+  facilityLocation: string;
+  facilitySizeMW: string;
+  firstName: string;
+  role: string;
   email: string;
+  phoneNumber: string;
   country: string;
   score: number;
   scoreLabel: string;

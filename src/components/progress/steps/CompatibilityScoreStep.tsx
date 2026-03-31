@@ -39,7 +39,7 @@ export default function CompatibilityScoreStep({ enquiryId, qualityScore, readin
   const handleAdvance = async () => {
     setAdvancing(true);
     try {
-      await advanceStep({ enquiryId, stepKey: "compatViewScore" });
+      await advanceStep({ enquiryId, stepKey: "discoverFit" });
     } catch (error) {
       console.error('Error advancing step:', error);
       setAdvancing(false);
@@ -208,7 +208,7 @@ export default function CompatibilityScoreStep({ enquiryId, qualityScore, readin
         disabled={advancing}
         className="w-full py-4 bg-[#4a9eff] hover:bg-[#5aa8ff] text-white rounded-lg font-bold uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
-        {advancing ? 'Continuing...' : 'Continue — Book Your Initial Assessment'}
+        {advancing ? 'Continuing...' : 'Continue — Book A Call'}
       </button>
     </div>
   );

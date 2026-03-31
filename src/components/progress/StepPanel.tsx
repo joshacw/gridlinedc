@@ -139,27 +139,37 @@ function DCOwnerStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
 }
 
 const COMPAT_POST_STEPS: Record<number, { label: string; description: string; detail: string }> = {
+  3: {
+    label: 'Share More Details',
+    description: 'Provide additional facility information.',
+    detail: 'Our team will guide you through the additional information required to progress your assessment. This ensures we have a complete picture of your facility.',
+  },
+  4: {
+    label: 'Heads Of Agreement',
+    description: 'Outline the partnership terms.',
+    detail: 'The Heads of Agreement outlines the key commercial terms and structure of the proposed partnership. This provides a framework for both parties to proceed with confidence.',
+  },
+  5: {
+    label: 'Review Audited Financials',
+    description: 'Financial documentation review.',
+    detail: 'We will review your audited financial statements including annual revenue, operating costs, EBITDA, and capital expenditure history to support the valuation process.',
+  },
   6: {
-    label: 'Share Financials',
-    description: 'Provide financial documentation for your data centre.',
-    detail: 'Our team will guide you through the financial documentation required. This typically includes annual revenue figures, operating costs, EBITDA, and capital expenditure history.',
+    label: 'Letter of Intent',
+    description: 'Formalising the partnership commitment.',
+    detail: 'The LOI outlines the key terms and conditions of the partnership agreement. Once signed, this represents a formal commitment to proceed towards closing.',
   },
   7: {
-    label: 'Prepare Report',
-    description: 'GRIDLINE is preparing your valuation report.',
-    detail: 'Our analysts are reviewing your facility data and financials to prepare a comprehensive valuation and partnership proposal tailored to your asset.',
+    label: 'Due Diligence',
+    description: 'Including site visit.',
+    detail: 'The due diligence phase involves a thorough review of legal, financial, and operational aspects of your data centre, including an on-site visit to assess the facility first-hand.',
   },
   8: {
-    label: 'Present Offer',
-    description: 'Review the partnership proposal.',
-    detail: 'We will present our partnership offer including the recommended structure, valuation, and terms. This is your opportunity to review and discuss all details with our team.',
+    label: 'Sign Definitive Acquisition Documents',
+    description: 'Execute acquisition agreements.',
+    detail: 'The definitive acquisition documents formalise all terms of the partnership. Our legal teams will work together to finalise and execute the agreements.',
   },
   9: {
-    label: 'Due Diligence',
-    description: 'Formal verification process underway.',
-    detail: 'The due diligence phase involves a thorough review of legal, financial, and operational aspects of your data centre to ensure alignment and readiness for partnership.',
-  },
-  10: {
     label: 'Closing',
     description: 'Finalising the partnership agreement.',
     detail: 'The final step — all agreements are signed, and your data centre officially becomes part of the GRIDLINE platform. Welcome to the future of data centre infrastructure.',
@@ -167,8 +177,8 @@ const COMPAT_POST_STEPS: Record<number, { label: string; description: string; de
 };
 
 function CompatibilityStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
-  // Step 2: View score + PDF
-  if (currentStep === 2 && enquiryData.detailedTier) {
+  // Step 1: Discover Your Fit — show score + PDF
+  if (currentStep === 1 && enquiryData.detailedTier) {
     return (
       <CompatibilityScoreStep
         enquiryId={enquiryId}
@@ -180,23 +190,13 @@ function CompatibilityStepPanel({ currentStep, enquiryId, enquiryData }: Props) 
     );
   }
 
-  // Step 3: DC details survey
-  if (currentStep === 3) {
-    return <DCDetailsSurveyStep enquiryId={enquiryId} existingSurvey={enquiryData.survey} />;
-  }
-
-  // Step 4: Book meeting
-  if (currentStep === 4) {
+  // Step 2: Book a call
+  if (currentStep === 2) {
     return <BookMeetingStep enquiryId={enquiryId} />;
   }
 
-  // Step 5: Have meeting
-  if (currentStep === 5) {
-    return <HaveMeetingStep name={enquiryData.name} />;
-  }
-
-  // Steps 6-10: Post-meeting managed steps
-  if (currentStep >= 6 && currentStep <= 10) {
+  // Steps 3-9: Managed steps
+  if (currentStep >= 3 && currentStep <= 9) {
     const stepInfo = COMPAT_POST_STEPS[currentStep];
     return (
       <PostMeetingStep
@@ -209,7 +209,7 @@ function CompatibilityStepPanel({ currentStep, enquiryId, enquiryData }: Props) 
   }
 
   // Completed
-  if (currentStep > 10) {
+  if (currentStep > 9) {
     return (
       <div className="bg-[#0d1b33] rounded-lg p-8 sm:p-10 text-center">
         <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">

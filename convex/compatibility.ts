@@ -172,10 +172,8 @@ export const createEnquiry = mutation({
       detailedConditionalFlags: args.conditionalFlags,
       submittedAt: args.submittedAt,
       status: "new",
-      pipelineStep: 2,
-      pipelineSteps: {
-        compatAssessment: { completedAt: args.submittedAt },
-      },
+      pipelineStep: 1,
+      pipelineSteps: {},
     });
 
     await ctx.db.insert("progressTokens", {

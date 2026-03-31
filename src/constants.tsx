@@ -437,16 +437,15 @@ export const INVESTOR_SURVEY_QUESTIONS: SurveyQuestion[] = [
 
 // Compatibility Score Pipeline steps configuration (10 steps)
 export const COMPATIBILITY_PIPELINE_STEPS = [
-  { number: 1, key: 'compatAssessment', label: 'Compatibility Assessment', description: 'Initial screening complete', phase: 'pre' as const },
-  { number: 2, key: 'compatViewScore', label: 'View Your Score', description: 'Review your compatibility rating', phase: 'pre' as const },
-  { number: 3, key: 'compatShareDetails', label: 'Share DC Details', description: 'Complete the detailed facility survey', phase: 'pre' as const },
-  { number: 4, key: 'compatBookMeeting', label: 'Book Initial Assessment', description: 'Schedule a call with our team', phase: 'pre' as const },
-  { number: 5, key: 'compatHaveMeeting', label: 'Have Meeting', description: 'Meet with the GRIDLINE team', phase: 'pre' as const },
-  { number: 6, key: 'shareFinancials', label: 'Share Financials', description: 'Provide financial documentation', phase: 'post' as const },
-  { number: 7, key: 'prepareReport', label: 'Prepare Report', description: 'GRIDLINE prepares valuation report', phase: 'post' as const },
-  { number: 8, key: 'presentOffer', label: 'Present Offer', description: 'Review partnership proposal', phase: 'post' as const },
-  { number: 9, key: 'dueDiligence', label: 'Due Diligence', description: 'Formal verification process', phase: 'post' as const },
-  { number: 10, key: 'closing', label: 'Closing', description: 'Finalise partnership agreement', phase: 'post' as const },
+  { number: 1, key: 'discoverFit', label: 'Discover Your Fit', description: 'Initial screening complete', phase: 'pre' as const },
+  { number: 2, key: 'bookCall', label: 'Book A Call', description: 'Schedule a call with our team', phase: 'pre' as const },
+  { number: 3, key: 'shareDetails', label: 'Share More Details', description: 'Provide additional facility information', phase: 'pre' as const },
+  { number: 4, key: 'headsOfAgreement', label: 'Heads Of Agreement', description: 'Outline the partnership terms', phase: 'post' as const },
+  { number: 5, key: 'reviewFinancials', label: 'Review Audited Financials', description: 'Financial documentation review', phase: 'post' as const },
+  { number: 6, key: 'loi', label: 'Letter of Intent', description: 'Formalising partnership commitment', phase: 'post' as const },
+  { number: 7, key: 'dueDiligence', label: 'Due Diligence', description: 'Including site visit', phase: 'post' as const },
+  { number: 8, key: 'signDocs', label: 'Sign Definitive Acquisition Documents', description: 'Execute acquisition agreements', phase: 'post' as const },
+  { number: 9, key: 'closing', label: 'Closing', description: 'Finalise partnership agreement', phase: 'post' as const },
 ];
 
 // DC Owner Pipeline steps configuration (12 steps)

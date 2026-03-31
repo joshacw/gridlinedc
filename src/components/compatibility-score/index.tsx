@@ -338,43 +338,30 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
                 className={inputBase}
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_140px] gap-4">
-              <div>
-                <label className={labelBase}>Facility Location</label>
-                <PlacesAutocomplete
-                  value={contactForm.facilityLocation}
-                  onChange={(val) => setContactForm((f) => ({ ...f, facilityLocation: val }))}
-                  onPlaceSelect={(place) =>
-                    setContactForm((f) => ({
-                      ...f,
-                      facilityLocation: place.address,
-                      facilityPlaceId: place.placeId,
-                      country: place.country || f.country,
-                    }))
-                  }
-                  placeholder="Start typing an address..."
-                  className={inputBase}
-                />
-                {contactForm.country && (
-                  <p className="text-[#4a9eff]/70 text-xs mt-1.5 flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    {contactForm.country}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className={labelBase}>Size (MW)</label>
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  value={contactForm.facilitySizeMW}
-                  onChange={(e) => setContactForm((f) => ({ ...f, facilitySizeMW: e.target.value }))}
-                  placeholder="e.g. 2.5"
-                  className={inputBase}
-                />
-              </div>
+            <div>
+              <label className={labelBase}>Facility Location</label>
+              <PlacesAutocomplete
+                value={contactForm.facilityLocation}
+                onChange={(val) => setContactForm((f) => ({ ...f, facilityLocation: val }))}
+                onPlaceSelect={(place) =>
+                  setContactForm((f) => ({
+                    ...f,
+                    facilityLocation: place.address,
+                    facilityPlaceId: place.placeId,
+                    country: place.country || f.country,
+                  }))
+                }
+                placeholder="Start typing an address..."
+                className={inputBase}
+              />
+              {contactForm.country && (
+                <p className="text-[#4a9eff]/70 text-xs mt-1.5 flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {contactForm.country}
+                </p>
+              )}
             </div>
           </div>
         </div>

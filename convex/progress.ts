@@ -26,7 +26,7 @@ export const advanceStep = mutation({
     const enquiry = await ctx.db.get(args.enquiryId);
     if (!enquiry) throw new Error("Enquiry not found");
 
-    const currentStep = enquiry.pipelineStep || 2;
+    const currentStep = enquiry.pipelineStep || 1;
     const steps = enquiry.pipelineSteps || {};
 
     await ctx.db.patch(args.enquiryId, {

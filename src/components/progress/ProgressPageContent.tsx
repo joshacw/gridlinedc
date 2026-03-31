@@ -77,7 +77,7 @@ export default function ProgressPageContent({ token }: Props) {
     : isInvestor
       ? INVESTOR_PIPELINE_STEPS
       : PIPELINE_STEPS;
-  const currentStep = data.pipelineStep || (isCompatibility ? 2 : isInvestor ? 2 : 3);
+  const currentStep = data.pipelineStep || (isCompatibility ? 1 : isInvestor ? 2 : 3);
   const firstName = data.name?.split(' ')[0] || 'there';
 
   return (

@@ -87,6 +87,13 @@ export default defineSchema({
       loi: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       closing: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       // Compatibility steps
+      discoverFit: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      bookCall: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      shareDetails: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      headsOfAgreement: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      reviewFinancials: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      signDocs: v.optional(v.object({ completedAt: v.optional(v.string()) })),
+      // Legacy compatibility step keys (existing data)
       compatAssessment: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       compatViewScore: v.optional(v.object({ completedAt: v.optional(v.string()) })),
       compatShareDetails: v.optional(v.object({ completedAt: v.optional(v.string()) })),

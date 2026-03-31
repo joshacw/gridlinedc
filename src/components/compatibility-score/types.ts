@@ -5,7 +5,6 @@ export interface ContactFormData {
   facilityName: string;
   facilityLocation: string;
   facilityPlaceId: string;
-  facilitySizeMW: string;
   firstName: string;
   role: string;
   email: string;

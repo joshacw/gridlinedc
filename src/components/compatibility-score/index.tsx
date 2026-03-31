@@ -12,8 +12,10 @@ import type { SurveyQuestion, SurveyChoiceQuestion } from "@/types";
 function getGridClass(options: string[]): string {
   const maxLen = Math.max(...options.map((o) => o.length));
   const count = options.length;
-  if (maxLen <= 10 && count === 4) return "grid grid-cols-2 sm:grid-cols-4 gap-2";
-  if (maxLen <= 24) return "grid grid-cols-2 gap-2";
+  if (maxLen <= 12 && count === 4) return "grid grid-cols-2 sm:grid-cols-4 gap-2";
+  if (maxLen <= 12 && count === 3) return "grid grid-cols-3 gap-2";
+  if (maxLen <= 20 && count === 4) return "grid grid-cols-2 gap-2";
+  if (maxLen <= 20 && count === 3) return "grid grid-cols-3 gap-2";
   return "space-y-2.5";
 }
 
@@ -67,7 +69,6 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
     facilityName: "",
     facilityLocation: "",
     facilityPlaceId: "",
-    facilitySizeMW: "",
     firstName: "",
     role: "",
     email: "",
@@ -121,7 +122,7 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
         organisationName: contactForm.organisationName.trim(),
         facilityName: contactForm.facilityName.trim(),
         facilityLocation: contactForm.facilityLocation.trim(),
-        facilitySizeMW: contactForm.facilitySizeMW.trim() || undefined,
+        facilitySizeMW: undefined,
         role: contactForm.role.trim() || undefined,
         email: contactForm.email.trim(),
         phoneNumber: contactForm.phoneNumber.trim() || undefined,
@@ -390,6 +391,11 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                   {contactForm.country}
+                </p>
+              )}
+              {!contactForm.country && contactForm.facilityLocation && (
+                <p className="text-[#94a3b8]/50 text-xs mt-1.5">
+                  Select from the dropdown for auto-detection of country
                 </p>
               )}
             </div>

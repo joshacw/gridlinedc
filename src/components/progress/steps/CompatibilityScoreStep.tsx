@@ -100,7 +100,7 @@ export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }
               Download our acquisition evaluation framework to understand how we assess and value data centre assets.
             </p>
             <a
-              href="/GridLine-Evaluation-Report.pdf"
+              href="/GridlineDC_Your_Fit.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/20 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-all"

@@ -4,7 +4,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useAction } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { DC_SURVEY_QUESTIONS } from '@/constants';
+import { DC_SURVEY_QUESTIONS, computeDetailedScores } from '@/constants';
 import type { SurveyQuestion } from '@/types';
 
 interface Props {
@@ -69,22 +69,31 @@ export default function DCDetailsSurveyStep({ enquiryId, existingSurvey }: Props
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    const scores = computeDetailedScores(survey);
     try {
       await submitSurvey({
         enquiryId,
         survey: {
-          ownershipStructure: survey.ownershipStructure || undefined,
-          currentPowerUtilisation: survey.currentPowerUtilisation || undefined,
-          powerScalability: survey.powerScalability || undefined,
-          customerBase: survey.customerBase || undefined,
-          customerConcentration: survey.customerConcentration || undefined,
-          contractTenure: survey.contractTenure || undefined,
-          anchorTenants: survey.anchorTenants || undefined,
-          networkConnectivity: survey.networkConnectivity || undefined,
-          annualRevenue: survey.annualRevenue || undefined,
-          ebitdaRange: survey.ebitdaRange || undefined,
-          capitalOutlook: survey.capitalOutlook || undefined,
+          criticalLoadCapacity: survey.criticalLoadCapacity || undefined,
+          capacityUtilisation: survey.capacityUtilisation || undefined,
+          expansionCapability: survey.expansionCapability || undefined,
+          ebitdaMargin: survey.ebitdaMargin || undefined,
+          powerCost: survey.powerCost || undefined,
+          longTermContracts: survey.longTermContracts || undefined,
+          tenantConcentration: survey.tenantConcentration || undefined,
+          ownershipType: survey.ownershipType || undefined,
+          realEstateStatus: survey.realEstateStatus || undefined,
+          debtStatus: survey.debtStatus || undefined,
+          marketDemand: survey.marketDemand || undefined,
+          managementTeam: survey.managementTeam || undefined,
+          transactionIntent: survey.transactionIntent || undefined,
+          timeline: survey.timeline || undefined,
         },
+        detailedQualityScore: scores.qualityScore,
+        detailedReadinessScore: scores.readinessScore,
+        detailedTotalScore: scores.totalScore,
+        detailedTier: scores.tier,
+        detailedConditionalFlags: scores.conditionalFlags,
       });
     } catch (error) {
       console.error('Error submitting survey:', error);

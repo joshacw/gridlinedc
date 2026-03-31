@@ -35,20 +35,30 @@ export default defineSchema({
       }),
     })),
 
-    // DC Owner Survey (optional - only for asset_owner type)
+    // DC Owner Survey (optional - 14 questions across 6 sections)
     survey: v.optional(v.object({
-      ownershipStructure: v.optional(v.string()),
-      currentPowerUtilisation: v.optional(v.string()),
-      powerScalability: v.optional(v.string()),
-      customerBase: v.optional(v.string()),
-      customerConcentration: v.optional(v.string()),
-      contractTenure: v.optional(v.string()),
-      anchorTenants: v.optional(v.string()),
-      networkConnectivity: v.optional(v.string()),
-      annualRevenue: v.optional(v.string()),
-      ebitdaRange: v.optional(v.string()),
-      capitalOutlook: v.optional(v.string()),
+      criticalLoadCapacity: v.optional(v.string()),
+      capacityUtilisation: v.optional(v.string()),
+      expansionCapability: v.optional(v.string()),
+      ebitdaMargin: v.optional(v.string()),
+      powerCost: v.optional(v.string()),
+      longTermContracts: v.optional(v.string()),
+      tenantConcentration: v.optional(v.string()),
+      ownershipType: v.optional(v.string()),
+      realEstateStatus: v.optional(v.string()),
+      debtStatus: v.optional(v.string()),
+      marketDemand: v.optional(v.string()),
+      managementTeam: v.optional(v.string()),
+      transactionIntent: v.optional(v.string()),
+      timeline: v.optional(v.string()),
     })),
+
+    // Detailed Survey Scoring (top-level for easy querying)
+    detailedQualityScore: v.optional(v.number()),
+    detailedReadinessScore: v.optional(v.number()),
+    detailedTotalScore: v.optional(v.number()),
+    detailedTier: v.optional(v.string()),
+    detailedConditionalFlags: v.optional(v.array(v.string())),
 
     // Investor Survey (optional - only for investor type)
     investorSurvey: v.optional(v.object({

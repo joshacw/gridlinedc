@@ -114,6 +114,9 @@ export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }
         </div>
       </div>
 
+      {/* 2-Axis Quality vs Readiness Chart (placeholder — populated after detailed survey) */}
+      <QualityReadinessChart />
+
       {/* Advance CTA */}
       <button
         onClick={handleAdvance}
@@ -123,8 +126,64 @@ export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }
         {advancing ? 'Continuing...' : 'Continue — Share Your Facility Details'}
       </button>
       <p className="text-center text-xs text-slate-500">
-        Provide detailed information about your facility so we can prepare a tailored assessment.
+        Complete the detailed facility survey to unlock your full Quality vs Readiness assessment.
       </p>
+    </div>
+  );
+}
+
+function QualityReadinessChart() {
+  // Preview of the 2-axis framework — actual position shown after detailed survey
+  return (
+    <div className="bg-[#0d1b33] rounded-lg p-6 sm:p-8">
+      <p className="text-xs uppercase tracking-widest text-[#4a9eff] font-bold mb-1">
+        Qualification Framework
+      </p>
+      <p className="text-white font-bold text-lg mb-1">Asset Quality vs Deal Readiness</p>
+      <p className="text-slate-400 text-xs mb-6">
+        Your position on this chart will be determined after completing the detailed facility survey.
+      </p>
+
+      <div className="relative">
+        {/* Y-axis label */}
+        <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-slate-500 font-medium uppercase tracking-wider whitespace-nowrap">
+          Asset Quality
+        </div>
+
+        {/* Chart area */}
+        <div className="ml-6">
+          {/* X-axis label */}
+          <div className="grid grid-cols-2 gap-1 mb-1">
+            {/* Top-left: High Quality, Low Readiness */}
+            <div className="bg-amber-500/8 border border-amber-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
+              <p className="text-amber-400 text-xs font-bold">Nurture</p>
+              <p className="text-[10px] text-slate-500 mt-1">High Quality</p>
+              <p className="text-[10px] text-slate-500">Low Readiness</p>
+            </div>
+            {/* Top-right: High Quality, High Readiness */}
+            <div className="bg-emerald-500/8 border border-emerald-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
+              <p className="text-emerald-400 text-xs font-bold">Fast-Track</p>
+              <p className="text-[10px] text-slate-500 mt-1">High Quality</p>
+              <p className="text-[10px] text-slate-500">High Readiness</p>
+            </div>
+            {/* Bottom-left: Low Quality, Low Readiness */}
+            <div className="bg-slate-500/8 border border-slate-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
+              <p className="text-slate-400 text-xs font-bold">Park</p>
+              <p className="text-[10px] text-slate-500 mt-1">Low Quality</p>
+              <p className="text-[10px] text-slate-500">Low Readiness</p>
+            </div>
+            {/* Bottom-right: Low Quality, High Readiness */}
+            <div className="bg-slate-500/8 border border-slate-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
+              <p className="text-slate-400 text-xs font-bold">Pass</p>
+              <p className="text-[10px] text-slate-500 mt-1">Low Quality</p>
+              <p className="text-[10px] text-slate-500">High Readiness</p>
+            </div>
+          </div>
+          <p className="text-center text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-2">
+            Deal Readiness →
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -330,3 +330,75 @@ export const submitScore = action({
     }
   },
 });
+
+// One-time setup: create GHL custom fields for the detailed survey scores
+export const setupDetailedSurveyFields = action({
+  args: {},
+  handler: async () => {
+    const apiKey = process.env.GHL_API_KEY;
+    if (!apiKey) {
+      return { success: false, reason: "GHL_API_KEY not configured" };
+    }
+
+    const fieldsToCreate = [
+      { name: "Detailed Quality Score", dataType: "NUMERICAL" },
+      { name: "Detailed Readiness Score", dataType: "NUMERICAL" },
+      { name: "Detailed Total Score", dataType: "NUMERICAL" },
+      { name: "Detailed Tier", dataType: "TEXT" },
+      { name: "Survey - Critical Load Capacity", dataType: "TEXT" },
+      { name: "Survey - Capacity Utilisation", dataType: "TEXT" },
+      { name: "Survey - Expansion Capability", dataType: "TEXT" },
+      { name: "Survey - EBITDA Margin", dataType: "TEXT" },
+      { name: "Survey - Power Cost", dataType: "TEXT" },
+      { name: "Survey - Long Term Contracts", dataType: "TEXT" },
+      { name: "Survey - Tenant Concentration", dataType: "TEXT" },
+      { name: "Survey - Ownership Type", dataType: "TEXT" },
+      { name: "Survey - Real Estate Status", dataType: "TEXT" },
+      { name: "Survey - Debt Status", dataType: "TEXT" },
+      { name: "Survey - Market Demand", dataType: "TEXT" },
+      { name: "Survey - Management Team", dataType: "TEXT" },
+      { name: "Survey - Transaction Intent", dataType: "TEXT" },
+      { name: "Survey - Timeline", dataType: "TEXT" },
+    ];
+
+    const results: Record<string, string> = {};
+
+    for (const field of fieldsToCreate) {
+      try {
+        const response = await fetch(
+          `${GHL_API_BASE}/locations/${GHL_LOCATION_ID}/customFields`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${apiKey}`,
+              Version: "2021-07-28",
+            },
+            body: JSON.stringify({
+              name: field.name,
+              dataType: field.dataType,
+              model: "contact",
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (!response.ok) {
+          console.error(`Failed to create field "${field.name}":`, response.status, data);
+          results[field.name] = `ERROR: ${response.status}`;
+        } else {
+          const fieldId = data.customField?.id || data.id;
+          results[field.name] = fieldId;
+          console.log(`Created "${field.name}" → ${fieldId}`);
+        }
+      } catch (error) {
+        console.error(`Error creating field "${field.name}":`, error);
+        results[field.name] = `ERROR: ${error}`;
+      }
+    }
+
+    console.log("\n=== COPY THESE IDs INTO GHL_FIELDS (enquiries.ts) ===");
+    console.log(JSON.stringify(results, null, 2));
+    return { success: true, fields: results };
+  },
+});

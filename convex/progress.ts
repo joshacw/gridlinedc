@@ -39,26 +39,44 @@ export const advanceStep = mutation({
   },
 });
 
+// Survey validator — matches the 14-question detailed survey
+const surveyValidator = v.object({
+  criticalLoadCapacity: v.optional(v.string()),
+  capacityUtilisation: v.optional(v.string()),
+  expansionCapability: v.optional(v.string()),
+  ebitdaMargin: v.optional(v.string()),
+  powerCost: v.optional(v.string()),
+  longTermContracts: v.optional(v.string()),
+  tenantConcentration: v.optional(v.string()),
+  ownershipType: v.optional(v.string()),
+  realEstateStatus: v.optional(v.string()),
+  debtStatus: v.optional(v.string()),
+  marketDemand: v.optional(v.string()),
+  managementTeam: v.optional(v.string()),
+  transactionIntent: v.optional(v.string()),
+  timeline: v.optional(v.string()),
+});
+
 // Save survey data to the enquiry record
 export const saveSurvey = mutation({
   args: {
     enquiryId: v.id("enquiries"),
-    survey: v.object({
-      ownershipStructure: v.optional(v.string()),
-      currentPowerUtilisation: v.optional(v.string()),
-      powerScalability: v.optional(v.string()),
-      customerBase: v.optional(v.string()),
-      customerConcentration: v.optional(v.string()),
-      contractTenure: v.optional(v.string()),
-      anchorTenants: v.optional(v.string()),
-      networkConnectivity: v.optional(v.string()),
-      annualRevenue: v.optional(v.string()),
-      ebitdaRange: v.optional(v.string()),
-      capitalOutlook: v.optional(v.string()),
-    }),
+    survey: surveyValidator,
+    detailedQualityScore: v.optional(v.number()),
+    detailedReadinessScore: v.optional(v.number()),
+    detailedTotalScore: v.optional(v.number()),
+    detailedTier: v.optional(v.string()),
+    detailedConditionalFlags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.enquiryId, { survey: args.survey });
+    await ctx.db.patch(args.enquiryId, {
+      survey: args.survey,
+      detailedQualityScore: args.detailedQualityScore,
+      detailedReadinessScore: args.detailedReadinessScore,
+      detailedTotalScore: args.detailedTotalScore,
+      detailedTier: args.detailedTier,
+      detailedConditionalFlags: args.detailedConditionalFlags,
+    });
   },
 });
 
@@ -66,25 +84,23 @@ export const saveSurvey = mutation({
 export const submitSurveyFromProgress = action({
   args: {
     enquiryId: v.id("enquiries"),
-    survey: v.object({
-      ownershipStructure: v.optional(v.string()),
-      currentPowerUtilisation: v.optional(v.string()),
-      powerScalability: v.optional(v.string()),
-      customerBase: v.optional(v.string()),
-      customerConcentration: v.optional(v.string()),
-      contractTenure: v.optional(v.string()),
-      anchorTenants: v.optional(v.string()),
-      networkConnectivity: v.optional(v.string()),
-      annualRevenue: v.optional(v.string()),
-      ebitdaRange: v.optional(v.string()),
-      capitalOutlook: v.optional(v.string()),
-    }),
+    survey: surveyValidator,
+    detailedQualityScore: v.optional(v.number()),
+    detailedReadinessScore: v.optional(v.number()),
+    detailedTotalScore: v.optional(v.number()),
+    detailedTier: v.optional(v.string()),
+    detailedConditionalFlags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    // 1. Save survey data
+    // 1. Save survey data + scores
     await ctx.runMutation(api.progress.saveSurvey, {
       enquiryId: args.enquiryId,
       survey: args.survey,
+      detailedQualityScore: args.detailedQualityScore,
+      detailedReadinessScore: args.detailedReadinessScore,
+      detailedTotalScore: args.detailedTotalScore,
+      detailedTier: args.detailedTier,
+      detailedConditionalFlags: args.detailedConditionalFlags,
     });
 
     // 2. Get the enquiry to find ghlContactId
@@ -95,13 +111,18 @@ export const submitSurveyFromProgress = action({
       await ctx.runAction(api.enquiries.updateGHLContactSurvey, {
         contactId: enquiry.ghlContactId,
         survey: args.survey,
+        detailedQualityScore: args.detailedQualityScore,
+        detailedReadinessScore: args.detailedReadinessScore,
+        detailedTotalScore: args.detailedTotalScore,
+        detailedTier: args.detailedTier,
       });
     }
 
-    // 4. Advance the pipeline step
+    // 4. Advance the pipeline step (use compatShareDetails for compatibility flow)
+    const stepKey = enquiry?.enquiryType === 'compatibility' ? 'compatShareDetails' : 'shareDCDetails';
     await ctx.runMutation(api.progress.advanceStep, {
       enquiryId: args.enquiryId,
-      stepKey: "shareDCDetails",
+      stepKey,
     });
 
     return { success: true };

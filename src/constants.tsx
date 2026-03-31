@@ -116,86 +116,269 @@ export const PARTNERSHIP_OPTIONS = [
   }
 ];
 
-// DC Owner Survey Questions (used on progress page survey step)
+// DC Owner Detailed Survey Questions (14 questions across 6 sections)
 export const DC_SURVEY_QUESTIONS: SurveyQuestion[] = [
+  // Section 1: Facility Overview
   {
-    key: 'ownershipStructure',
-    label: 'Ownership Structure',
-    question: 'How is the data centre currently owned?',
+    key: 'criticalLoadCapacity',
+    label: 'Facility Overview',
+    question: "What is the facility's total critical load capacity (MW)?",
     type: 'choice',
-    options: ['Fully owned', 'Majority owned (>50%)', 'Minority owned (<50%)', 'Joint venture / Partnership'],
+    options: ['<1 MW', '1–5 MW', '5–10 MW', '10+ MW'],
   },
   {
-    key: 'currentPowerUtilisation',
-    label: 'Current Power Utilisation',
-    question: 'What is the current IT load of the facility?',
+    key: 'capacityUtilisation',
+    label: 'Facility Overview',
+    question: 'What percentage of capacity is currently utilised (revenue-generating)?',
     type: 'choice',
-    options: ['<2MW', '2\u20135MW', '5\u201310MW', '10\u201320MW', '20MW+'],
+    options: ['<30%', '30–60%', '60–85%', '85%+'],
   },
   {
-    key: 'powerScalability',
-    label: 'Power Scalability',
-    question: 'What is the maximum designed power capacity?',
+    key: 'expansionCapability',
+    label: 'Facility Overview',
+    question: 'Does the facility have the ability to expand power capacity?',
     type: 'choice',
-    options: ['<5MW', '5\u201310MW', '10\u201320MW', '20\u201350MW', '50MW+'],
+    options: ['Yes – Significant expansion available', 'Yes – Limited expansion', 'No expansion capability', 'Unsure'],
+  },
+  // Section 2: Financial & Operating Profile
+  {
+    key: 'ebitdaMargin',
+    label: 'Financial & Operating Profile',
+    question: 'What is the approximate EBITDA margin?',
+    type: 'choice',
+    options: ['<20%', '20–30%', '30–50%', '50%+'],
   },
   {
-    key: 'customerBase',
-    label: 'Customer Base',
-    question: 'How many active customer contracts are in place?',
-    type: 'choice',
-    options: ['1\u20135 contracts', '6\u201315 contracts', '16\u201350 contracts', '50+ contracts'],
-  },
-  {
-    key: 'customerConcentration',
-    label: 'Customer Concentration',
-    question: 'What percentage of revenue comes from the top three customers?',
-    type: 'choice',
-    options: ['<30%', '30\u201350%', '50\u201370%', '70%+'],
-  },
-  {
-    key: 'contractTenure',
-    label: 'Contract Tenure',
-    question: 'What is the typical contract length?',
-    type: 'choice',
-    options: ['<1 year', '1\u20133 years', '3\u20135 years', '5+ years'],
-  },
-  {
-    key: 'anchorTenants',
-    label: 'Anchor Tenant(s)',
-    question: 'Who are the anchor tenant(s), and what is the remaining contract term?',
+    key: 'powerCost',
+    label: 'Financial & Operating Profile',
+    question: 'What is your approximate all-in power cost ($/kWh)?',
     type: 'text',
-    placeholder: 'e.g., Major telco \u2014 8 years remaining',
+    placeholder: 'e.g., $0.06/kWh',
+  },
+  // Section 3: Tenants & Contracts
+  {
+    key: 'longTermContracts',
+    label: 'Tenants & Contracts',
+    question: 'Do you have long-term contracts with tenants?',
+    type: 'choice',
+    options: ['Yes (3+ years remaining)', 'Yes (1–3 years remaining)', 'Mostly short-term / month-to-month', 'No current tenants'],
   },
   {
-    key: 'networkConnectivity',
-    label: 'Network Connectivity',
-    question: 'How many network carriers are available on-site?',
+    key: 'tenantConcentration',
+    label: 'Tenants & Contracts',
+    question: 'How concentrated is your tenant base?',
     type: 'choice',
-    options: ['1\u20132 carriers', '3\u20135 carriers', '6\u201310 carriers', '10+ carriers'],
+    options: ['Single tenant >50% of revenue', 'Top 2–3 tenants = majority', 'Diversified tenant base', 'No tenants currently'],
+  },
+  // Section 4: Ownership & Structure
+  {
+    key: 'ownershipType',
+    label: 'Ownership & Structure',
+    question: 'How is the facility owned?',
+    type: 'choice',
+    options: ['Single owner', 'Small ownership group (2–5 parties)', 'Larger group / multiple stakeholders'],
   },
   {
-    key: 'annualRevenue',
-    label: 'Annual Revenue',
-    question: 'What is the current annual revenue?',
+    key: 'realEstateStatus',
+    label: 'Ownership & Structure',
+    question: 'Is the real estate owned or leased?',
     type: 'choice',
-    options: ['<$5M', '$5\u201315M', '$15\u201350M', '$50M+'],
+    options: ['Owned outright', 'Owned with debt', 'Ground lease', 'Fully leased'],
   },
   {
-    key: 'ebitdaRange',
-    label: 'EBITDA Range',
-    question: 'What is the typical EBITDA margin?',
+    key: 'debtStatus',
+    label: 'Ownership & Structure',
+    question: 'Does the facility currently have any debt or liens?',
     type: 'choice',
-    options: ['<20%', '20\u201330%', '30\u201340%', '40%+'],
+    options: ['No debt', 'Moderate debt', 'Significant debt'],
+  },
+  // Section 5: Market & Operations
+  {
+    key: 'marketDemand',
+    label: 'Market & Operations',
+    question: 'How would you describe demand in your market?',
+    type: 'choice',
+    options: ['Strong and growing (AI / hyperscale demand)', 'Stable demand', 'Limited demand', 'Unsure'],
   },
   {
-    key: 'capitalOutlook',
-    label: 'Capital & Maintenance Outlook',
-    question: 'Are there major capital expenditures planned in the next 12\u201324 months?',
+    key: 'managementTeam',
+    label: 'Market & Operations',
+    question: 'Is there an existing management/operations team in place?',
     type: 'choice',
-    options: ['No major capex planned', 'Minor maintenance (<$1M)', 'Major upgrade ($1\u20135M)', 'Significant expansion (>$5M)'],
+    options: ['Yes – would remain post-transaction', 'Yes – but uncertain retention', 'No'],
+  },
+  // Section 6: Seller Intent
+  {
+    key: 'transactionIntent',
+    label: 'Seller Intent',
+    question: 'Are you open to exploring a potential sale or strategic transaction?',
+    type: 'choice',
+    options: ['Yes – actively exploring', 'Possibly – open to discussion', 'Just evaluating options'],
+  },
+  {
+    key: 'timeline',
+    label: 'Seller Intent',
+    question: 'What is your approximate timeline?',
+    type: 'choice',
+    options: ['Immediate (0–3 months)', 'Near-term (3–12 months)', 'Long-term / exploratory'],
   },
 ];
+
+// Detailed Survey Scoring Model
+// Each scored question maps answer → points (0-3)
+// Q5 (powerCost) is free text and unscored
+export const SURVEY_SCORING: Record<string, Record<string, number>> = {
+  // Section 1: Asset Quality
+  criticalLoadCapacity: {
+    '<1 MW': 1,
+    '1–5 MW': 3,
+    '5–10 MW': 2,
+    '10+ MW': 1,
+  },
+  capacityUtilisation: {
+    '<30%': 3,
+    '30–60%': 2,
+    '60–85%': 1,
+    '85%+': 0,
+  },
+  expansionCapability: {
+    'Yes – Significant expansion available': 3,
+    'Yes – Limited expansion': 2,
+    'No expansion capability': 0,
+    'Unsure': 1,
+  },
+  ebitdaMargin: {
+    '<20%': 0,
+    '20–30%': 1,
+    '30–50%': 2,
+    '50%+': 3,
+  },
+  longTermContracts: {
+    'Yes (3+ years remaining)': 3,
+    'Yes (1–3 years remaining)': 2,
+    'Mostly short-term / month-to-month': 1,
+    'No current tenants': 0,
+  },
+  tenantConcentration: {
+    'Single tenant >50% of revenue': 1,
+    'Top 2–3 tenants = majority': 2,
+    'Diversified tenant base': 3,
+    'No tenants currently': 0,
+  },
+  // Section 2: Deal Readiness
+  ownershipType: {
+    'Single owner': 3,
+    'Small ownership group (2–5 parties)': 2,
+    'Larger group / multiple stakeholders': 1,
+  },
+  realEstateStatus: {
+    'Owned outright': 3,
+    'Owned with debt': 2,
+    'Ground lease': 1,
+    'Fully leased': 0,
+  },
+  debtStatus: {
+    'No debt': 3,
+    'Moderate debt': 1,
+    'Significant debt': 0,
+  },
+  marketDemand: {
+    'Strong and growing (AI / hyperscale demand)': 3,
+    'Stable demand': 2,
+    'Limited demand': 1,
+    'Unsure': 1,
+  },
+  managementTeam: {
+    'Yes – would remain post-transaction': 3,
+    'Yes – but uncertain retention': 1,
+    'No': 0,
+  },
+  transactionIntent: {
+    'Yes – actively exploring': 3,
+    'Possibly – open to discussion': 2,
+    'Just evaluating options': 1,
+  },
+  timeline: {
+    'Immediate (0–3 months)': 3,
+    'Near-term (3–12 months)': 2,
+    'Long-term / exploratory': 1,
+  },
+};
+
+// Asset Quality questions (Q1-Q7, excluding Q5 which is unscored text)
+export const QUALITY_QUESTION_KEYS = [
+  'criticalLoadCapacity', 'capacityUtilisation', 'expansionCapability',
+  'ebitdaMargin', 'longTermContracts', 'tenantConcentration',
+];
+
+// Deal Readiness questions (Q8-Q14)
+export const READINESS_QUESTION_KEYS = [
+  'ownershipType', 'realEstateStatus', 'debtStatus',
+  'marketDemand', 'managementTeam', 'transactionIntent', 'timeline',
+];
+
+// Conditional flags
+export const SURVEY_CONDITIONALS: Record<string, { answer: string; flag: string }> = {
+  tenantConcentration: {
+    answer: 'No tenants currently',
+    flag: 'No tenants — combined with low utilisation may signal greenfield upside',
+  },
+};
+
+// Compute detailed survey scores
+export function computeDetailedScores(answers: Record<string, string>): {
+  qualityScore: number;
+  readinessScore: number;
+  totalScore: number;
+  maxQuality: number;
+  maxReadiness: number;
+  maxTotal: number;
+  tier: string;
+  tierNumber: number;
+  conditionalFlags: string[];
+} {
+  let qualityScore = 0;
+  let readinessScore = 0;
+  const conditionalFlags: string[] = [];
+
+  // Quality (max 18: 6 questions × 3 points)
+  for (const key of QUALITY_QUESTION_KEYS) {
+    const answer = answers[key];
+    if (answer && SURVEY_SCORING[key]) {
+      qualityScore += SURVEY_SCORING[key][answer] ?? 0;
+    }
+    // Check conditionals
+    if (SURVEY_CONDITIONALS[key] && answer === SURVEY_CONDITIONALS[key].answer) {
+      const utilisationAnswer = answers['capacityUtilisation'];
+      if (utilisationAnswer === '<30%' || utilisationAnswer === '30–60%') {
+        conditionalFlags.push(SURVEY_CONDITIONALS[key].flag);
+      }
+    }
+  }
+
+  // Readiness (max 21: 7 questions × 3 points)
+  for (const key of READINESS_QUESTION_KEYS) {
+    const answer = answers[key];
+    if (answer && SURVEY_SCORING[key]) {
+      readinessScore += SURVEY_SCORING[key][answer] ?? 0;
+    }
+  }
+
+  const totalScore = qualityScore + readinessScore;
+  const maxQuality = 18;
+  const maxReadiness = 21;
+  const maxTotal = 39;
+
+  let tier: string;
+  let tierNumber: number;
+  if (totalScore >= 33) { tier = 'Priority Acquisition Target'; tierNumber = 1; }
+  else if (totalScore >= 25) { tier = 'Strong Candidate'; tierNumber = 2; }
+  else if (totalScore >= 17) { tier = 'Conditional — Needs Alignment'; tierNumber = 3; }
+  else if (totalScore >= 9) { tier = 'Unlikely Fit'; tierNumber = 4; }
+  else { tier = 'Not Aligned'; tierNumber = 5; }
+
+  return { qualityScore, readinessScore, totalScore, maxQuality, maxReadiness, maxTotal, tier, tierNumber, conditionalFlags };
+}
 
 // Investor Pipeline steps configuration (5 steps)
 export const INVESTOR_PIPELINE_STEPS = [

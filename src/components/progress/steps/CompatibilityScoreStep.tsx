@@ -5,35 +5,34 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-interface CompatibilityScoreData {
-  score: number;
-  scoreLabel: string;
-  band1Score: number;
-  band2Score: number;
-  band3Score: number;
-  answers: Record<string, boolean>;
-}
-
 interface Props {
   enquiryId: Id<"enquiries">;
-  compatibilityScore: CompatibilityScoreData;
+  qualityScore: number;
+  readinessScore: number;
+  totalScore: number;
+  tier: string;
 }
 
-const BAND_INFO = [
-  { key: 'band1Score', label: 'Thesis', description: 'Investment rationale alignment' },
-  { key: 'band2Score', label: 'Structure', description: 'Clean deal fundamentals' },
-  { key: 'band3Score', label: 'Quality', description: 'Operational durability & fit' },
-] as const;
+const MAX_QUALITY = 18;
+const MAX_READINESS = 21;
 
-const LABEL_COLORS: Record<string, string> = {
-  "Exceptional Match": "text-emerald-400",
-  "Strong Fit": "text-[#4a9eff]",
-  "Qualified": "text-[#60a5fa]",
-  "Emerging": "text-amber-400",
-  "Not Right Now": "text-slate-400",
+const TIER_COLORS: Record<string, string> = {
+  "Priority Acquisition Target": "text-emerald-400",
+  "Strong Candidate": "text-[#4a9eff]",
+  "Conditional — Needs Alignment": "text-amber-400",
+  "Unlikely Fit": "text-orange-400",
+  "Not Aligned": "text-slate-400",
 };
 
-export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }: Props) {
+const TIER_MESSAGES: Record<string, string> = {
+  "Priority Acquisition Target": "Your facility scores exceptionally across both asset quality and deal readiness. Expect to hear from us within 24 hours.",
+  "Strong Candidate": "Your facility is a strong match for the GridLine platform. We'll be in touch within 24 hours to discuss next steps.",
+  "Conditional — Needs Alignment": "Your facility shows potential, but there are areas that need alignment. We'll follow up to explore further.",
+  "Unlikely Fit": "Your facility doesn't meet our current criteria in several areas, but circumstances change. We'll keep your details on file.",
+  "Not Aligned": "Your facility isn't the right fit at this stage. We'll keep your details on file and be in touch if that shifts.",
+};
+
+export default function CompatibilityScoreStep({ enquiryId, qualityScore, readinessScore, totalScore, tier }: Props) {
   const advanceStep = useMutation(api.progress.advanceStep);
   const [advancing, setAdvancing] = useState(false);
 
@@ -47,43 +46,132 @@ export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }
     }
   };
 
-  const labelColor = LABEL_COLORS[compatibilityScore.scoreLabel] || "text-white";
+  const tierColor = TIER_COLORS[tier] || "text-white";
+  const qualityPct = Math.round((qualityScore / MAX_QUALITY) * 100);
+  const readinessPct = Math.round((readinessScore / MAX_READINESS) * 100);
+
+  // Determine quadrant
+  const isHighQuality = qualityPct >= 50;
+  const isHighReadiness = readinessPct >= 50;
 
   return (
     <div className="space-y-6">
-      {/* Score card */}
+      {/* Tier card */}
       <div className="bg-[#0d1b33] rounded-lg p-6 sm:p-8 text-center">
         <p className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-4">
           Your Compatibility Rating
         </p>
         <div className="inline-block bg-white/5 border border-white/10 rounded-[19px] px-8 py-5 mb-4">
-          <p className={`text-2xl sm:text-3xl font-bold ${labelColor}`}>
-            {compatibilityScore.scoreLabel}
+          <p className={`text-2xl sm:text-3xl font-bold ${tierColor}`}>
+            {tier}
           </p>
         </div>
         <p className="text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
-          {getScoreMessage(compatibilityScore.scoreLabel)}
+          {TIER_MESSAGES[tier] || ""}
         </p>
       </div>
 
-      {/* Band breakdown */}
-      <div className="grid grid-cols-3 gap-3">
-        {BAND_INFO.map((band) => {
-          const score = compatibilityScore[band.key];
-          return (
-            <div key={band.key} className="bg-[#0d1b33] rounded-lg p-4 text-center">
-              <p className="text-xs uppercase tracking-wider text-[#4a9eff] font-bold mb-2">
-                {band.label}
-              </p>
-              <p className="text-2xl font-bold text-white mb-1">
-                {score}<span className="text-slate-500 text-sm font-normal">/2</span>
-              </p>
-              <p className="text-[10px] text-slate-500 leading-tight">
-                {band.description}
-              </p>
+      {/* Score breakdown */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-[#0d1b33] rounded-lg p-5 text-center">
+          <p className="text-xs uppercase tracking-wider text-[#4a9eff] font-bold mb-2">
+            Asset Quality
+          </p>
+          <p className="text-3xl font-bold text-white mb-1">
+            {qualityScore}<span className="text-slate-500 text-sm font-normal">/{MAX_QUALITY}</span>
+          </p>
+          <div className="w-full h-1.5 bg-white/10 rounded-full mt-3">
+            <div
+              className="h-full bg-[#4a9eff] rounded-full transition-all duration-500"
+              style={{ width: `${qualityPct}%` }}
+            />
+          </div>
+        </div>
+        <div className="bg-[#0d1b33] rounded-lg p-5 text-center">
+          <p className="text-xs uppercase tracking-wider text-[#4a9eff] font-bold mb-2">
+            Deal Readiness
+          </p>
+          <p className="text-3xl font-bold text-white mb-1">
+            {readinessScore}<span className="text-slate-500 text-sm font-normal">/{MAX_READINESS}</span>
+          </p>
+          <div className="w-full h-1.5 bg-white/10 rounded-full mt-3">
+            <div
+              className="h-full bg-[#4a9eff] rounded-full transition-all duration-500"
+              style={{ width: `${readinessPct}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 2-Axis Quality vs Readiness Chart */}
+      <div className="bg-[#0d1b33] rounded-lg p-6 sm:p-8">
+        <p className="text-xs uppercase tracking-widest text-[#4a9eff] font-bold mb-1">
+          Qualification Framework
+        </p>
+        <p className="text-white font-bold text-lg mb-6">Where Your Facility Sits</p>
+
+        <div className="relative">
+          {/* Y-axis label */}
+          <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-slate-500 font-medium uppercase tracking-wider whitespace-nowrap">
+            Asset Quality
+          </div>
+
+          <div className="ml-6">
+            <div className="grid grid-cols-2 gap-1 mb-1">
+              {/* Top-left: High Quality, Low Readiness = Nurture */}
+              <div className={`border rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center transition-all ${
+                isHighQuality && !isHighReadiness
+                  ? 'bg-amber-500/15 border-amber-500/40 ring-2 ring-amber-500/30'
+                  : 'bg-amber-500/5 border-amber-500/15'
+              }`}>
+                <p className="text-amber-400 text-xs font-bold">Nurture</p>
+                <p className="text-[10px] text-slate-500 mt-1">High Quality, Low Readiness</p>
+                {isHighQuality && !isHighReadiness && (
+                  <div className="w-3 h-3 rounded-full bg-amber-400 mt-2 animate-pulse" />
+                )}
+              </div>
+              {/* Top-right: High Quality, High Readiness = Fast-Track */}
+              <div className={`border rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center transition-all ${
+                isHighQuality && isHighReadiness
+                  ? 'bg-emerald-500/15 border-emerald-500/40 ring-2 ring-emerald-500/30'
+                  : 'bg-emerald-500/5 border-emerald-500/15'
+              }`}>
+                <p className="text-emerald-400 text-xs font-bold">Fast-Track</p>
+                <p className="text-[10px] text-slate-500 mt-1">High Quality, High Readiness</p>
+                {isHighQuality && isHighReadiness && (
+                  <div className="w-3 h-3 rounded-full bg-emerald-400 mt-2 animate-pulse" />
+                )}
+              </div>
+              {/* Bottom-left: Low Quality, Low Readiness = Park */}
+              <div className={`border rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center transition-all ${
+                !isHighQuality && !isHighReadiness
+                  ? 'bg-slate-500/15 border-slate-500/40 ring-2 ring-slate-500/30'
+                  : 'bg-slate-500/5 border-slate-500/15'
+              }`}>
+                <p className="text-slate-400 text-xs font-bold">Park</p>
+                <p className="text-[10px] text-slate-500 mt-1">Low Quality, Low Readiness</p>
+                {!isHighQuality && !isHighReadiness && (
+                  <div className="w-3 h-3 rounded-full bg-slate-400 mt-2 animate-pulse" />
+                )}
+              </div>
+              {/* Bottom-right: Low Quality, High Readiness = Pass */}
+              <div className={`border rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center transition-all ${
+                !isHighQuality && isHighReadiness
+                  ? 'bg-slate-500/15 border-slate-500/40 ring-2 ring-slate-500/30'
+                  : 'bg-slate-500/5 border-slate-500/15'
+              }`}>
+                <p className="text-slate-400 text-xs font-bold">Pass</p>
+                <p className="text-[10px] text-slate-500 mt-1">Low Quality, High Readiness</p>
+                {!isHighQuality && isHighReadiness && (
+                  <div className="w-3 h-3 rounded-full bg-slate-400 mt-2 animate-pulse" />
+                )}
+              </div>
             </div>
-          );
-        })}
+            <p className="text-center text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-2">
+              Deal Readiness →
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* PDF download */}
@@ -114,87 +202,14 @@ export default function CompatibilityScoreStep({ enquiryId, compatibilityScore }
         </div>
       </div>
 
-      {/* 2-Axis Quality vs Readiness Chart (placeholder — populated after detailed survey) */}
-      <QualityReadinessChart />
-
       {/* Advance CTA */}
       <button
         onClick={handleAdvance}
         disabled={advancing}
         className="w-full py-4 bg-[#4a9eff] hover:bg-[#5aa8ff] text-white rounded-lg font-bold uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
-        {advancing ? 'Continuing...' : 'Continue — Share Your Facility Details'}
+        {advancing ? 'Continuing...' : 'Continue — Book Your Initial Assessment'}
       </button>
-      <p className="text-center text-xs text-slate-500">
-        Complete the detailed facility survey to unlock your full Quality vs Readiness assessment.
-      </p>
     </div>
   );
-}
-
-function QualityReadinessChart() {
-  // Preview of the 2-axis framework — actual position shown after detailed survey
-  return (
-    <div className="bg-[#0d1b33] rounded-lg p-6 sm:p-8">
-      <p className="text-xs uppercase tracking-widest text-[#4a9eff] font-bold mb-1">
-        Qualification Framework
-      </p>
-      <p className="text-white font-bold text-lg mb-1">Asset Quality vs Deal Readiness</p>
-      <p className="text-slate-400 text-xs mb-6">
-        Your position on this chart will be determined after completing the detailed facility survey.
-      </p>
-
-      <div className="relative">
-        {/* Y-axis label */}
-        <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-slate-500 font-medium uppercase tracking-wider whitespace-nowrap">
-          Asset Quality
-        </div>
-
-        {/* Chart area */}
-        <div className="ml-6">
-          {/* X-axis label */}
-          <div className="grid grid-cols-2 gap-1 mb-1">
-            {/* Top-left: High Quality, Low Readiness */}
-            <div className="bg-amber-500/8 border border-amber-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
-              <p className="text-amber-400 text-xs font-bold">Nurture</p>
-              <p className="text-[10px] text-slate-500 mt-1">High Quality</p>
-              <p className="text-[10px] text-slate-500">Low Readiness</p>
-            </div>
-            {/* Top-right: High Quality, High Readiness */}
-            <div className="bg-emerald-500/8 border border-emerald-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
-              <p className="text-emerald-400 text-xs font-bold">Fast-Track</p>
-              <p className="text-[10px] text-slate-500 mt-1">High Quality</p>
-              <p className="text-[10px] text-slate-500">High Readiness</p>
-            </div>
-            {/* Bottom-left: Low Quality, Low Readiness */}
-            <div className="bg-slate-500/8 border border-slate-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
-              <p className="text-slate-400 text-xs font-bold">Park</p>
-              <p className="text-[10px] text-slate-500 mt-1">Low Quality</p>
-              <p className="text-[10px] text-slate-500">Low Readiness</p>
-            </div>
-            {/* Bottom-right: Low Quality, High Readiness */}
-            <div className="bg-slate-500/8 border border-slate-500/20 rounded-lg p-4 min-h-[80px] flex flex-col justify-center items-center text-center">
-              <p className="text-slate-400 text-xs font-bold">Pass</p>
-              <p className="text-[10px] text-slate-500 mt-1">Low Quality</p>
-              <p className="text-[10px] text-slate-500">High Readiness</p>
-            </div>
-          </div>
-          <p className="text-center text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-2">
-            Deal Readiness →
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function getScoreMessage(label: string): string {
-  const messages: Record<string, string> = {
-    "Exceptional Match": "Your facility aligns with every dimension of the GridLine acquisition profile. Expect to hear from us within 24 hours.",
-    "Strong Fit": "Your facility is a strong candidate for the GridLine platform. We'll be in touch within 24 hours to arrange a conversation.",
-    "Qualified": "Your facility meets the core criteria. There are a few areas we'd like to explore together — we'll follow up shortly.",
-    "Emerging": "Your facility shows real promise. Timing or structure may need to align further. We'll follow up to discuss.",
-    "Not Right Now": "Your facility isn't the right fit at this stage, but circumstances change. We'll keep your details on file and be in touch if that shifts.",
-  };
-  return messages[label] || "";
 }

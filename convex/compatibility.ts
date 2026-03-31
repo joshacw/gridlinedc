@@ -112,6 +112,24 @@ export const setupCustomFields = action({
   },
 });
 
+// Survey validator for compatibility submission
+const surveyValidator = v.object({
+  criticalLoadCapacity: v.optional(v.string()),
+  capacityUtilisation: v.optional(v.string()),
+  expansionCapability: v.optional(v.string()),
+  ebitdaMargin: v.optional(v.string()),
+  powerCost: v.optional(v.string()),
+  longTermContracts: v.optional(v.string()),
+  tenantConcentration: v.optional(v.string()),
+  ownershipType: v.optional(v.string()),
+  realEstateStatus: v.optional(v.string()),
+  debtStatus: v.optional(v.string()),
+  marketDemand: v.optional(v.string()),
+  managementTeam: v.optional(v.string()),
+  transactionIntent: v.optional(v.string()),
+  timeline: v.optional(v.string()),
+});
+
 // Create compatibility enquiry + progress token
 export const createEnquiry = mutation({
   args: {
@@ -124,27 +142,17 @@ export const createEnquiry = mutation({
     email: v.string(),
     phoneNumber: v.optional(v.string()),
     country: v.string(),
-    score: v.number(),
-    scoreLabel: v.string(),
-    band1Score: v.number(),
-    band2Score: v.number(),
-    band3Score: v.number(),
-    answers: v.object({
-      q1: v.boolean(),
-      q2: v.boolean(),
-      q3: v.boolean(),
-      q4: v.boolean(),
-      q5: v.boolean(),
-      q6: v.boolean(),
-      q7: v.boolean(),
-      q8: v.boolean(),
-      q9: v.boolean(),
-    }),
+    qualityScore: v.number(),
+    readinessScore: v.number(),
+    totalScore: v.number(),
+    tier: v.string(),
+    tierNumber: v.number(),
+    survey: surveyValidator,
+    conditionalFlags: v.optional(v.array(v.string())),
     token: v.string(),
     submittedAt: v.string(),
   },
   handler: async (ctx, args) => {
-    // Create enquiry record
     const enquiryId = await ctx.db.insert("enquiries", {
       name: args.firstName,
       email: args.email,
@@ -156,23 +164,20 @@ export const createEnquiry = mutation({
       facilitySizeMW: args.facilitySizeMW,
       enquiryType: "compatibility",
       heardAbout: "compatibility-score",
-      compatibilityScore: {
-        score: args.score,
-        scoreLabel: args.scoreLabel,
-        band1Score: args.band1Score,
-        band2Score: args.band2Score,
-        band3Score: args.band3Score,
-        answers: args.answers,
-      },
+      survey: args.survey,
+      detailedQualityScore: args.qualityScore,
+      detailedReadinessScore: args.readinessScore,
+      detailedTotalScore: args.totalScore,
+      detailedTier: args.tier,
+      detailedConditionalFlags: args.conditionalFlags,
       submittedAt: args.submittedAt,
       status: "new",
-      pipelineStep: 2, // Start at "View Your Score"
+      pipelineStep: 2,
       pipelineSteps: {
         compatAssessment: { completedAt: args.submittedAt },
       },
     });
 
-    // Create progress token
     await ctx.db.insert("progressTokens", {
       token: args.token,
       enquiryId,
@@ -183,7 +188,7 @@ export const createEnquiry = mutation({
   },
 });
 
-// Submit compatibility score — creates GHL contact with score custom fields + progress URL
+// Submit compatibility score — creates enquiry + GHL contact with survey scores
 export const submitScore = action({
   args: {
     firstName: v.string(),
@@ -195,28 +200,19 @@ export const submitScore = action({
     email: v.string(),
     phoneNumber: v.optional(v.string()),
     country: v.string(),
-    score: v.number(),
-    scoreLabel: v.string(),
-    band1Score: v.number(),
-    band2Score: v.number(),
-    band3Score: v.number(),
-    answers: v.object({
-      q1: v.boolean(),
-      q2: v.boolean(),
-      q3: v.boolean(),
-      q4: v.boolean(),
-      q5: v.boolean(),
-      q6: v.boolean(),
-      q7: v.boolean(),
-      q8: v.boolean(),
-      q9: v.boolean(),
-    }),
+    qualityScore: v.number(),
+    readinessScore: v.number(),
+    totalScore: v.number(),
+    tier: v.string(),
+    tierNumber: v.number(),
+    survey: surveyValidator,
+    conditionalFlags: v.optional(v.array(v.string())),
     token: v.string(),
     progressUrl: v.string(),
     submittedAt: v.string(),
   },
   handler: async (ctx, args) => {
-    // 1. Create enquiry + progress token via mutation
+    // 1. Create enquiry + progress token
     const { enquiryId } = await ctx.runMutation(api.compatibility.createEnquiry, {
       firstName: args.firstName,
       organisationName: args.organisationName,
@@ -227,17 +223,18 @@ export const submitScore = action({
       email: args.email,
       phoneNumber: args.phoneNumber,
       country: args.country,
-      score: args.score,
-      scoreLabel: args.scoreLabel,
-      band1Score: args.band1Score,
-      band2Score: args.band2Score,
-      band3Score: args.band3Score,
-      answers: args.answers,
+      qualityScore: args.qualityScore,
+      readinessScore: args.readinessScore,
+      totalScore: args.totalScore,
+      tier: args.tier,
+      tierNumber: args.tierNumber,
+      survey: args.survey,
+      conditionalFlags: args.conditionalFlags,
       token: args.token,
       submittedAt: args.submittedAt,
     });
 
-    // 2. Create GHL contact with custom fields + progress URL
+    // 2. Create GHL contact
     const apiKey = process.env.GHL_API_KEY;
 
     if (!apiKey) {
@@ -246,41 +243,19 @@ export const submitScore = action({
     }
 
     const customFields = [
-      { id: SCORE_FIELDS.score, field_value: String(args.score) },
-      { id: SCORE_FIELDS.label, field_value: args.scoreLabel },
-      { id: SCORE_FIELDS.band1, field_value: String(args.band1Score) },
-      { id: SCORE_FIELDS.band2, field_value: String(args.band2Score) },
-      { id: SCORE_FIELDS.band3, field_value: String(args.band3Score) },
-      { id: SCORE_FIELDS.q1, field_value: args.answers.q1 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q2, field_value: args.answers.q2 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q3, field_value: args.answers.q3 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q4, field_value: args.answers.q4 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q5, field_value: args.answers.q5 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q6, field_value: args.answers.q6 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q7, field_value: args.answers.q7 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q8, field_value: args.answers.q8 ? "Yes" : "No" },
-      { id: SCORE_FIELDS.q9, field_value: args.answers.q9 ? "Yes" : "No" },
+      { id: SCORE_FIELDS.score, field_value: String(args.totalScore) },
+      { id: SCORE_FIELDS.label, field_value: args.tier },
+      { id: SCORE_FIELDS.band1, field_value: String(args.qualityScore) },
+      { id: SCORE_FIELDS.band2, field_value: String(args.readinessScore) },
       { id: SCORE_FIELDS.facilityName, field_value: args.facilityName },
       { id: SCORE_FIELDS.country, field_value: args.country },
-      { id: "2BjxVIRiKEn4HI7MTGgr", field_value: args.progressUrl }, // progressUrl field (shared with enquiries)
-    ];
-
-    // Add new custom fields only if IDs are configured
-    if (SCORE_FIELDS.organisationName) {
-      customFields.push({ id: SCORE_FIELDS.organisationName, field_value: args.organisationName ?? "" });
-    }
-    if (SCORE_FIELDS.facilityLocation) {
-      customFields.push({ id: SCORE_FIELDS.facilityLocation, field_value: args.facilityLocation ?? "" });
-    }
-    if (SCORE_FIELDS.contactRole) {
-      customFields.push({ id: SCORE_FIELDS.contactRole, field_value: args.role ?? "" });
-    }
-    if (SCORE_FIELDS.facilitySizeMW) {
-      customFields.push({ id: SCORE_FIELDS.facilitySizeMW, field_value: args.facilitySizeMW ?? "" });
-    }
-    if (SCORE_FIELDS.contactPhone) {
-      customFields.push({ id: SCORE_FIELDS.contactPhone, field_value: args.phoneNumber ?? "" });
-    }
+      { id: SCORE_FIELDS.organisationName, field_value: args.organisationName ?? "" },
+      { id: SCORE_FIELDS.facilityLocation, field_value: args.facilityLocation ?? "" },
+      { id: SCORE_FIELDS.contactRole, field_value: args.role ?? "" },
+      { id: SCORE_FIELDS.facilitySizeMW, field_value: args.facilitySizeMW ?? "" },
+      { id: SCORE_FIELDS.contactPhone, field_value: args.phoneNumber ?? "" },
+      { id: "2BjxVIRiKEn4HI7MTGgr", field_value: args.progressUrl },
+    ].filter(f => f.id);
 
     const payload: Record<string, unknown> = {
       firstName: args.firstName,
@@ -288,7 +263,7 @@ export const submitScore = action({
       companyName: args.organisationName || args.facilityName,
       locationId: GHL_LOCATION_ID,
       customFields,
-      tags: ["compatibility-score", args.scoreLabel.toLowerCase().replace(/\s+/g, "-")],
+      tags: ["compatibility-score", args.tier.toLowerCase().replace(/\s+/g, "-")],
     };
 
     if (args.phoneNumber) payload.phone = args.phoneNumber;
@@ -313,9 +288,8 @@ export const submitScore = action({
       }
 
       const contactId = data.contact?.id || null;
-      console.log("GHL compatibility contact created:", contactId, "Score:", args.score, args.scoreLabel);
+      console.log("GHL compatibility contact created:", contactId, "Tier:", args.tier, "Score:", args.totalScore);
 
-      // Store GHL contact ID on enquiry
       if (contactId) {
         await ctx.runMutation(api.enquiries.updateGhlContactId, {
           id: enquiryId,

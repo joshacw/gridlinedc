@@ -20,14 +20,10 @@ interface EnquiryData {
   pipelineStep?: number;
   survey?: Record<string, string | undefined>;
   investorSurvey?: Record<string, string | undefined>;
-  compatibilityScore?: {
-    score: number;
-    scoreLabel: string;
-    band1Score: number;
-    band2Score: number;
-    band3Score: number;
-    answers: Record<string, boolean>;
-  };
+  detailedQualityScore?: number;
+  detailedReadinessScore?: number;
+  detailedTotalScore?: number;
+  detailedTier?: string;
 }
 
 interface Props {
@@ -172,8 +168,16 @@ const COMPAT_POST_STEPS: Record<number, { label: string; description: string; de
 
 function CompatibilityStepPanel({ currentStep, enquiryId, enquiryData }: Props) {
   // Step 2: View score + PDF
-  if (currentStep === 2 && enquiryData.compatibilityScore) {
-    return <CompatibilityScoreStep enquiryId={enquiryId} compatibilityScore={enquiryData.compatibilityScore} />;
+  if (currentStep === 2 && enquiryData.detailedTier) {
+    return (
+      <CompatibilityScoreStep
+        enquiryId={enquiryId}
+        qualityScore={enquiryData.detailedQualityScore ?? 0}
+        readinessScore={enquiryData.detailedReadinessScore ?? 0}
+        totalScore={enquiryData.detailedTotalScore ?? 0}
+        tier={enquiryData.detailedTier}
+      />
+    );
   }
 
   // Step 3: DC details survey

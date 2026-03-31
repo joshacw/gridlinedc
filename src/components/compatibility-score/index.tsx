@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { QuizStage, ContactFormData, CompatibilityScoreProps } from "./types";
-import { QUESTIONS, BANDS } from "./questions";
-import { computeAllScores, getRating } from "./scoring";
+import { SECTIONS, QUESTIONS, computeDetailedScores } from "./questions";
 import PlacesAutocomplete from "./PlacesAutocomplete";
+import type { SurveyQuestion } from "@/types";
 
 function generateToken(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -18,7 +18,7 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
   const router = useRouter();
   const submitToGHL = useAction(api.compatibility.submitScore);
   const [stage, setStage] = useState<QuizStage>("welcome");
-  const [answers, setAnswers] = useState<Record<number, boolean>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [contactForm, setContactForm] = useState<ContactFormData>({
     organisationName: "",
     facilityName: "",
@@ -31,30 +31,27 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
     phoneNumber: "",
     country: "",
   });
-  const [currentBand, setCurrentBand] = useState(0);
+  const [currentSection, setCurrentSection] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [webhookError, setWebhookError] = useState<string | null>(null);
-  const [scores, setScores] = useState<{
-    band1Score: number;
-    band2Score: number;
-    band3Score: number;
-    total: number;
-  } | null>(null);
 
-  const answeredCount = Object.keys(answers).length;
-  const allAnswered = answeredCount === QUESTIONS.length;
-  const activeBand = BANDS[currentBand];
-  const bandQuestions = QUESTIONS.filter((q) => q.bandId === activeBand.id);
-  const bandAllAnswered = bandQuestions.every((q) => answers[q.id] !== undefined);
-  const isLastBand = currentBand === BANDS.length - 1;
+  const activeSection = SECTIONS[currentSection];
+  const sectionQuestions = activeSection.questionKeys.map(
+    (key) => QUESTIONS.find((q: SurveyQuestion) => q.key === key)!
+  );
+  const sectionAllAnswered = sectionQuestions.every((q) => {
+    const val = answers[q.key]?.trim();
+    return val && val.length > 0;
+  });
+  const isLastSection = currentSection === SECTIONS.length - 1;
+  const totalQuestions = QUESTIONS.length;
+  const answeredCount = QUESTIONS.filter((q: SurveyQuestion) => answers[q.key]?.trim()).length;
 
-  const handleAnswer = (questionId: number, value: boolean) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  const handleAnswer = (key: string, value: string) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleContinue = () => {
-    const computed = computeAllScores(answers);
-    setScores(computed);
     setStage("contact");
   };
 
@@ -67,11 +64,11 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
     isEmailValid;
 
   const handleSubmit = async () => {
-    if (!scores || !isFormValid) return;
+    if (!isFormValid) return;
     setIsSubmitting(true);
     setWebhookError(null);
 
-    const rating = getRating(scores.total);
+    const scores = computeDetailedScores(answers);
     const token = generateToken();
     const progressUrl = `${window.location.origin}/progress/${token}`;
 
@@ -86,28 +83,33 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
         email: contactForm.email.trim(),
         phoneNumber: contactForm.phoneNumber.trim() || undefined,
         country: contactForm.country.trim(),
-        score: scores.total,
-        scoreLabel: rating.label,
-        band1Score: scores.band1Score,
-        band2Score: scores.band2Score,
-        band3Score: scores.band3Score,
-        answers: {
-          q1: answers[1] ?? false,
-          q2: answers[2] ?? false,
-          q3: answers[3] ?? false,
-          q4: answers[4] ?? false,
-          q5: answers[5] ?? false,
-          q6: answers[6] ?? false,
-          q7: answers[7] ?? false,
-          q8: answers[8] ?? false,
-          q9: answers[9] ?? false,
+        qualityScore: scores.qualityScore,
+        readinessScore: scores.readinessScore,
+        totalScore: scores.totalScore,
+        tier: scores.tier,
+        tierNumber: scores.tierNumber,
+        survey: {
+          criticalLoadCapacity: answers.criticalLoadCapacity || undefined,
+          capacityUtilisation: answers.capacityUtilisation || undefined,
+          expansionCapability: answers.expansionCapability || undefined,
+          ebitdaMargin: answers.ebitdaMargin || undefined,
+          powerCost: answers.powerCost || undefined,
+          longTermContracts: answers.longTermContracts || undefined,
+          tenantConcentration: answers.tenantConcentration || undefined,
+          ownershipType: answers.ownershipType || undefined,
+          realEstateStatus: answers.realEstateStatus || undefined,
+          debtStatus: answers.debtStatus || undefined,
+          marketDemand: answers.marketDemand || undefined,
+          managementTeam: answers.managementTeam || undefined,
+          transactionIntent: answers.transactionIntent || undefined,
+          timeline: answers.timeline || undefined,
         },
+        conditionalFlags: scores.conditionalFlags,
         token,
         progressUrl,
         submittedAt: new Date().toISOString(),
       });
 
-      // Redirect to progress page
       router.push(`/progress/${token}`);
     } catch (err) {
       console.error("Submission failed:", err);
@@ -115,8 +117,6 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
       setIsSubmitting(false);
     }
   };
-
-  const rating = scores ? getRating(scores.total) : null;
 
   // ── Welcome Stage ──
   if (stage === "welcome") {
@@ -130,7 +130,7 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
             Is your data centre a fit<br className="hidden sm:block" /> for the GridLine platform?
           </h1>
           <p className="text-[#94a3b8] text-base sm:text-lg leading-relaxed max-w-lg mx-auto mb-4">
-            Answer 9 short questions to find out how well your facility aligns with our acquisition criteria. Takes under 2 minutes.
+            Answer {totalQuestions} short questions to find out how well your facility aligns with our acquisition criteria. Takes under 3 minutes.
           </p>
           <p className="text-[#94a3b8]/60 text-sm max-w-md mx-auto mb-10">
             Your answers are confidential and used solely to assess compatibility. No commitment required.
@@ -161,19 +161,19 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
             <span className="text-[#4a9eff]">LINE</span>?
           </h1>
           <p className="text-[#94a3b8] text-sm">
-            Answer 9 questions to find out how well your data centre aligns with our acquisition profile.
+            {answeredCount} of {totalQuestions} answered
           </p>
         </div>
 
         {/* Progress steps */}
         <div className="flex gap-2 mb-8">
-          {BANDS.map((band, i) => (
+          {SECTIONS.map((section, i) => (
             <div
-              key={band.id}
+              key={section.id}
               className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                i < currentBand
+                i < currentSection
                   ? "bg-[#4a9eff]"
-                  : i === currentBand
+                  : i === currentSection
                     ? "bg-[#4a9eff]/50"
                     : "bg-white/10"
               }`}
@@ -181,53 +181,58 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
           ))}
         </div>
 
-        {/* Current band */}
-        <div key={activeBand.id}>
-          {/* Band heading */}
+        {/* Current section */}
+        <div key={activeSection.id}>
+          {/* Section heading */}
           <div className="flex items-center gap-3 mb-5">
             <span className="text-xs font-bold uppercase tracking-[0.15em] text-[#4a9eff]">
-              {String(currentBand + 1).padStart(2, "0")}
+              {String(currentSection + 1).padStart(2, "0")}
             </span>
             <span className="text-xs font-bold uppercase tracking-[0.15em] text-[#94a3b8]">
-              {activeBand.label}
+              {activeSection.label}
             </span>
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
           {/* Questions */}
           <div className="space-y-4">
-            {bandQuestions.map((question) => (
+            {sectionQuestions.map((question) => (
               <div
-                key={question.id}
+                key={question.key}
                 className="bg-[#0d1b33] border border-white/10 rounded-[19px] p-6 sm:p-8"
               >
                 <p className="text-white text-lg sm:text-xl font-medium leading-snug mb-5">
-                  {question.text}
+                  {question.question}
                 </p>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    data-testid={`q${question.id}-yes`}
-                    onClick={() => handleAnswer(question.id, true)}
-                    className={`w-full py-3.5 rounded-lg text-base font-semibold transition-all duration-200 cursor-pointer ${
-                      answers[question.id] === true
-                        ? "bg-[#4a9eff] text-white border border-[#4a9eff] shadow-[0_0_12px_rgba(74,158,255,0.3)]"
-                        : "bg-transparent text-[#94a3b8] border border-white/20 hover:border-white/40 hover:text-white"
-                    }`}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    data-testid={`q${question.id}-no`}
-                    onClick={() => handleAnswer(question.id, false)}
-                    className={`w-full py-3.5 rounded-lg text-base font-semibold transition-all duration-200 cursor-pointer ${
-                      answers[question.id] === false
-                        ? "bg-white/10 text-white border border-white/30"
-                        : "bg-transparent text-[#94a3b8] border border-white/20 hover:border-white/40 hover:text-white"
-                    }`}
-                  >
-                    No
-                  </button>
-                </div>
+
+                {question.type === "choice" ? (
+                  <div className="space-y-2.5">
+                    {question.options.map((option: string) => {
+                      const isSelected = answers[question.key] === option;
+                      return (
+                        <button
+                          key={option}
+                          onClick={() => handleAnswer(question.key, option)}
+                          className={`w-full text-left px-5 py-3.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+                            isSelected
+                              ? "bg-[#4a9eff] text-white border border-[#4a9eff] shadow-[0_0_12px_rgba(74,158,255,0.3)]"
+                              : "bg-transparent text-[#94a3b8] border border-white/20 hover:border-white/40 hover:text-white"
+                          }`}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    value={answers[question.key] || ""}
+                    onChange={(e) => handleAnswer(question.key, e.target.value)}
+                    placeholder={question.placeholder}
+                    className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3.5 text-white text-sm placeholder:text-[#94a3b8]/50 focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:border-transparent transition-all"
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -236,9 +241,9 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
         {/* Navigation */}
         <div className="mt-10 flex items-center justify-between">
           <div>
-            {currentBand > 0 && (
+            {currentSection > 0 && (
               <button
-                onClick={() => setCurrentBand((b) => b - 1)}
+                onClick={() => setCurrentSection((s) => s - 1)}
                 className="text-xs text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
               >
                 ← Back
@@ -246,22 +251,21 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
             )}
           </div>
           <button
-            data-testid="quiz-next"
             onClick={() => {
-              if (isLastBand) {
+              if (isLastSection) {
                 handleContinue();
               } else {
-                setCurrentBand((b) => b + 1);
+                setCurrentSection((s) => s + 1);
               }
             }}
-            disabled={!bandAllAnswered}
+            disabled={!sectionAllAnswered}
             className={`px-8 py-3 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-              bandAllAnswered
+              sectionAllAnswered
                 ? "bg-[#4a9eff] text-white hover:bg-[#5aa8ff] shadow-[4px_4px_7px_3px_rgba(96,165,250,0.4)]"
                 : "bg-white/5 text-[#94a3b8]/50 border border-white/10 cursor-not-allowed"
             }`}
           >
-            {isLastBand ? "Continue" : "Next"}
+            {isLastSection ? "Continue" : "Next"}
           </button>
         </div>
       </div>
@@ -453,7 +457,7 @@ export default function CompatibilityScore({ webhookUrl: _webhookUrl }: Compatib
         </div>
 
         <button
-          onClick={() => { setCurrentBand(BANDS.length - 1); setStage("quiz"); }}
+          onClick={() => { setCurrentSection(SECTIONS.length - 1); setStage("quiz"); }}
           className="mt-5 mx-auto block text-xs text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
         >
           ← Back to questions

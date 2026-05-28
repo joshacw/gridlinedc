@@ -14,6 +14,20 @@ declare global {
   }
 }
 
+interface L3CheckSignal {
+  match: string;
+  type: "disqualify" | "review" | "positive";
+  source?: string;
+}
+
+interface L3Check {
+  name: string;
+  description: string;
+  status: "pass" | "fail" | "warn" | "skip";
+  signals: L3CheckSignal[];
+  sources: { title: string; url: string }[];
+}
+
 interface PipelineTarget {
   name: string;
   org_name: string;
@@ -43,6 +57,12 @@ interface PipelineTarget {
   l3_founder_name_guess: string;
   l3_news_summary: string;
   l3_news_articles: { title: string; url: string }[];
+  l3_news_sources: number;
+  l3_disqualify_signals: string[];
+  l3_review_signals: string[];
+  l3_positive_signals: string[];
+  l3_homepage_scale_signals: string[];
+  l3_checks: L3Check[];
   l3_status: string;
   l4_primary_contact_name: string;
   l4_primary_contact_title: string;
@@ -669,26 +689,31 @@ function DetailPanel({ target: d, onClose }: { target: PipelineTarget; onClose: 
           </Section>
         )}
 
-        {/* News */}
-        {(d.l3_news_summary || (d.l3_news_articles && d.l3_news_articles.length > 0)) && (
-          <Section title="News Check">
-            <div className="text-xs text-slate-400 leading-relaxed mb-2">{d.l3_news_summary}</div>
-            {d.l3_news_articles && d.l3_news_articles.length > 0 && (
-              <div className="space-y-1.5">
-                {d.l3_news_articles.map((article, idx) => (
-                  <a
-                    key={idx}
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-xs text-blue-400 hover:text-blue-300 no-underline hover:underline leading-snug"
-                  >
-                    <span className="text-slate-500 mr-1">{idx + 1}.</span>
-                    {article.title}
-                    <span className="text-slate-600 ml-1">&rarr;</span>
-                  </a>
+        {/* Research Checks */}
+        {d.status !== "UNPROCESSED" && (
+          <Section title="Research Checks">
+            {d.l3_checks && d.l3_checks.length > 0 ? (
+              <div className="space-y-2">
+                {d.l3_checks.map((check, ci) => (
+                  <ResearchCheck key={ci} check={check} />
                 ))}
               </div>
+            ) : (
+              /* Fallback for data without structured checks */
+              <>
+                <div className="text-xs text-slate-400 leading-relaxed mb-2">{d.l3_news_summary}</div>
+                {d.l3_news_articles && d.l3_news_articles.length > 0 && (
+                  <div className="space-y-1.5 mt-2">
+                    {d.l3_news_articles.map((article, idx) => (
+                      <a key={idx} href={article.url} target="_blank" rel="noopener noreferrer"
+                        className="block text-xs text-blue-400 hover:text-blue-300 no-underline hover:underline leading-snug">
+                        <span className="text-slate-500 mr-1">{idx + 1}.</span>
+                        {article.title} <span className="text-slate-600 ml-1">&rarr;</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </Section>
         )}
@@ -735,6 +760,73 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
     <div className="flex justify-between py-0.5 text-[13px]">
       <span className="text-slate-400">{label}</span>
       <span className="text-slate-200 font-medium text-right max-w-[200px] overflow-hidden text-ellipsis">{value}</span>
+    </div>
+  );
+}
+
+function ResearchCheck({ check }: { check: L3Check }) {
+  const statusStyles = {
+    pass: { bg: "#22c55e15", border: "#22c55e44", fg: "#86efac", icon: "✓" },
+    fail: { bg: "#ef444415", border: "#ef444444", fg: "#fca5a5", icon: "✗" },
+    warn: { bg: "#eab30815", border: "#eab30844", fg: "#fde68a", icon: "!" },
+    skip: { bg: "#64748b10", border: "#64748b33", fg: "#64748b", icon: "—" },
+  };
+  const s = statusStyles[check.status] || statusStyles.skip;
+
+  const dqSignals = check.signals.filter(s => s.type === "disqualify");
+  const reviewSignals = check.signals.filter(s => s.type === "review");
+  const positiveSignals = check.signals.filter(s => s.type === "positive");
+  const hasSignals = check.signals.length > 0;
+
+  return (
+    <div className="rounded-md overflow-hidden" style={{ background: s.bg, border: `1px solid ${s.border}` }}>
+      {/* Check header */}
+      <div className="flex items-center gap-2 px-2.5 py-1.5">
+        <span className="text-sm font-bold w-5 text-center" style={{ color: s.fg }}>{s.icon}</span>
+        <div className="flex-1 min-w-0">
+          <div className="text-[12px] font-semibold text-slate-200">{check.name}</div>
+          <div className="text-[10px] text-slate-500 leading-tight">{check.description}</div>
+        </div>
+        {check.status === "skip" && (
+          <span className="text-[9px] text-slate-600 uppercase">skipped</span>
+        )}
+      </div>
+
+      {/* Signal tags */}
+      {hasSignals && (
+        <div className="px-2.5 pb-2 flex flex-wrap gap-1">
+          {dqSignals.map((sig, i) => (
+            <span key={`dq-${i}`} className="inline-block px-1.5 py-0.5 rounded text-[10px]"
+              style={{ background: "#ef444433", color: "#fca5a5" }}>
+              {sig.match}
+            </span>
+          ))}
+          {reviewSignals.map((sig, i) => (
+            <span key={`rv-${i}`} className="inline-block px-1.5 py-0.5 rounded text-[10px]"
+              style={{ background: "#eab30833", color: "#fde68a" }}>
+              {sig.match}
+            </span>
+          ))}
+          {positiveSignals.map((sig, i) => (
+            <span key={`pos-${i}`} className="inline-block px-1.5 py-0.5 rounded text-[10px]"
+              style={{ background: "#22c55e33", color: "#86efac" }}>
+              {sig.match}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Sources */}
+      {check.sources.length > 0 && (
+        <div className="px-2.5 pb-2">
+          {check.sources.map((src, i) => (
+            <a key={i} href={src.url} target="_blank" rel="noopener noreferrer"
+              className="block text-[10px] text-blue-400/80 hover:text-blue-300 no-underline hover:underline leading-snug truncate">
+              {src.title} <span className="text-slate-600">&rarr;</span>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

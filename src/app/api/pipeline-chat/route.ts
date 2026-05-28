@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-// Configurable LLM endpoint — works with Ollama, Groq, Together, OpenAI, etc.
-const LLM_API_BASE = process.env.LLM_API_BASE || "http://localhost:11434/v1";
-const LLM_API_KEY = process.env.LLM_API_KEY || "ollama"; // Ollama doesn't need a real key
-const LLM_MODEL = process.env.LLM_MODEL || "gemma3";
+// Configurable LLM endpoint
+// Provider: "anthropic" | "openai" (openai = any OpenAI-compatible: Ollama, Groq, Together, etc.)
+const LLM_PROVIDER = process.env.LLM_PROVIDER || "anthropic";
+const LLM_API_BASE = process.env.LLM_API_BASE || (LLM_PROVIDER === "anthropic" ? "https://api.anthropic.com" : "http://localhost:11434/v1");
+const LLM_API_KEY = process.env.LLM_API_KEY || "";
+const LLM_MODEL = process.env.LLM_MODEL || (LLM_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gemma3");
 
 // Cache the pipeline data summary (built once per cold start)
 let pipelineContext: string | null = null;
@@ -124,42 +126,78 @@ export async function POST(request: NextRequest) {
     }
 
     const context = buildPipelineContext();
+    const systemContent = SYSTEM_PROMPT + context;
 
-    // Build the LLM request in OpenAI-compatible format
-    const llmMessages = [
-      { role: "system", content: SYSTEM_PROMPT + context },
-      ...messages.map((m: { role: string; content: string }) => ({
-        role: m.role,
-        content: m.content,
-      })),
-    ];
+    const chatMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role,
+      content: m.content,
+    }));
 
-    const response = await fetch(`${LLM_API_BASE}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${LLM_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: LLM_MODEL,
-        messages: llmMessages,
-        temperature: 0.3,
-        max_tokens: 2048,
-        stream: false,
-      }),
-    });
+    let assistantMessage: string;
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("LLM error:", response.status, errText);
-      return NextResponse.json(
-        { error: `LLM request failed (${response.status}). Check LLM_API_BASE and LLM_MODEL env vars.` },
-        { status: 502 }
-      );
+    if (LLM_PROVIDER === "anthropic") {
+      // ─── Anthropic Claude API ───────────────────────────────────────
+      const response = await fetch(`${LLM_API_BASE}/v1/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": LLM_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: LLM_MODEL,
+          system: systemContent,
+          messages: chatMessages,
+          temperature: 0.3,
+          max_tokens: 2048,
+        }),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Anthropic error:", response.status, errText);
+        return NextResponse.json(
+          { error: `LLM request failed (${response.status}). Check ANTHROPIC_API_KEY env var.` },
+          { status: 502 }
+        );
+      }
+
+      const data = await response.json();
+      assistantMessage = data.content?.[0]?.text || "No response generated.";
+    } else {
+      // ─── OpenAI-compatible API (Ollama, Groq, Together, OpenAI) ────
+      const llmMessages = [
+        { role: "system", content: systemContent },
+        ...chatMessages,
+      ];
+
+      const response = await fetch(`${LLM_API_BASE}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${LLM_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: LLM_MODEL,
+          messages: llmMessages,
+          temperature: 0.3,
+          max_tokens: 2048,
+          stream: false,
+        }),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("LLM error:", response.status, errText);
+        return NextResponse.json(
+          { error: `LLM request failed (${response.status}). Check LLM_API_BASE and LLM_MODEL env vars.` },
+          { status: 502 }
+        );
+      }
+
+      const data = await response.json();
+      assistantMessage = data.choices?.[0]?.message?.content || "No response generated.";
     }
-
-    const data = await response.json();
-    const assistantMessage = data.choices?.[0]?.message?.content || "No response generated.";
 
     return NextResponse.json({ content: assistantMessage });
   } catch (error) {

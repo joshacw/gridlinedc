@@ -594,7 +594,7 @@ function DetailPanel({ target: d, onClose }: { target: PipelineTarget; onClose: 
 
   return (
     <div
-      className="absolute top-2.5 right-2.5 w-[340px] max-h-[calc(100%-20px)] overflow-y-auto rounded-lg border z-[1000]"
+      className="absolute top-2.5 left-2.5 w-[340px] max-h-[calc(100%-20px)] overflow-y-auto rounded-lg border z-[1000]"
       style={{ background: "#1e293bee", borderColor: "#334155" }}
     >
       <button onClick={onClose} className="absolute top-2 right-3 bg-transparent border-none text-slate-400 text-lg cursor-pointer hover:text-white">

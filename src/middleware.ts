@@ -17,5 +17,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/pipeline/:path*', '/api/pipeline-data/:path*'],
+  matcher: ['/pipeline/:path*', '/api/pipeline-data/:path*', '/api/pipeline-chat/:path*'],
 };

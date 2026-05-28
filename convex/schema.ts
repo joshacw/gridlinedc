@@ -118,6 +118,23 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_ghlContactId", ["ghlContactId"]),
 
+  // Pipeline chat
+  chatThreads: defineTable({
+    title: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    messageCount: v.number(),
+  })
+    .index("by_updated", ["updatedAt"]),
+
+  chatMessages: defineTable({
+    threadId: v.id("chatThreads"),
+    role: v.union(v.literal("user"), v.literal("assistant")),
+    content: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_thread", ["threadId", "createdAt"]),
+
   progressTokens: defineTable({
     token: v.string(),
     enquiryId: v.id("enquiries"),

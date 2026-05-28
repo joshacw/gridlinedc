@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import ChatPanel from "./ChatPanel";
+
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+
 
 declare global {
   interface Window {
@@ -306,6 +311,7 @@ export default function PipelineMap() {
   }
 
   return (
+    <ConvexProvider client={convex}>
     <div className="fixed inset-0 flex flex-col" style={{ background: "#0f172a", color: "#e2e8f0", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
       {/* Stats Bar */}
       <div className="flex items-center gap-6 px-4 py-2 border-b shrink-0" style={{ background: "#1e293b", borderColor: "#334155", fontSize: "13px" }}>
@@ -522,7 +528,9 @@ export default function PipelineMap() {
           )}
         </div>
       </div>
+      <ChatPanel />
     </div>
+    </ConvexProvider>
   );
 }
 

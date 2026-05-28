@@ -132,7 +132,7 @@ export default function ChatPanel() {
 
   return (
     <div
-      className="fixed bottom-6 right-6 w-[420px] h-[600px] rounded-xl border flex flex-col z-[1100] shadow-2xl overflow-hidden"
+      className="fixed top-0 bottom-0 right-0 w-[420px] border-l flex flex-col z-[1100] shadow-2xl overflow-hidden"
       style={{ background: "#0f172a", borderColor: "#334155" }}
     >
       {/* Header */}

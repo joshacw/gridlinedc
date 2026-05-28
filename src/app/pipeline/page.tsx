@@ -37,6 +37,7 @@ interface PipelineTarget {
   best_outreach_email: string;
   l3_founder_name_guess: string;
   l3_news_summary: string;
+  l3_news_articles: { title: string; url: string }[];
   l3_status: string;
   l4_primary_contact_name: string;
   l4_primary_contact_title: string;
@@ -661,9 +662,26 @@ function DetailPanel({ target: d, onClose }: { target: PipelineTarget; onClose: 
         )}
 
         {/* News */}
-        {d.l3_news_summary && (
+        {(d.l3_news_summary || (d.l3_news_articles && d.l3_news_articles.length > 0)) && (
           <Section title="News Check">
-            <div className="text-xs text-slate-400 leading-relaxed">{d.l3_news_summary}</div>
+            <div className="text-xs text-slate-400 leading-relaxed mb-2">{d.l3_news_summary}</div>
+            {d.l3_news_articles && d.l3_news_articles.length > 0 && (
+              <div className="space-y-1.5">
+                {d.l3_news_articles.map((article, idx) => (
+                  <a
+                    key={idx}
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-xs text-blue-400 hover:text-blue-300 no-underline hover:underline leading-snug"
+                  >
+                    <span className="text-slate-500 mr-1">{idx + 1}.</span>
+                    {article.title}
+                    <span className="text-slate-600 ml-1">&rarr;</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </Section>
         )}
 
